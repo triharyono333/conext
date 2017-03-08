@@ -1,0 +1,6 @@
+; $Id$
+name = Conext Job Opening Function
+description = Module for Conext Job Opening Function
+version = "0.1-Tri"
+package = conext
+core = 7.x

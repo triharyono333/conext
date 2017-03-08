@@ -1,0 +1,14 @@
+name = Conext   
+description = A custom theme for Conext
+package = Custom
+version = VERSION
+core = 7.x
+
+; Information added by tri packaging script on 2017-02-25
+version = "7.41"
+project = "drupal"
+datestamp = "1365027012"
+
+regions[content] = Content
+regions[sidebar_first] = Sidebar first
+

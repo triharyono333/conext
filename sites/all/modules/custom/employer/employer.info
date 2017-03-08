@@ -1,0 +1,6 @@
+; $Id$
+name = Conext Employer Function
+description = Module for Conext Employer Function
+version = "0.1-Tri"
+package = conext
+core = 7.x

@@ -1,0 +1,6 @@
+; $Id$
+name = Conext Admin Page
+description = Conext Module for Admin Page
+version = "0.1-Tri"
+package = extra
+core = 7.x

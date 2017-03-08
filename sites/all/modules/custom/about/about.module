@@ -1,0 +1,88 @@
+<?php
+
+// $Id$
+
+function about_menu() {
+	$items['about'] = array(
+		'title' => t('About Us'),
+		'description' => 'about',
+		'page callback' => 'about',
+		'access arguments' => true,
+		'access callback' => true,
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['about_action'] = array(
+		'title' => t('About Us'),
+		'description' => 'about',
+		'page callback' => 'about_action',
+		'access arguments' => true,
+		'access callback' => true,
+		'type' =>  MENU_CALLBACK,
+	);
+        
+	return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function about_theme($existing, $type, $theme, $path) {
+	return array(
+		'about' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'about',
+			'path' => drupal_get_path('module', 'about')
+		)
+	);
+}
+
+/**
+ * Implements hook_mail()
+ * @param 
+ *   type $key to decide which email body to sent on basis of key parameter inacese of multiple email content
+ * @param 
+ *   type $message the email content to be sent.Message array contains 'subject and body ' for the email.
+ * @param 
+ *   type $params using to get the cusotm email content from a function.This can be used in my other ways aslo as per need.
+ */
+function about_mail($key, &$message, $params) {
+	$language = $message['language'];
+  switch ($key) {
+		//switching on $key lets you create variations of the email based on the $key parameter
+    case 'about_email':
+      $message['subject'] = t('Conext Contact Email');
+			//the email body is here, inside the $message array
+      $message['body'][] = $params['body'];
+      break;
+  }
+}
+
+function about() {
+	global $base_url;
+	
+	$jobs = db_query("SELECT nid FROM node WHERE type = 'conext_job'");
+	foreach($jobs as $job) {
+		$job_detail[] = node_load($job->nid);
+	}
+	
+	$content = array(
+		'action' => $base_url. "/about_action",
+		'jobs' => $job_detail
+	);
+	
+	//drupal_set_message('<pre>'.print_r($content, true).'</pre>');
+	return theme('about', array('content' => $content));
+}
+
+function about_action(){
+	$email_content = "Hi Tri < br /> Apa Kabar <br /><br />Thanks";
+  $params = array('body' => $email_content);
+  $key = 'about_email';
+  $to = "triharyono333@gmail.com";
+  $from = 'triharyono111@gmail.com';
+  $mail = drupal_mail('about', $key, $to, language_default(), $params, $from);
+	
+	drupal_set_message('<pre>'.print_r($mail, true).'</pre>', 'notice');
+	return 'test';
+}

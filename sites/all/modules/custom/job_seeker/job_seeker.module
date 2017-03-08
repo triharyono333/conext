@@ -1,0 +1,250 @@
+<?php
+
+function job_seeker_menu() {
+	$items['job_seeker'] = array(
+		'title' => t('Job Seeker'),
+		'description' => 'job_seeker',
+		'page callback' => 'job_seeker',
+		'access arguments' => true,
+		'access callback' => true,
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['job_seeker/account'] = array(
+		'title' => t('Job Seeker Account'),
+		'description' => 'job_seeker_',
+		'page callback' => 'job_seeker_account',
+		'access arguments' => true,
+		'access callback' => true,
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['job_seeker/account/submit'] = array(
+		'title' => t('Job Seeker Account'),
+		'description' => 'job_seeker_',
+		'page callback' => 'job_seeker_account_submit',
+		'access arguments' => true,
+		'access callback' => true,
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['job_seeker/login'] = array(
+		'title' => t('Job Seeker Login'),
+		'description' => 'job_seeker',
+		'page callback' => 'job_seeker_login',
+		'access arguments' => true,
+		'access callback' => true,
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['job_seeker/login/submit'] = array(
+		'title' => t('Job Seeker Login'),
+		'description' => 'job_seeker',
+		'page callback' => 'job_seeker_login_submit',
+		'access arguments' => true,
+		'access callback' => true,
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['job_seeker/register'] = array(
+		'title' => t('Job Seeker Register'),
+		'description' => 'job_seeker',
+		'page callback' => 'job_seeker_register',
+		'access arguments' => true,
+		'access callback' => true,
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['job_seeker/register/submit'] = array(
+		'title' => t('Job Seeker Register'),
+		'description' => 'job_seeker',
+		'page callback' => 'job_seeker_register_submit',
+		'access arguments' => true,
+		'access callback' => true,
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['job_seeker/register_complete'] = array(
+		'title' => t('Job Seeker Register Complete'),
+		'description' => 'job_seeker',
+		'page callback' => 'job_seeker_register_complete',
+		'access arguments' => true,
+		'access callback' => true,
+		'type' =>  MENU_CALLBACK,
+	);
+        
+	return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function job_seeker_theme($existing, $type, $theme, $path) {
+	return array(
+		'job_seeker_login' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'job_seeker_login',
+			'path' => drupal_get_path('module', 'job_seeker')
+		),
+		'job_seeker_register' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'job_seeker_register',
+			'path' => drupal_get_path('module', 'job_seeker')
+		),
+		'job_seeker_register_thanks' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'job_seeker_register_thanks',
+			'path' => drupal_get_path('module', 'job_seeker')
+		),
+		'job_seeker_account' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'job_seeker_account',
+			'path' => drupal_get_path('module', 'job_seeker')
+		),
+	);
+}
+
+function job_seeker () {
+	global $user, $base_url;
+	
+	$roles = $user->roles;
+	if ( valid_user_role(JOB_SEEKER_ROLE_ID) ) {
+		drupal_goto($base_url.'/job_seeker/account');
+	} else {
+		drupal_goto($base_url.'/job_seeker/login');
+	}
+}
+
+function job_seeker_account() {
+	global $user, $base_url;
+	$jobs = array();
+	
+	if (valid_user_role(JOB_SEEKER_ROLE_ID)) {
+		$industries = get_term_list ('company_industry');
+		$cities = db_query("SELECT id, nama_kota FROM conext_kota");
+		$education_cities = db_query("SELECT id, nama_kota FROM conext_kota");
+		$months = conext_get_month();
+		$years = conext_get_year();
+		$account = db_query("SELECT * FROM users a INNER JOIN conext_job_seeker b ON a.uid = b.user_id WHERE user_id = :user_id", array('user_id' => $user->uid));
+
+		$query_job_applieds = "SELECT title, location, drupal_job_id, b.created_at FROM conext_job a 
+				INNER JOIN conext_job_applied b ON a.drupal_job_id = b.job_id 
+				INNER JOIN conext_job_seeker c ON c.user_id = b.job_seeker_id
+				WHERE b.job_seeker_id = :job_seeker_id";
+		$job_applieds = db_query($query_job_applieds, array('job_seeker_id' => $user->uid));
+		foreach($job_applieds as $job_applied) {
+			$jobs[] = array(
+				'title' => $job_applied->title,
+				'location' => $job_applied->location,
+				'drupal_job_id' => $job_applied->drupal_job_id,
+				'created_at' => $job_applied->created_at
+			);
+		}
+
+		$content = array(
+			'industries' => $industries,
+			'cities' => $cities,
+			'education_cities' => $education_cities,
+			'user' => $user,
+			'months' => $months,
+			'years' => $years,
+			'jobs' => $jobs,
+			'account' => $account
+		);
+
+		return theme('job_seeker_account', array('content' => $content));
+	} else {
+		drupal_goto($base_url.'/job_seeker');
+	}
+}
+
+function job_seeker_account_submit() {
+	global $user, $base_url;
+	$timestamp = time();
+	
+	if ($_POST) {
+		if (empty($_FILES['cv_file']['tmp_name'])) {
+			$cv_path = '';
+		} else {
+			$path = $_FILES['cv_file']['tmp_name'];
+			$file_temp = file_get_contents($path);
+			$file_temp = file_save_data($file_temp, 'public://cv/' . $timestamp .'-'. $_FILES['cv_file']['name'], FILE_EXISTS_RENAME);
+			$cv_path = $file_temp->uri;
+		}
+		conext_update_user ($_POST, 'job_seeker', $cv_path);
+		drupal_goto($base_url.'/job_seeker/account');
+	}
+}
+
+function job_seeker_login () {
+	global $user, $base_url;
+	
+	if (valid_user_role(JOB_SEEKER_ROLE_ID)) drupal_goto($base_url.'/job_seeker/account');
+	
+	return theme('job_seeker_login');
+}
+
+function job_seeker_login_submit() {
+	if ($_POST) {
+		conext_login_user ($_POST['username'], $_POST['password'], 'job_seeker/account', 'job_seeker/login', JOB_SEEKER_ROLE_ID);
+	} else {
+		return theme('employer_login');
+	}	
+}
+
+
+function job_seeker_register() {
+	global $user, $base_url;
+	if (!empty($_SESSION['linkedin'])) {
+		$first_name = $_SESSION['linkedin']['person']['first-name'];
+		$last_name = $_SESSION['linkedin']['person']['last-name'];
+		$public_profile_url = $_SESSION['linkedin']['person']['public-profile-url'];
+		$email_address = $_SESSION['linkedin']['person']['email-address'];
+	}
+	
+	$industries = get_term_list ('company_industry');
+	$cities = db_query("SELECT id, nama_kota FROM conext_kota");
+	$education_cities = db_query("SELECT id, nama_kota FROM conext_kota");
+	$months = conext_get_month();
+	$years = conext_get_year();
+	
+	$content = array(
+		'industries' => $industries,
+		'cities' => $cities,
+		'education_cities' => $education_cities,
+		'user' => $user,
+		'months' => $months,
+		'years' => $years,
+		'first_name' => (empty($first_name)) ? '' : $first_name,
+		'last_name' => (empty($last_name)) ? '' : $last_name,
+		'public_profile_url' => (empty($public_profile_url)) ? '' : $public_profile_url,
+		'email_address' => (empty($email_address)) ? '' : $email_address,
+	);
+	drupal_set_message("<pre>".print_r($content, true)."</pre>");
+	
+	return theme('job_seeker_register', array('content' => $content));
+}
+
+
+function job_seeker_register_submit() {
+	if ($_POST) {
+		$timestamp = time();
+		
+		if (empty($_FILES['cv_file']['tmp_name'])) {
+			$cv_path = '';
+		} else {
+			$path = $_FILES['cv_file']['tmp_name'];
+			$file_temp = file_get_contents($path);
+			$file_temp = file_save_data($file_temp, 'public://cv/' . $timestamp .'-'. $_FILES['cv_file']['name'], FILE_EXISTS_RENAME);
+			$cv_path = $file_temp->uri;
+		}
+		
+		conext_register_user($_POST, 'job_seeker', $cv_path);
+		drupal_goto('job_seeker/register_complete');
+
+	}
+}
+
+function job_seeker_register_complete() {
+	return theme('job_seeker_register_thanks');
+}

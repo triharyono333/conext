@@ -1,0 +1,6 @@
+; $Id$
+name = Conext About Us Function
+description = Module for Conext About us Function
+version = "0.1-Tri"
+package = conext
+core = 7.x

@@ -1,0 +1,442 @@
+<?php
+// $Id$
+function admin_page_menu() {
+	$items['admin/employer'] = array(
+		'title' => t('Admin Employer'),
+		'description' => 'Admin Employer',
+		'page callback' => 'admin_employer',
+		'access arguments' => array('access admin employer'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/employer/detail'] = array(
+		'title' => t('Admin Employer Detail'),
+		'description' => 'Admin Employer Detail',
+		'page callback' => 'admin_employer_detail',
+		'access arguments' => array('access admin employer'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/employer/export'] = array(
+		'title' => t('Admin Employer Export'),
+		'description' => 'Admin Employer Export',
+		'page callback' => 'admin_employer_export',
+		'access arguments' => array('access admin employer'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/job_seeker'] = array(
+		'title' => t('Admin Employer'),
+		'description' => 'Admin Job Seeker',
+		'page callback' => 'admin_job_seeker',
+		'access arguments' => array('access admin job seeker'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/job_seeker/detail'] = array(
+		'title' => t('Admin Job Seeker Detail'),
+		'description' => 'Admin Job Seeker Detail',
+		'page callback' => 'admin_job_seeker_detail',
+		'access arguments' => array('access admin job seeker'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/job_seeker/export'] = array(
+		'title' => t('Admin Job Seeker Export'),
+		'description' => 'Admin Job Seeker Export',
+		'page callback' => 'admin_job_seeker_export',
+		'access arguments' => array('access admin job seeker'),
+		'type' =>  MENU_CALLBACK,
+	);
+
+	$items['admin/job'] = array(
+		'title' => t('Admin Job'),
+		'description' => 'Admin Job',
+		'page callback' => 'admin_job',
+		'access arguments' => array('access admin job'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/job/detail'] = array(
+		'title' => t('Admin Job Detail'),
+		'description' => 'Admin Job Detail',
+		'page callback' => 'admin_job_detail',
+		'access arguments' => array('access admin job'),
+		'type' =>  MENU_CALLBACK,
+	);
+		
+	$items['admin/applied_job'] = array(
+		'title' => t('Admin Applied Job'),
+		'description' => 'Admin Applied Job',
+		'page callback' => 'admin_applied_job',
+		'access arguments' => array('access admin applied job'),
+		'type' =>  MENU_CALLBACK,
+	);
+     
+	$items['admin/other_setting'] = array(
+		'title' => t('Other Setting'),
+		'description' => 'other setting',
+		'page callback' => 'other_setting',
+		'access arguments' => array('access other setting'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function admin_page_permission() {
+  return array(
+    'access admin employer' => array(
+      'title' => t('Access admin Employer'),
+    ), 
+		'access admin job seeker' => array(
+      'title' => t('Access admin Job Seeker'),
+    ), 
+		'access admin applied job' => array(
+      'title' => t('Access admin applied job'),
+    ), 
+		'access admin job' => array(
+      'title' => t('Access admin job'),
+    ), 
+		'access other setting' => array(
+      'title' => t('Access Other Setting'),
+    )
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function admin_page_theme($existing, $type, $theme, $path) {
+	return array(
+		'employer_list' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'employer_list',
+			'path' => drupal_get_path('module', 'admin_page')
+		),
+		'employer_detail' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'employer_detail',
+			'path' => drupal_get_path('module', 'admin_page')
+		),
+		'job_seeker_list' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'job_seeker_list',
+			'path' => drupal_get_path('module', 'admin_page')
+		),
+		'job_seeker_detail' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'job_seeker_detail',
+			'path' => drupal_get_path('module', 'admin_page')
+		),
+		'job_list' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'job_list',
+			'path' => drupal_get_path('module', 'admin_page')
+		),
+		'job_detail' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'job_detail',
+			'path' => drupal_get_path('module', 'admin_page')
+		)
+	);
+}
+
+function admin_employer(){
+	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE mail LIKE '%".$_GET['keyword']."%' OR name LIKE '%".$_GET['keyword']."%' OR first_name LIKE '%".$_GET['keyword']."%' OR last_name LIKE '%".$_GET['keyword']."%' ";
+	$query_employers_total = "SELECT COUNT(uid) FROM users a 
+		INNER JOIN conext_employer b ON a.uid = b.user_id".$keyword;
+ 	$employers_total = db_query($query_employers_total)->fetchField();
+	
+	$query_employers = "SELECT * FROM users a 
+		INNER JOIN conext_employer b ON a.uid = b.user_id".$keyword;
+ 	$employers = db_query($query_employers);
+	
+	pager_default_initialize($employers_total,1);
+	$pager = theme('pager');
+	$content = array(
+		'employers' => $employers,
+		'pager' => $pager
+	);
+	
+	//drupal_set_message('<pre>'.print_r($content, true).'</pre>');
+	return theme('employer_list', array('content' => $content));
+}
+
+function admin_employer_detail(){
+	$uid = arg(3);
+	if (!empty($uid)) {
+		$query_employer = "SELECT * FROM users a 
+			INNER JOIN conext_employer b ON a.uid = b.user_id WHERE uid = :uid";
+		$employer = db_query($query_employer, array('uid' => $uid));
+
+		$content = array(
+			'employer' => $employer
+		);
+	}
+	return theme('employer_detail', array('content' => $content));
+}
+
+function admin_job_seeker(){
+	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE mail LIKE '%".$_GET['keyword']."%' OR name LIKE '%".$_GET['keyword']."%' OR first_name LIKE '%".$_GET['keyword']."%' OR last_name LIKE '%".$_GET['keyword']."%' ";
+	$query_job_seekers_total = "SELECT COUNT(uid) FROM users a 
+		INNER JOIN conext_job_seeker b ON a.uid = b.user_id".$keyword;
+ 	$job_seekers_total = db_query($query_job_seekers_total)->fetchField();
+	
+	$query_job_seekers = "SELECT * FROM users a 
+		INNER JOIN conext_job_seeker b ON a.uid = b.user_id".$keyword;
+ 	$job_seekers = db_query($query_job_seekers);
+	
+	pager_default_initialize($job_seekers_total,1);
+	$pager = theme('pager');
+	
+	$content = array(
+		'job_seekers' => $job_seekers,
+		'keyword' => $keyword
+	);
+	
+	return theme('job_seeker_list', array('content' => $content));
+}
+
+function admin_job_seeker_detail(){
+	$uid = arg(3);
+	if (!empty($uid)) {
+		$query_job_seeker = "SELECT * FROM users a 
+			INNER JOIN conext_job_seeker b ON a.uid = b.user_id WHERE uid = :uid";
+		$job_seeker = db_query($query_job_seeker, array('uid' => $uid));
+
+		$content = array(
+			'job_seeker' => $job_seeker
+		);
+	}
+	return theme('job_seeker_detail', array('content' => $content));
+}
+
+function admin_job(){
+	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE a.title LIKE '%".$_GET['keyword']."%' OR b.title LIKE '%".$_GET['keyword']."%'";
+	$query_jobs_total = "SELECT COUNT(nid) FROM node a 
+		INNER JOIN conext_job b ON a.nid = b.drupal_job_id".$keyword;
+ 	$jobs_total = db_query($query_jobs_total)->fetchField();
+	
+	$query_jobs = "SELECT * FROM node a 
+		INNER JOIN conext_job b ON a.nid = b.drupal_job_id".$keyword;
+ 	$jobs = db_query($query_jobs);
+	
+	$content = array(
+		'jobs' => $jobs
+	);
+	
+	return theme('job_list', array('content' => $content));
+}
+
+function admin_job_detail(){
+	$nid = arg(3);
+	$job_list = array();
+	
+	if ($_POST) {
+		$job_status = $_POST['job_status'];
+		$query_update = "UPDATE conext_job SET job_status = :job_status WHERE drupal_job_id = :drupal_job_id";
+		db_query($query_update, array('job_status' => $job_status, 'drupal_job_id' => $nid));
+		drupal_set_message('Updated Successfully');
+	}
+	
+	$query_job = "SELECT * FROM node a 
+		INNER JOIN conext_job b ON a.nid = b.drupal_job_id WHERE nid = :nid LIMIT 1";
+ 	$jobs = db_query($query_job, array('nid' => $nid));
+	
+	foreach($jobs as $job) {
+		$qualification = taxonomy_term_load($job->qualification);
+		$qualification_name = $qualification->name;
+		
+		$industry = taxonomy_term_load($job->industry);
+		$industry_name = $industry->name;
+		
+		$employer = db_query('SELECT mail FROM users WHERE uid = '.$job->employer_id)->fetchField();
+		
+		$job_list = array(
+			'nid' => $nid,
+			'employer' => $employer,
+			'title' => $job->title,
+			'location' => $job->location,
+			'qualification' => $qualification_name,
+			'salary_min' => format_salary($job->salary_min),
+			'salary_max' => format_salary($job->salary_max),
+			'industry' => $industry_name,
+			'requirement' => $job->requirement,
+			'responsibility' => $job->responsibility,
+			'short_description' => $job->short_description,
+			'benefit' => $job->benefit,
+			'publish_job_public' => $job->publish_job_public,
+			'job_status' => $job->job_status,
+			'created_at' => $job->created_at
+		);
+	}
+	
+	$content = array(
+		'job' => $job_list
+	);
+	
+	return theme('job_detail', array('content' => $content));
+}
+
+function admin_job_seeker_export() {
+	require 'sites/all/libraries/PHPExcel/Classes/PHPExcel.php';
+	$objPHPExcel = new PHPExcel(); 
+	$objPHPExcel->setActiveSheetIndex(0); 
+
+	$rowCount = 3; 
+	$horizontal_style = array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+	// SET HEADER - START
+	$objPHPExcel->getActiveSheet()->SetCellValue('A1','Input Date');
+	$objPHPExcel->getActiveSheet()->mergeCells('A1:A2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('B1','No.');
+	$objPHPExcel->getActiveSheet()->mergeCells('B1:B2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('C1','Candidata Name (First Name)');
+	$objPHPExcel->getActiveSheet()->mergeCells('C1:C2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('D1','Candidata Name (Last Name)');
+	$objPHPExcel->getActiveSheet()->mergeCells('D1:D2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('E1','Email Address');
+	$objPHPExcel->getActiveSheet()->mergeCells('E1:E2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('F1','Phone');
+	$objPHPExcel->getActiveSheet()->mergeCells('F1:F2');
+	// Address
+	$objPHPExcel->getActiveSheet()->SetCellValue('G1','Address');
+	$objPHPExcel->getActiveSheet()->mergeCells('G1:J1');
+  $objPHPExcel->getActiveSheet()->getStyle('G1:J1')->getAlignment()->applyFromArray($horizontal_style);
+	$objPHPExcel->getActiveSheet()->SetCellValue('G1','Street Name');
+	$objPHPExcel->getActiveSheet()->SetCellValue('H1','Province');
+	$objPHPExcel->getActiveSheet()->SetCellValue('I1','Country');
+	$objPHPExcel->getActiveSheet()->SetCellValue('J1','Zip Code');
+	// Current Position
+	$objPHPExcel->getActiveSheet()->SetCellValue('K1','Current Position');
+	$objPHPExcel->getActiveSheet()->mergeCells('K1:O1');
+  $objPHPExcel->getActiveSheet()->getStyle('K1:O1')->getAlignment()->applyFromArray($horizontal_style);
+	$objPHPExcel->getActiveSheet()->SetCellValue('K1','Title');
+	$objPHPExcel->getActiveSheet()->SetCellValue('L1','Company Name');
+	$objPHPExcel->getActiveSheet()->SetCellValue('M1','Duration (MM/YYYY to MM/YYYY)');
+	$objPHPExcel->getActiveSheet()->SetCellValue('N1','Location - city');
+	$objPHPExcel->getActiveSheet()->SetCellValue('O1','Industry');
+	// Years of Experience
+	$objPHPExcel->getActiveSheet()->SetCellValue('P1','Years of Experience');
+	$objPHPExcel->getActiveSheet()->mergeCells('P1:P2');
+	// Salary Expectation
+	$objPHPExcel->getActiveSheet()->SetCellValue('Q1','Salary Expectation (Per month)');
+	$objPHPExcel->getActiveSheet()->mergeCells('Q1:Q2');
+	// Highest Education
+	$objPHPExcel->getActiveSheet()->SetCellValue('R1','Highest Education');
+	$objPHPExcel->getActiveSheet()->mergeCells('R1:U1');
+  $objPHPExcel->getActiveSheet()->getStyle('R1:U1')->getAlignment()->applyFromArray($horizontal_style);
+	$objPHPExcel->getActiveSheet()->SetCellValue('R1','School Name');
+	$objPHPExcel->getActiveSheet()->SetCellValue('S1','Graduation Time');
+	$objPHPExcel->getActiveSheet()->SetCellValue('T1','Major');
+	$objPHPExcel->getActiveSheet()->SetCellValue('U1','Location - city');
+	// Nationality
+	$objPHPExcel->getActiveSheet()->SetCellValue('V1','Nationality');
+	$objPHPExcel->getActiveSheet()->mergeCells('V1:V2');
+	// SET HEADER - END
+	
+	// SET CONTENT - START
+	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE mail LIKE '%".$_GET['keyword']."%' OR name LIKE '%".$_GET['keyword']."%' OR first_name LIKE '%".$_GET['keyword']."%' OR last_name LIKE '%".$_GET['keyword']."%' ";
+	$query_job_seekers = "SELECT * FROM users a 
+		INNER JOIN conext_job_seeker b ON a.uid = b.user_id".$keyword;
+ 	$job_seekers = db_query($query_job_seekers);
+	
+	foreach($job_seekers as $job_seeker) {
+		$objPHPExcel->getActiveSheet()->SetCellValue('A'.$rowCount, $job_seeker->created_at);
+		$objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount, $rowCount-2);
+		$objPHPExcel->getActiveSheet()->SetCellValue('C'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('D'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('E'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('F'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('G'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('H'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('I'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('J'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('K'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('L'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('M'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('N'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('O'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('P'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('Q'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('R'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('S'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('T'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('U'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('U'.$rowCount, 'test');
+		$rowCount++;
+	}
+	// SET CONTENT - END
+	
+	$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
+	//$objWriter->save('some_excel_file.xlsx'); 
+	$filename = 'conext_employer.xlsx';
+	header('Content-Type: application/vnd.ms-excel');
+	header('Content-Disposition: attachment;filename="'.$filename.'"');
+	header('Cache-Control: max-age=0');
+	$objWriter->save('php://output');
+}
+
+function other_setting_form($form, &$form_state) {
+	$form['conext_email_from'] = array(
+			'#type' => 'textfield', 
+			'#title' => 'Conext Email From',
+			'#required' => true,
+			'#default_value' => variable_get('conext_email_from'),
+	);
+	$form['about_conext'] = array(
+			'#type' => 'textfield', 
+			'#title' => 'About Conext',
+			'#type' => 'text_format',
+			'#default_value' => variable_get('about_conext'),
+	);
+	$form['office_address'] = array(
+			'#type' => 'textfield', 
+			'#title' => 'Office Address',
+			'#type' => 'text_format',
+			'#default_value' => variable_get('office_address'),
+	);
+	$form['twitter'] = array(
+			'#type' => 'textfield', 
+			'#title' => 'Twitter',
+			'#default_value' => variable_get('twitter'),
+	);
+	$form['facebook'] = array(
+			'#type' => 'textfield', 
+			'#title' => 'Facebook',
+			'#default_value' => variable_get('facebook'),
+	);
+	$form['linkedin'] = array(
+			'#type' => 'textfield', 
+			'#title' => 'Linkedin',
+			'#default_value' => variable_get('linkedin'),
+	);
+	$form['submit'] = array(
+			'#type' => 'submit', 
+			'#title' => 'Submit',
+			'#value' => 'Submit'
+	);
+
+	return $form;    
+}
+
+function other_setting_form_submit($form, &$form_state) {
+	$conext_email_from = variable_set('conext_email_from', $form['conext_email_from']['#value']);
+	$about_conext = variable_set('about_conext', $form['about_conext']['value']['#value']);
+	$office_address = variable_set('office_address', $form['office_address']['value']['#value']);
+	$twitter = variable_set('twitter', $form['twitter']['#value']);
+	$facebook = variable_set('facebook', $form['facebook']['#value']);
+	$linkedin = variable_set('linkedin', $form['linkedin']['#value']);
+	drupal_set_message("Save Successfully", "notice");
+}
+
+function other_setting() {
+	$output = "<h1>Other Setting</h1>";
+	$form = drupal_get_form('other_setting_form');
+	$output .= drupal_render($form);
+
+	return $output;
+}

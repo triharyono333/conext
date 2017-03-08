@@ -1,0 +1,52 @@
+<?php
+// $Id$
+
+function custom_form_alter_form_alter(&$form, &$form_state, $form_id) {
+	//print "<pre>".print_r($form, true)."</pre>";
+	//print $form_id;
+	global $user;
+
+	if($form_id == 'article_node_form') {
+		$form['actions']['submit']['#submit'][] = 'article_node_form_submit_handler';
+	}
+	else if($form_id == 'conext_job_applied_node_form') {
+		$form['actions']['submit']['#submit'][] = 'conext_job_applied_node_form_submit_handler';
+	}
+	else if($form_id == 'article_category_node_form') {
+		$form['actions']['submit']['#submit'][] = 'article_category_node_form_submit_handler';
+	}
+	else if($form_id == 'client_node_form') {
+		$form['actions']['submit']['#submit'][] = 'client_node_form_submit_handler';
+	}
+	else if($form_id == 'conext_job_node_form') {
+		$form['actions']['submit']['#submit'][] = 'conext_job_node_form_submit_handler';
+	}
+	else if($form_id == 'testimonial_node_form') {
+		$form['actions']['submit']['#submit'][] = 'testimonial_node_form_submit_handler';
+	}
+}
+
+function article_node_form_submit_handler($form, &$form_state) {
+    $form_state['redirect']  = 'admin/article';   
+}
+
+function conext_job_applied_node_form_submit_handler($form, &$form_state) {
+    $form_state['redirect']  = 'admin/applied-job-opening';   
+}
+
+function article_category_node_form_submit_handler($form, &$form_state) {
+    $form_state['redirect']  = 'admin/article-category';   
+}
+
+function client_node_form_submit_handler($form, &$form_state) {
+    $form_state['redirect']  = 'admin/client';   
+}
+
+function conext_job_node_form_submit_handler($form, &$form_state) {
+    $form_state['redirect']  = 'admin/job-opening';   
+}
+
+function testimonial_node_form_submit_handler($form, &$form_state) {
+    $form_state['redirect']  = 'admin/testimonial';   
+}
+?>

@@ -1,0 +1,6 @@
+; $Id$
+name = Conext Custom Function
+description = Module for Conext Custom Function
+version = "0.1-Tri"
+package = conext
+core = 7.x

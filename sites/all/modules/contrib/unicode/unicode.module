@@ -1,0 +1,174 @@
+<?php
+
+/**
+ * @file
+ * Exposes global functionality for Unicode.
+ */
+
+/**
+ * Implements hook_permission
+ */
+function unicode_permission() {
+  $return = array();
+
+  $return['administer unicode'] = array(
+    'title' => t('Administer unicode'),
+    'description' => t('Administer settings for unicode character conversion'),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_menu
+ */
+function unicode_menu() {
+  $items = array();
+
+  $items['admin/config/content/unicode'] = array(
+    'title' => 'Unicode',
+    'description' => 'Configure unicode character conversion.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('unicode_admin_form'),
+    'access arguments' => array('administer unicode'),
+    'file' => 'includes/unicode.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_entity_presave
+ */
+function unicode_entity_presave($entity, $type) {
+
+  $settings = unicode_settings_get();
+  $strategy = $settings['strategy'];
+  $entities = $settings['entities'];
+
+  if ($strategy == 'whitelist' && isset($entities[$type])
+    || $strategy == 'blacklist' && !isset($entities[$type])) {
+
+    $wrapper = entity_metadata_wrapper($type, $entity);
+
+    $properties = $wrapper->getPropertyInfo();
+
+    foreach ($properties as $property_key => $property_info) {
+
+      if (isset($property_info['type']) &&
+        ($filter_callback = unicode_allowed_properties($property_info['type']))) {
+        $value = $wrapper->{$property_key}->value();
+        if(empty($value)) {
+          continue;
+        }
+
+        $value = $filter_callback($value);
+
+        try {
+          $wrapper->{$property_key}->set($value);
+        }
+        catch(Exception $e) {
+
+          $message = t('Failed to convert unicode in @property for entity @entity_type',
+            array(
+              '@property' => $property_key,
+              '@entity_type' => $type,
+            ));
+
+          drupal_set_message($message, 'error');
+          watchdog('unicode', $message);
+        }
+
+      }
+    }
+
+  }
+
+}
+
+/**
+ * Helper Class
+ *
+ * @param $text
+ * @return string
+ */
+function _unicode_filter($text) {
+
+  $text = preg_replace_callback('/[\x{80}-\x{10FFFF}]/u', function ($match) {
+    list($utf8) = $match;
+    $binary = mb_convert_encoding($utf8, 'UTF-32BE', 'UTF-8');
+    $entity = vsprintf('&#x%X;', unpack('N', $binary));
+    return $entity;
+  }, $text);
+
+  return $text;
+}
+
+/**
+ * Unicode settings array
+ *
+ * @return array $settings
+ */
+function unicode_settings_get() {
+  return variable_get('unicode_settings', array('strategy' => 'whitelist', 'entities' => array()));
+}
+
+/**
+ * Saves Unicode settings
+ *
+ * @param array $settings
+ */
+function unicode_settings_save(array $settings) {
+  variable_set('unicode_settings', $settings);
+}
+
+/**
+ * Allowed properties
+ *
+ * @param bool $type
+ * @return array|bool|string
+ */
+function unicode_allowed_properties($type = FALSE) {
+
+  $allowed = array(
+    'text_formatted' => 'unicode_filter_formatted_text',
+    'text' => 'unicode_filter_text',
+  );
+
+  drupal_alter('unicode_allowed_properties', $allowed);
+
+  if ($type && isset($allowed[$type])) {
+    return (string) $allowed[$type];
+  }
+  else if($type) {
+    return FALSE;
+  }
+
+  return $allowed;
+}
+
+/**
+ * Callback to convert formatted text
+ *
+ * @param $value
+ * @return mixed
+ */
+function unicode_filter_formatted_text($value) {
+  $value['value'] = _unicode_filter($value['value']);
+
+  if(isset($value['summary'])) {
+    $value['summary'] = _unicode_filter($value['summary']);
+  }
+
+  return $value;
+}
+
+/**
+ * Callback to convert simple text
+ *
+ * @param $value
+ * @return string
+ */
+function unicode_filter_text($value) {
+  return _unicode_filter($value);
+}
