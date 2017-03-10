@@ -9156,7 +9156,12 @@ ol.job-listing li {
     font-size: 30px;
     line-height: 56px; }
 
-/*# sourceMappingURL=custom.css.map */
+/* ADMIN */
+body.admin-menu #page-wrapper {
+  position: relative; }
+body.admin-menu #header.header-color-white.header-sticky {
+  top: 29px; }
+body.admin-menu .sticky-wrapper.is-sticky .section.bookmark {
+  margin-top: 29px; }
 
-.error_input { border: 1px solid red !important; }
-.error_text { color: red; }
+/*# sourceMappingURL=custom.css.map */

@@ -36,7 +36,7 @@ $arg1 = arg(1);
 							<a href="<?php print $base_url ?>/employer" class="rounded">Employer</a>
 						</li>
 						<?php if ($user->uid > 0) { ?>
-						<?php 
+						<?php
 							$href = '';
 							if ( valid_user_role(JOB_SEEKER_ROLE_ID) ) $href = $base_url.'/job_seeker';
 							if ( valid_user_role(EMPLOYER_ROLE_ID) ) $href = $base_url.'/employer';
@@ -71,7 +71,7 @@ $arg1 = arg(1);
 					<a href="<?php print $base_url ?>/employer">Employer</a>
 				</li>
 				<?php if ($user->uid > 0) { ?>
-				<?php 
+				<?php
 					if ( valid_user_role(JOB_SEEKER_ROLE_ID) ) $href = $base_url.'/job_seeker';
 					if ( valid_user_role(EMPLOYER_ROLE_ID) ) $href = $base_url.'/employer';
 				?>
@@ -86,7 +86,7 @@ $arg1 = arg(1);
 			</ul>
 		</div>
 	</header>
-	
+
 	<?php if (drupal_is_front_page()) { ?>
 	<div id="slideshow">
 		<div class="post-slider style4 owl-carousel box">
@@ -151,7 +151,7 @@ $arg1 = arg(1);
 					<h2 class="box-title">Recent Articles</h2>
 				</div>
 				<div class="row">
-					<?php 
+					<?php
 						$articles = get_article_home();
 						foreach($articles as $article) {
 							$article_image = file_create_url($article->field_article_image[LANGUAGE_NONE][0]['uri'])
@@ -182,7 +182,7 @@ $arg1 = arg(1);
 			<div class="image-banner image-testimony">
 				<div class="container">
 					<div class="testimonials style1 owl-carousel" data-items="1" data-itemsPerDisplayWidth="[[0, 1], [480, 1], [768, 1], [992, 1], [1200, 1]]">
-						<?php 
+						<?php
 						$testimonial = get_testimonial();
 						foreach($testimonial as $testimonial) {
 						?>
@@ -207,7 +207,7 @@ $arg1 = arg(1);
 				</div>
 				<div class="overflow-hidden">
 					<div class="brand-slider owl-carousel" data-items="4" data-itemsPerDisplayWidth="[[0, 1], [480, 1], [768, 2], [992, 3], [1200, 4]]">
-						<?php 
+						<?php
 						$clients = get_client();
 						foreach($clients as $client) {
 							$logo = file_create_url($client->field_client_logo[LANGUAGE_NONE][0]['uri'])
@@ -249,11 +249,12 @@ $arg1 = arg(1);
 			</div>
 		</div>
 	<?php } ?>
+
+        <?php if ($messages): ?><div class="container"><div id="console" class="clearfix"><?php print $messages; ?></div></div><?php endif; ?>
 	<section id="content" class="<?php print (empty($register_class)) ? '' : $register_class ?> <?php print (empty($job_listing_class)) ? '' : $job_listing_class ?>">
-		<?php if ($messages): ?><div id="console" class="clearfix"><?php print $messages; ?></div><?php endif; ?>
-		<?php print render($page['content']); ?>
+      <?php print render($page['content']); ?>
 	</section>
-	
+
 	<?php } ?>
 
 	<?php $other_setting = get_other_setting() ?>
@@ -298,7 +299,7 @@ $arg1 = arg(1);
 <script type="text/javascript" src="<?php print $path_to_theme ?>js/bootstrap.min.js"></script>
 
 <!-- Magnific Popup core JS file -->
-<script type="text/javascript" src="<?php print $path_to_theme ?>components/magnific-popup/jquery.magnific-popup.min.js"></script> 
+<script type="text/javascript" src="<?php print $path_to_theme ?>components/magnific-popup/jquery.magnific-popup.min.js"></script>
 
 <!-- parallax -->
 <script type="text/javascript" src="<?php print $path_to_theme ?>js/jquery.stellar.min.js"></script>
