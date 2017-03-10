@@ -4,3 +4,14 @@ sites/*/settings*.php
 # Ignore paths that contain user-generated content.
 sites/*/files
 sites/*/private
+sites/all/themes/conext/.sass-cache/f7e7ab60261e4f5198a21e1dc4d661eec8dddc54/_base.scssc
+sites/all/themes/conext/.sass-cache/f7e7ab60261e4f5198a21e1dc4d661eec8dddc54/responsive.scssc
+sites/all/themes/conext/.sass-cache/f7e7ab60261e4f5198a21e1dc4d661eec8dddc54/style.scssc
+sites/all/themes/conext/.sass-cache/f7e7ab60261e4f5198a21e1dc4d661eec8dddc54/updates.scssc
+sites/all/themes/conext/css/admin.css
+sites/all/themes/conext/css/admin.css.map
+.idea/conext.iml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/watcherTasks.xml
+.idea/workspace.xml
