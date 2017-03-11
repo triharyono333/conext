@@ -19,7 +19,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 	<div id="main">
 		<div class="text-center">
 			<div class="heading-box">
-				<h2 class="box-title">Forgot Password</h2>
+				<h2 class="box-title">User Login</h2>
 			</div>
 			<div class="authentication">
 				<div class="form-group">

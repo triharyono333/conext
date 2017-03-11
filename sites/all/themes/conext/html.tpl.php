@@ -101,6 +101,10 @@ $path_to_file = $base_url."/sites/default/files/";
 		<script type='text/javascript' src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<script type='text/javascript' src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
 	<![endif]-->
+	<style>
+		.error_input { border: 1px solid red !important; }
+		.error_text { color: red; }
+	</style>
 </head>
 <body>
 	<?php print $page_top; ?>
