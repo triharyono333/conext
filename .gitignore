@@ -15,3 +15,8 @@ sites/all/themes/conext/css/admin.css.map
 .idea/vcs.xml
 .idea/watcherTasks.xml
 .idea/workspace.xml
+sites/all/themes/conext/css/custom.css.map
+sites/all/themes/conext/scss/custom.css
+sites/all/themes/conext/scss/custom.css.map
+sites/all/themes/conext/scss/responsive.css
+sites/all/themes/conext/scss/responsive.css.map
