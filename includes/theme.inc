@@ -1484,11 +1484,11 @@ function theme_get_setting($setting_name, $theme = NULL) {
       // Generate the path to the favicon.
       if ($cache[$theme]['toggle_favicon']) {
         if ($cache[$theme]['default_favicon']) {
-          if (file_exists($favicon = dirname($theme_object->filename) . '/favicon.ico')) {
+          if (file_exists($favicon = dirname($theme_object->filename) . '/favicon.png')) {
             $cache[$theme]['favicon'] = file_create_url($favicon);
           }
           else {
-            $cache[$theme]['favicon'] = file_create_url('misc/favicon.ico');
+            $cache[$theme]['favicon'] = file_create_url('misc/favicon.png');
           }
         }
         elseif ($cache[$theme]['favicon_path']) {

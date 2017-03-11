@@ -71,9 +71,9 @@ article { margin-bottom: 30px; }
 
 #content {
   padding: 70px 0 0; min-height: 300px;
-  > .container > .section, #main > .section, > .section {
-    &:first-child { padding-top: 0; }
-  }
+  /*> .container > .section, #main > .section, > .section {
+    &:first-child { border: 1px solid red;}
+  }*/
 }
 #main {
   margin-bottom: 60px;

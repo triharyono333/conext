@@ -527,7 +527,7 @@ function system_theme_settings($form, &$form_state, $key = '') {
   }
 
   // Inject human-friendly values for logo and favicon.
-  foreach (array('logo' => 'logo.png', 'favicon' => 'favicon.ico') as $type => $default) {
+  foreach (array('logo' => 'logo.png', 'favicon' => 'favicon.png') as $type => $default) {
     if (isset($form[$type]['settings'][$type . '_path'])) {
       $element = &$form[$type]['settings'][$type . '_path'];
 

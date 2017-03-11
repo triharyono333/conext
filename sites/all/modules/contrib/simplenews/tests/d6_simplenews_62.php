@@ -4730,7 +4730,7 @@ db_insert('menu_links')->fields(array(
   'plid' => '0',
   'link_path' => '<front>',
   'router_path' => '',
-  'link_title' => '<img class="admin-menu-icon" src="/misc/favicon.ico" width="16" height="16" alt="Home" />',
+  'link_title' => '<img class="admin-menu-icon" src="/misc/favicon.png" width="16" height="16" alt="Home" />',
   'options' => 'a:3:{s:11:"extra class";s:15:"admin-menu-icon";s:4:"html";b:1;s:5:"alter";b:1;}',
   'module' => 'admin_menu',
   'hidden' => '0',

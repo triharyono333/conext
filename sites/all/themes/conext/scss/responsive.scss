@@ -336,7 +336,7 @@
 
 /* 6. Styles for devices(<=991px ) */
 @media (max-width: 991px) {
-  #content { padding-top: 30px;}
+  #content { padding-top: 0;}
   .hidden-mobile { display: none !important; }
 
   [class^="col-md-"], [class*=" col-md-"] {
@@ -462,6 +462,9 @@
   #header.header-color-white .header-inner { margin-top: 0;}
   #header .header-top-nav > li > a .fa { background: rgba(255,255,255,0.7);}
   #header .header-top-nav > li > a:hover .fa { background: rgba(0,156,231,0.7);}
+  .section.bookmark { top: 0 !important; margin-top: 0 !important;}
+  .bookmark ul li { margin-top: 5px; margin-bottom: 5px;}
+  .work-with-us .icon-box { width: 49%; }
 }
 
 /* 7. Styles for devices(>=768px and <= 991px) */

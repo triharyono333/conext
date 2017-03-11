@@ -518,9 +518,10 @@ article {
 
 #content {
   padding: 70px 0 0;
-  min-height: 300px; }
-  #content > .container > .section:first-child, #content #main > .section:first-child, #content > .section:first-child {
-    padding-top: 0; }
+  min-height: 300px;
+  /*> .container > .section, #main > .section, > .section {
+    &:first-child { border: 1px solid red;}
+  }*/ }
 
 #main {
   margin-bottom: 60px; }

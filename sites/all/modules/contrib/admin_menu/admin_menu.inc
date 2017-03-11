@@ -886,7 +886,7 @@ function template_preprocess_admin_menu_icon(&$variables) {
       $variables['src'] = theme_get_setting('favicon');
     }
     else {
-      $variables['src'] = base_path() . 'misc/favicon.ico';
+      $variables['src'] = base_path() . 'misc/favicon.png';
     }
   }
   // Strip the protocol without delimiters for transient HTTP/HTTPS support.
