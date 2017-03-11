@@ -423,3 +423,18 @@ ol {
         }
     }
 }
+
+/* ADMIN */
+body {
+    &.admin-menu {
+        #page-wrapper { position: relative;}
+        #header.header-color-white.header-sticky { top: 29px; }
+        .sticky-wrapper {
+            &.is-sticky {
+                .section {
+                    &.bookmark { margin-top: 29px;}
+                }
+            }
+        }
+    }
+}
