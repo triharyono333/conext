@@ -21,8 +21,8 @@ $arg1 = arg(1);
 						</li>
 					</ul>
 					<ul id="main-nav" class="hidden-mobile">
-						<li class="menu-item-has-children">
-							<a href="<?php print $base_url ?>" id="home">Home</a>
+						<li class="menu-item-has-children" id="home">
+							<a href="<?php print $base_url ?>">Home</a>
 						</li>
 						<li class="menu-item-has-children" id="articles">
 							<a href="<?php print $base_url ?>/articles">Articles</a>
@@ -56,20 +56,20 @@ $arg1 = arg(1);
 		</div>
 		<div class="mobile-nav-wrapper collapse visible-mobile" id="mobile-nav-wrapper">
 			<ul class="mobile-nav">
-				<li class="menu-item-has-children">
-					<a href="<?php print $base_url ?>" id="home">Home</a>
+				<li class="menu-item-has-children" id="home">
+					<a href="<?php print $base_url ?>">Home</a>
 				</li>
-				<li class="menu-item-has-children">
-					<a href="<?php print $base_url ?>/articles" id="articles">Articles</a>
+				<li class="menu-item-has-children" id="articles">
+					<a href="<?php print $base_url ?>/articles">Articles</a>
 				</li>
-				<li class="menu-item-has-children">
-					<a href="<?php print $base_url ?>/about" id="about">About Us</a>
+				<li class="menu-item-has-children" id="about">
+					<a href="<?php print $base_url ?>/about">About Us</a>
 				</li>
-				<li class="menu-item-has-children">
-					<a href="<?php print $base_url ?>/job_seeker" id="job_seeker">Job Seeker</a>
+				<li class="menu-item-has-children" id="job_seeker">
+					<a href="<?php print $base_url ?>/job_seeker">Job Seeker</a>
 				</li>
-				<li class="menu-item-has-children">
-					<a href="<?php print $base_url ?>/employer" id="employer">Employer</a>
+				<li class="menu-item-has-children" id="employer">
+					<a href="<?php print $base_url ?>/employer">Employer</a>
 				</li>
 				<?php if ($user->uid > 0) { ?>
 				<?php
