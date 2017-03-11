@@ -65,5 +65,3 @@ $theme_path = $base_url . '/' . $theme_path;
 		</div>
 	</div>
 </div>
-
-<script type="text/javascript" src="<?php print $theme_path ?>/js/validate.js"></script>

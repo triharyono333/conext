@@ -4,7 +4,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 ?>
 <div class="container">
 	<div id="main">
-		<form method="post" action="<?php print $base_url ?>/job_seeker/register/submit" enctype="multipart/form-data">
+		<form id="job_seeker_register" method="post" action="<?php print $base_url ?>/job_seeker/register/submit" enctype="multipart/form-data">
 			<div class="text-center">
 				<div class="heading-box">
 					<h2 class="box-title">Registration</h2>
@@ -39,7 +39,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							<input type="text" class="input-text" placeholder="Zip code" id="zip_code" name="zip_code">
 						</div>
 						<div class="form-group dropdown">
-							<select class="selector full-width" id="country" name="country">
+							<select class="selector full-width country" id="country" name="country">
 								<option value="">Select a Country</option>
 								<option value="Indonesia">Indonesia</option>
 							</select>
@@ -177,5 +177,3 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 		</form>
 	</div>
 </div>
-
-<script type="text/javascript" src="<?php print $path_to_theme ?>js/validate.js"></script>

@@ -151,15 +151,19 @@ function admin_employer(){
 		INNER JOIN conext_employer b ON a.uid = b.user_id".$keyword;
  	$employers_total = db_query($query_employers_total)->fetchField();
 	
+	// for paging
+	$limit = 50;
+	$pages = ceil($employers_total / $limit);
+	$page = empty($_GET['page']) ? 1 : $_GET['page'];
+	$offset = ($page - 1)  * $limit;
+	
 	$query_employers = "SELECT * FROM users a 
-		INNER JOIN conext_employer b ON a.uid = b.user_id".$keyword;
+		INNER JOIN conext_employer b ON a.uid = b.user_id".$keyword." LIMIT ".$limit." OFFSET ".$offset;
  	$employers = db_query($query_employers);
 	
-	pager_default_initialize($employers_total,1);
-	$pager = theme('pager');
 	$content = array(
 		'employers' => $employers,
-		'pager' => $pager
+		'pages' => $pages
 	);
 	
 	//drupal_set_message('<pre>'.print_r($content, true).'</pre>');
@@ -186,16 +190,19 @@ function admin_job_seeker(){
 		INNER JOIN conext_job_seeker b ON a.uid = b.user_id".$keyword;
  	$job_seekers_total = db_query($query_job_seekers_total)->fetchField();
 	
-	$query_job_seekers = "SELECT * FROM users a 
-		INNER JOIN conext_job_seeker b ON a.uid = b.user_id".$keyword;
- 	$job_seekers = db_query($query_job_seekers);
+	// for paging
+	$limit = 50;
+	$pages = ceil($job_seekers_total / $limit);
+	$page = empty($_GET['page']) ? 1 : $_GET['page'];
+	$offset = ($page - 1)  * $limit;
 	
-	pager_default_initialize($job_seekers_total,1);
-	$pager = theme('pager');
+	$query_job_seekers = "SELECT * FROM users a 
+		INNER JOIN conext_job_seeker b ON a.uid = b.user_id".$keyword." LIMIT ".$limit." OFFSET ".$offset;
+ 	$job_seekers = db_query($query_job_seekers);
 	
 	$content = array(
 		'job_seekers' => $job_seekers,
-		'keyword' => $keyword
+		'pages' => $pages
 	);
 	
 	return theme('job_seeker_list', array('content' => $content));
@@ -221,12 +228,19 @@ function admin_job(){
 		INNER JOIN conext_job b ON a.nid = b.drupal_job_id".$keyword;
  	$jobs_total = db_query($query_jobs_total)->fetchField();
 	
+	// for paging
+	$limit = 50;
+	$pages = ceil($query_jobs_total / $limit);
+	$page = empty($_GET['page']) ? 1 : $_GET['page'];
+	$offset = ($page - 1)  * $limit;
+	
 	$query_jobs = "SELECT * FROM node a 
-		INNER JOIN conext_job b ON a.nid = b.drupal_job_id".$keyword;
+		INNER JOIN conext_job b ON a.nid = b.drupal_job_id".$keyword." LIMIT ".$limit." OFFSET ".$offset;
  	$jobs = db_query($query_jobs);
 	
 	$content = array(
-		'jobs' => $jobs
+		'jobs' => $jobs,
+		'pages' => $pages
 	);
 	
 	return theme('job_list', array('content' => $content));
@@ -306,19 +320,19 @@ function admin_job_seeker_export() {
 	$objPHPExcel->getActiveSheet()->SetCellValue('G1','Address');
 	$objPHPExcel->getActiveSheet()->mergeCells('G1:J1');
   $objPHPExcel->getActiveSheet()->getStyle('G1:J1')->getAlignment()->applyFromArray($horizontal_style);
-	$objPHPExcel->getActiveSheet()->SetCellValue('G1','Street Name');
-	$objPHPExcel->getActiveSheet()->SetCellValue('H1','Province');
-	$objPHPExcel->getActiveSheet()->SetCellValue('I1','Country');
-	$objPHPExcel->getActiveSheet()->SetCellValue('J1','Zip Code');
+	$objPHPExcel->getActiveSheet()->SetCellValue('G2','Street Name');
+	$objPHPExcel->getActiveSheet()->SetCellValue('H2','Province');
+	$objPHPExcel->getActiveSheet()->SetCellValue('I2','Country');
+	$objPHPExcel->getActiveSheet()->SetCellValue('J2','Zip Code');
 	// Current Position
 	$objPHPExcel->getActiveSheet()->SetCellValue('K1','Current Position');
 	$objPHPExcel->getActiveSheet()->mergeCells('K1:O1');
   $objPHPExcel->getActiveSheet()->getStyle('K1:O1')->getAlignment()->applyFromArray($horizontal_style);
-	$objPHPExcel->getActiveSheet()->SetCellValue('K1','Title');
-	$objPHPExcel->getActiveSheet()->SetCellValue('L1','Company Name');
-	$objPHPExcel->getActiveSheet()->SetCellValue('M1','Duration (MM/YYYY to MM/YYYY)');
-	$objPHPExcel->getActiveSheet()->SetCellValue('N1','Location - city');
-	$objPHPExcel->getActiveSheet()->SetCellValue('O1','Industry');
+	$objPHPExcel->getActiveSheet()->SetCellValue('K2','Title');
+	$objPHPExcel->getActiveSheet()->SetCellValue('L2','Company Name');
+	$objPHPExcel->getActiveSheet()->SetCellValue('M2','Duration (MM/YYYY to MM/YYYY)');
+	$objPHPExcel->getActiveSheet()->SetCellValue('N2','Location - city');
+	$objPHPExcel->getActiveSheet()->SetCellValue('O2','Industry');
 	// Years of Experience
 	$objPHPExcel->getActiveSheet()->SetCellValue('P1','Years of Experience');
 	$objPHPExcel->getActiveSheet()->mergeCells('P1:P2');
@@ -329,10 +343,10 @@ function admin_job_seeker_export() {
 	$objPHPExcel->getActiveSheet()->SetCellValue('R1','Highest Education');
 	$objPHPExcel->getActiveSheet()->mergeCells('R1:U1');
   $objPHPExcel->getActiveSheet()->getStyle('R1:U1')->getAlignment()->applyFromArray($horizontal_style);
-	$objPHPExcel->getActiveSheet()->SetCellValue('R1','School Name');
-	$objPHPExcel->getActiveSheet()->SetCellValue('S1','Graduation Time');
-	$objPHPExcel->getActiveSheet()->SetCellValue('T1','Major');
-	$objPHPExcel->getActiveSheet()->SetCellValue('U1','Location - city');
+	$objPHPExcel->getActiveSheet()->SetCellValue('R2','School Name');
+	$objPHPExcel->getActiveSheet()->SetCellValue('S2','Graduation Time');
+	$objPHPExcel->getActiveSheet()->SetCellValue('T2','Major');
+	$objPHPExcel->getActiveSheet()->SetCellValue('U2','Location - city');
 	// Nationality
 	$objPHPExcel->getActiveSheet()->SetCellValue('V1','Nationality');
 	$objPHPExcel->getActiveSheet()->mergeCells('V1:V2');
@@ -347,32 +361,31 @@ function admin_job_seeker_export() {
 	foreach($job_seekers as $job_seeker) {
 		$objPHPExcel->getActiveSheet()->SetCellValue('A'.$rowCount, $job_seeker->created_at);
 		$objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount, $rowCount-2);
-		$objPHPExcel->getActiveSheet()->SetCellValue('C'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('D'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('E'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('F'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('G'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('H'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('I'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('J'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('K'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('L'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('M'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('N'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('O'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('P'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('Q'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('R'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('S'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('T'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('U'.$rowCount, 'test');
-		$objPHPExcel->getActiveSheet()->SetCellValue('U'.$rowCount, 'test');
+		$objPHPExcel->getActiveSheet()->SetCellValue('C'.$rowCount, $job_seeker->first_name);
+		$objPHPExcel->getActiveSheet()->SetCellValue('D'.$rowCount, $job_seeker->last_name);
+		$objPHPExcel->getActiveSheet()->SetCellValue('E'.$rowCount, $job_seeker->mail);
+		$objPHPExcel->getActiveSheet()->SetCellValue('F'.$rowCount, $job_seeker->phone);
+		$objPHPExcel->getActiveSheet()->SetCellValue('G'.$rowCount, $job_seeker->address_street);
+		$objPHPExcel->getActiveSheet()->SetCellValue('H'.$rowCount, $job_seeker->address_province);
+		$objPHPExcel->getActiveSheet()->SetCellValue('I'.$rowCount, $job_seeker->address_country);
+		$objPHPExcel->getActiveSheet()->SetCellValue('J'.$rowCount, $job_seeker->address_zip);
+		$objPHPExcel->getActiveSheet()->SetCellValue('K'.$rowCount, $job_seeker->current_company);
+		$objPHPExcel->getActiveSheet()->SetCellValue('L'.$rowCount, $job_seeker->current_title);
+		$objPHPExcel->getActiveSheet()->SetCellValue('M'.$rowCount, $job_seeker->current_work_start.' - '.$job_seeker->current_work_end);
+		$objPHPExcel->getActiveSheet()->SetCellValue('N'.$rowCount, $job_seeker->current_city);
+		$objPHPExcel->getActiveSheet()->SetCellValue('O'.$rowCount, $job_seeker->current_industry);
+		$objPHPExcel->getActiveSheet()->SetCellValue('P'.$rowCount, '-');
+		$objPHPExcel->getActiveSheet()->SetCellValue('Q'.$rowCount, '-');
+		$objPHPExcel->getActiveSheet()->SetCellValue('R'.$rowCount, $job_seeker->education);
+		$objPHPExcel->getActiveSheet()->SetCellValue('S'.$rowCount, $job_seeker->graduation);
+		$objPHPExcel->getActiveSheet()->SetCellValue('T'.$rowCount, $job_seeker->major);
+		$objPHPExcel->getActiveSheet()->SetCellValue('U'.$rowCount, $job_seeker->education_city);
+		$objPHPExcel->getActiveSheet()->SetCellValue('V'.$rowCount, $job_seeker->nationality);
 		$rowCount++;
 	}
 	// SET CONTENT - END
 	
-	$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
-	//$objWriter->save('some_excel_file.xlsx'); 
+	$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
 	$filename = 'conext_employer.xlsx';
 	header('Content-Type: application/vnd.ms-excel');
 	header('Content-Disposition: attachment;filename="'.$filename.'"');

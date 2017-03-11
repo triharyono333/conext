@@ -46,6 +46,24 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 				</tbody>
 			</table>
     </div>
-		<?php print theme('pager') ?>
+		
+		<div style="text-align: center;">
+			<?php 
+			$paging_url = (empty($_GET['keyword'])) ? $base_url.'/admin/employer?' : $base_url.'/admin/employer?keyword='.$_GET['keyword'].'&';
+			$cur_page = (empty($_GET['page'])) ? '1' : $_GET['page'];
+			?>
+			<?php $prev_page = $cur_page-1; ?>
+			<?php if ($cur_page > 1) { ?><a href="<?php print $paging_url."page=".$prev_page ?>" class="nav-prev"> << </a><?php } ?>
+		
+				<?php 
+				for($i = 1; $i<=$content['pages']; $i++) { 
+				?>
+				<span style="padding: 10px;" class="<?php print ($cur_page == $i) ? 'pager-current' : '' ?>"><a href="<?php print $paging_url."page=".$i ?>"><?php print $i ?></a></span>
+				<?php } ?>
+	
+			<?php $next_page = $cur_page+1; ?>
+			<?php if ($cur_page < $content['pages']) { ?><a href="<?php print $paging_url."page=".$next_page ?>" class="nav-next"> >> </a><?php } ?>
+		</div>
+			
 	</div>  
 </div>

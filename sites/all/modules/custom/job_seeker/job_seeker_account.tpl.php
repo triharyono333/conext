@@ -209,5 +209,3 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 		<?php } ?>
 	</form>
 </div>
-
-<script type="text/javascript" src="<?php print $path_to_theme ?>js/validate.js"></script>

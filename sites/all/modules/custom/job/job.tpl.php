@@ -1,4 +1,7 @@
-<?php global $base_url; ?>
+<?php 
+global $base_url; 
+$path_to_theme = $base_url . "/sites/all/themes/conext/";
+?>
 
 <form method="get" action="<?php print $base_url ?>/jobs">
 <div class="container">
@@ -29,7 +32,7 @@
 					</div>
 				</div>
 				<div class="col-sm-2">
-					<button type="submit" class="btn style1">Search Job</button>
+					<button id="job_submit_1" type="submit" class="btn style1">Search Job</button>
 				</div>
 			</div>
 
@@ -84,16 +87,17 @@
 			</div>
 			<div class="box">
 				<h4>Job Type</h4>
-				<div class="form-group">
+				<div id="job_type_option" class="form-group">
 					<div class="checkbox">
-						<label><input type="checkbox" value="Permanent" name="type1">Permanent</label>
+						<label><input class="job_type" type="checkbox" value="Permanent">Permanent</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" value="Contract" name="type2">Contract</label>
+						<label><input class="job_type" type="checkbox" value="Contract">Contract</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" value="Temporary" name="type3">Temporary</label>
+						<label><input class="job_type" type="checkbox" value="Temporary">Temporary</label>
 					</div>
+					<input type="hidden" name="job_type" id="job_type">
 				</div>
 			</div>
 			<div class="box">
@@ -127,7 +131,7 @@
 				</select>
 			</div>
 			<div class="box">
-				<button type="submit" class="btn style2">Submit</button>
+				<button id="job_submit_2" type="submit" class="btn style2">Submit</button>
 			</div>
 		</div>
 	</div>

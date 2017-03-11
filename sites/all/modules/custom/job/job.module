@@ -47,6 +47,7 @@ function job_theme($existing, $type, $theme, $path) {
 
 function jobs () {
 	global $user, $base_url;
+	$filter_job_type = '';
 	
 	if (valid_user_role(EMPLOYER_ROLE_ID) || valid_user_role(JOB_SEEKER_ROLE_ID)) {
 		$filter_title = (empty($_GET['keyword'])) ? "" : " AND b.title LIKE '%".$_GET['keyword']."%'";
@@ -55,11 +56,20 @@ function jobs () {
 		$filter_qualification = (empty($_GET['qualification'])) ? "" : " AND qualification = ".$_GET['qualification'];
 		$filter_salary_min = (empty($_GET['salary_min'])) ? "" : " AND salary_min >= ".$_GET['salary_min'];
 		$filter_salary_max = (empty($_GET['salary_max'])) ? "" : " AND salary_max <= ".$_GET['salary_max'];
+		if (!empty($_GET['job_type'])) {
+			$job_types = explode(",", $_GET['job_type']);
+			$filter_job_type .= " AND (";
+			foreach($job_types as $key=>$job_type) {
+				if ($key > 0) $filter_job_type .= " OR job_type LIKE '%".$job_type."%'";
+				else $filter_job_type .= "job_type LIKE '%".$job_type."%'";
+			}
+			$filter_job_type .= ") ";
+		}
 	
 		$query_job_total = "SELECT COUNT(nid) FROM node a
 			INNER JOIN conext_job b ON a.nid = b.drupal_job_id
 			WHERE job_status = :job_status".
-			$filter_title . $filter_industry . $filter_city . $filter_qualification . $filter_salary_min . $filter_salary_max;
+			$filter_title . $filter_industry . $filter_city . $filter_qualification . $filter_salary_min . $filter_salary_max . $filter_job_type;
 		$total = db_query($query_job_total, array('job_status' => PUBLISHED))->fetchField();
 		$limit = JOB_PER_PAGE;
 		$pages = ceil($total / $limit);
@@ -69,7 +79,7 @@ function jobs () {
 		$query_job = "SELECT * FROM node a
 			INNER JOIN conext_job b ON a.nid = b.drupal_job_id 
 			WHERE job_status = :job_status".
-			$filter_title . $filter_industry . $filter_city . $filter_qualification . $filter_salary_min . $filter_salary_max
+			$filter_title . $filter_industry . $filter_city . $filter_qualification . $filter_salary_min . $filter_salary_max . $filter_job_type
 			." LIMIT ".$limit." OFFSET ".$offset;
 		$jobs = db_query($query_job, array('job_status' => PUBLISHED));
 		

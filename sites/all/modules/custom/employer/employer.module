@@ -272,6 +272,7 @@ function employer_post_job_submit() {
 	global $user, $base_url;
 	
 	if ($_POST) {
+		$new_user = '';
 		if (!empty($_SESSION['employer_register'])) {
 			$new_user = conext_register_user ($_SESSION['employer_register'], 'employer');
 			$_SESSION['employer_register'] = null;

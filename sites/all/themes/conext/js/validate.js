@@ -1,5 +1,9 @@
 (function ($) {
     $(document).ready(function () {
+        var arg0 = $("#arg0").val();
+        if (arg0 == '' || arg0 == null || arg0 == 'node') $("#home").addClass('active');
+        else $("#"+arg0).addClass('active');
+        
         $("#about_submit").click(function () {
             var class_error = "error_input";
             var contact_name = $("#contact_name");
@@ -85,7 +89,7 @@
                 alert("Password don't match");
                 return false;
             } else {
-                if ($(e.target).attr('id') == "profile_skip_job") $("#skip_job_post").val('1');
+                if ($(e.target).attr('id') == "employer_register_skip_job") $("#skip_job_post").val('1');
                 $("#employer_profile").submit();
             }
         });
@@ -100,22 +104,26 @@
             var salary_min = $("#salary_min");
             var salary_max = $("#salary_max");
 
-            if (title.val() == "" || location.val() == "" || qualification.val() == "" || 
-                    industry.val() == "" || salary_min.val() == "" || salary_max.val() == "") {
-                if (title.val() == "") title.addClass(class_error);
-                if (location.val() == "") $(".location").addClass(class_error);
-                if (industry.val() == "") $(".industry").addClass(class_error);
-                if (qualification.val() == "") $(".qualification").addClass(class_error);
-                if (salary_min.val() == "") $(".salary_min").addClass(class_error);
-                if (salary_max.val() == "") $(".salary_max").addClass(class_error);
-
-                alert("Please fill all mandatory fields");
-                return false;
-            } else if (salary_min.val() > salary_max.val()) {
-                alert('Invalid minimum salary');
-            } else {
-                if ($(e.target).attr('id') == "post_job_skip_job") $("#skip_job_post").val('1');
+            if ($(e.target).attr('id') == "post_job_skip_job") {
+                $("#skip_job_post").val('1');
                 $("#employer_post_job").submit();
+            } else {
+                if (title.val() == "" || location.val() == "" || qualification.val() == "" || 
+                        industry.val() == "" || salary_min.val() == "" || salary_max.val() == "") {
+                    if (title.val() == "") title.addClass(class_error);
+                    if (location.val() == "") $(".location").addClass(class_error);
+                    if (industry.val() == "") $(".industry").addClass(class_error);
+                    if (qualification.val() == "") $(".qualification").addClass(class_error);
+                    if (salary_min.val() == "") $(".salary_min").addClass(class_error);
+                    if (salary_max.val() == "") $(".salary_max").addClass(class_error);
+
+                    alert("Please fill all mandatory fields");
+                    return false;
+                } else if (parseInt(salary_min.val()) > parseInt(salary_max.val())) {
+                    alert('Invalid minimum salary');
+                } else {
+                    $("#employer_post_job").submit();
+                }
             }
         });
          
@@ -186,7 +194,42 @@
                 $("#job_seeker_account").submit();
             }
         });
+        
+        $("#job_seeker_register_submit").click(function (e) {
+            var class_error = "error_input";
+            var first_name = $("#first_name");
+            var email_address = $("#email_address");
+            var country = $("#country");
+            var password = $("#password");
+            var re_password = $("#re_password");
 
+            if (country.val() == "" || first_name.val() == "" || email_address.val() == "" || !is_valid_email_address(email_address.val())) {
+                if (first_name.val() == "")
+                    first_name.addClass(class_error);
+                if (email_address.val() == "" || !is_valid_email_address(email_address.val()))
+                    email_address.addClass(class_error);
+                if (country.val() == "") $(".country").addClass(class_error);
+
+                alert("Please fill all mandatory fields");
+                return false;
+            } else if (password.val() != re_password.val()) {
+                password.addClass(class_error);
+                re_password.addClass(class_error);
+                alert("Password don't match");
+                return false;
+            } else {
+                $("#job_seeker_register").submit();
+            }
+        });
+
+        $("#job_submit_1, #job_submit_2").click(function (e) {
+            var selecteditems = [];
+            $("#job_type_option").find("input:checked").each(function (i, ob) { 
+                selecteditems.push($(ob).val());
+            });  
+            $("#job_type").val(selecteditems);
+        });
+        
         $("#cv_file").change(function () {
             var file = this.files[0];
             var arrayExtensions = ["doc", "docx", "pdf"];
@@ -198,7 +241,7 @@
                 $("#cv_file_name").html("Upload CV");
             }
         });
-
+        
     })
 
     function is_valid_email_address(email_address) {

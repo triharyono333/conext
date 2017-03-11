@@ -6,6 +6,7 @@ $arg1 = arg(1);
 ?>
 <div id="page-wrapper">
 	<header id="header" class="header-color-white <?php print (drupal_is_front_page()) ? '' : 'white-box' ?>">
+		<input type="hidden" id="arg0" value="<?php print $arg0 ?>" >
 		<div class="container">
 			<div class="header-inner">
 				<div class="branding">
@@ -20,19 +21,19 @@ $arg1 = arg(1);
 						</li>
 					</ul>
 					<ul id="main-nav" class="hidden-mobile">
-						<li class="menu-item-has-children">
+						<li class="menu-item-has-children" id="home">
 							<a href="<?php print $base_url ?>">Home</a>
 						</li>
-						<li class="menu-item-has-children">
+						<li class="menu-item-has-children" id="articles">
 							<a href="<?php print $base_url ?>/articles">Articles</a>
 						</li>
-						<li class="menu-item-has-children">
+						<li class="menu-item-has-children" id="about">
 							<a href="<?php print $base_url ?>/about">About Us</a>
 						</li>
-						<li class="menu-item-has-children">
+						<li class="menu-item-has-children" id="job_seeker">
 							<a href="<?php print $base_url ?>/job_seeker" class="rounded">Job Seeker</a>
 						</li>
-						<li class="menu-item-has-children">
+						<li class="menu-item-has-children" id="employer">
 							<a href="<?php print $base_url ?>/employer" class="rounded">Employer</a>
 						</li>
 						<?php if ($user->uid > 0) { ?>
@@ -56,19 +57,19 @@ $arg1 = arg(1);
 		<div class="mobile-nav-wrapper collapse visible-mobile" id="mobile-nav-wrapper">
 			<ul class="mobile-nav">
 				<li class="menu-item-has-children">
-					<a href="<?php print $base_url ?>">Home</a>
+					<a href="<?php print $base_url ?>" id="home">Home</a>
 				</li>
-				<li class="menu-item-has-children">
+				<li class="menu-item-has-children" id="articles">
 					<a href="<?php print $base_url ?>/articles">Articles</a>
 				</li>
 				<li class="menu-item-has-children">
-					<a href="<?php print $base_url ?>/about">About Us</a>
+					<a href="<?php print $base_url ?>/about" id="about">About Us</a>
 				</li>
 				<li class="menu-item-has-children">
-					<a href="<?php print $base_url ?>/job_seeker">Job Seeker</a>
+					<a href="<?php print $base_url ?>/job_seeker" id="job_seeker">Job Seeker</a>
 				</li>
 				<li class="menu-item-has-children">
-					<a href="<?php print $base_url ?>/employer">Employer</a>
+					<a href="<?php print $base_url ?>/employer" id="employer">Employer</a>
 				</li>
 				<?php if ($user->uid > 0) { ?>
 				<?php 
@@ -109,39 +110,26 @@ $arg1 = arg(1);
 		<div class="section how-to">
 			<div class="container">
 				<div class="row">
+					<?php 
+					$intro_delay = 0;
+					$intros = get_intro_home();
+					foreach($intros as $intro) {
+						$intro_image = file_create_url($intro->field_intro_image[LANGUAGE_NONE][0]['uri']);
+						$intro_delay += 0.25;
+					?>
 					<div class="col-sm-4">
-						<div class="icon-box animated box" data-animation-type="fadeInDown" data-animation-delay="0">
+						<div class="icon-box animated box" data-animation-type="fadeInDown" data-animation-delay="<?php print $intro_delay ?>">
 							<div class="icon-container">
-								<img src="<?php print $path_to_theme ?>images/icon_create_account.png" border="0" align="Create An Account">
+								<img src="<?php print $intro_image ?>" border="0" align="<?php print $intro->title ?>">
 							</div>
 							<div class="box-content">
 								<h3 class="box-title"><a href="#">1. Create An Account</a></h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidid ut labore et dolore magna aliqua.</p>
+								<?php print $intro->body[LANGUAGE_NONE][0]['value'] ?>
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-4">
-						<div class="icon-box animated box" data-animation-type="fadeInDown" data-animation-delay="0.25">
-							<div class="icon-container">
-								<img src="<?php print $path_to_theme ?>images/icon_search_job.png" border="0" align="Search Desired Job">
-							</div>
-							<div class="box-content">
-								<h3 class="box-title"><a href="#">2. Search Desired Job</a></h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidid ut labore et dolore magna aliqua.</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="icon-box animated box" data-animation-type="fadeInDown" data-animation-delay="0.5">
-							<div class="icon-container">
-								<img src="<?php print $path_to_theme ?>images/icon_submit_resume.png" border="0" align="Submit Your Resume">
-							</div>
-							<div class="box-content">
-								<h3 class="box-title"><a href="#">3. Submit Your Resume</a></h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incidid ut labore et dolore magna aliqua.</p>
-							</div>
-						</div>
-					</div>
+					<?php } ?>
+					
 				</div>
 			</div>
 		</div>
@@ -324,3 +312,4 @@ $arg1 = arg(1);
 <script type="text/javascript" src="<?php print $path_to_theme ?>js/custom-file-input.js"></script>
 
 <script type="text/javascript" src="<?php print $path_to_theme ?>js/revolution-slider.js"></script>
+<script type="text/javascript" src="<?php print $path_to_theme ?>js/validate.js"></script>

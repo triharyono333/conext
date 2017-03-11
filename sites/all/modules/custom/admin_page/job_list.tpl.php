@@ -45,20 +45,22 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 			</table>
     </div>
 		
-		<div class="item-list">
-			<ul class="pager">
-				<li class="pager-last first"><a title="Go to first page" href="/admin/fragrance-product?sku=&amp;title=&amp;field_fragrance_category_tid=&amp;field_fragrance_brand_value=All&amp;page=9"><< first</a></li>
-				<li class="pager-current first">1</li>
-				<li class="pager-item"><a title="Go to page 2" href="/admin/fragrance-product?sku=&amp;title=&amp;field_fragrance_category_tid=&amp;field_fragrance_brand_value=All&amp;page=1">2</a></li>
-				<li class="pager-item"><a title="Go to page 3" href="/admin/fragrance-product?sku=&amp;title=&amp;field_fragrance_category_tid=&amp;field_fragrance_brand_value=All&amp;page=2">3</a></li>
-				<li class="pager-item"><a title="Go to page 4" href="/admin/fragrance-product?sku=&amp;title=&amp;field_fragrance_category_tid=&amp;field_fragrance_brand_value=All&amp;page=3">4</a></li>
-				<li class="pager-item"><a title="Go to page 5" href="/admin/fragrance-product?sku=&amp;title=&amp;field_fragrance_category_tid=&amp;field_fragrance_brand_value=All&amp;page=4">5</a></li>
-				<li class="pager-item"><a title="Go to page 6" href="/admin/fragrance-product?sku=&amp;title=&amp;field_fragrance_category_tid=&amp;field_fragrance_brand_value=All&amp;page=5">6</a></li>
-				<li class="pager-item"><a title="Go to page 7" href="/admin/fragrance-product?sku=&amp;title=&amp;field_fragrance_category_tid=&amp;field_fragrance_brand_value=All&amp;page=6">7</a></li>
-				<li class="pager-item"><a title="Go to page 8" href="/admin/fragrance-product?sku=&amp;title=&amp;field_fragrance_category_tid=&amp;field_fragrance_brand_value=All&amp;page=7">8</a></li>
-				<li class="pager-item"><a title="Go to page 9" href="/admin/fragrance-product?sku=&amp;title=&amp;field_fragrance_category_tid=&amp;field_fragrance_brand_value=All&amp;page=8">9</a></li>
-				<li class="pager-last last"><a title="Go to last page" href="/admin/fragrance-product?sku=&amp;title=&amp;field_fragrance_category_tid=&amp;field_fragrance_brand_value=All&amp;page=9">last >></a></li>
-			</ul>
+		<div style="text-align: center;">
+			<?php 
+			$paging_url = (empty($_GET['keyword'])) ? $base_url.'/admin/employer?' : $base_url.'/admin/employer?keyword='.$_GET['keyword'].'&';
+			$cur_page = (empty($_GET['page'])) ? '1' : $_GET['page'];
+			?>
+			<?php $prev_page = $cur_page-1; ?>
+			<?php if ($cur_page > 1) { ?><a href="<?php print $paging_url."page=".$prev_page ?>" class="nav-prev"> << </a><?php } ?>
+		
+				<?php 
+				for($i = 1; $i<=$content['pages']; $i++) { 
+				?>
+				<span style="padding: 10px;" class="<?php print ($cur_page == $i) ? 'pager-current' : '' ?>"><a href="<?php print $paging_url."page=".$i ?>"><?php print $i ?></a></span>
+				<?php } ?>
+	
+			<?php $next_page = $cur_page+1; ?>
+			<?php if ($cur_page < $content['pages']) { ?><a href="<?php print $paging_url."page=".$next_page ?>" class="nav-next"> >> </a><?php } ?>
 		</div>
 			
 	</div>  

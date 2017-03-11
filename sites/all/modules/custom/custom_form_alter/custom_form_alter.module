@@ -24,6 +24,9 @@ function custom_form_alter_form_alter(&$form, &$form_state, $form_id) {
 	else if($form_id == 'testimonial_node_form') {
 		$form['actions']['submit']['#submit'][] = 'testimonial_node_form_submit_handler';
 	}
+	else if($form_id == 'intro_node_form') {
+		$form['actions']['submit']['#submit'][] = 'intro_node_form_submit_handler';
+	}
 }
 
 function article_node_form_submit_handler($form, &$form_state) {
@@ -48,5 +51,9 @@ function conext_job_node_form_submit_handler($form, &$form_state) {
 
 function testimonial_node_form_submit_handler($form, &$form_state) {
     $form_state['redirect']  = 'admin/testimonial';   
+}
+
+function intro_node_form_submit_handler($form, &$form_state) {
+    $form_state['redirect']  = 'admin/intro';   
 }
 ?>

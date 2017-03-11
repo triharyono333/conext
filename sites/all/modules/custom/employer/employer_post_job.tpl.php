@@ -86,6 +86,26 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 				</div>
 			</div>
 			<div class="box">
+				<h4>Job Type</h4>
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="checkbox">
+							<label><input type="checkbox" name="job_types[]" value="Permanent">Permanent</label>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="checkbox">
+							<label><input type="checkbox" name="job_types[]" value="Contract">Contract</label>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="checkbox">
+							<label><input type="checkbox" name="job_types[]" value="Temporary">Temporary</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="box">
 				<h4>Benefits</h4>
 				<div class="row">
 					<div class="col-sm-4">

@@ -100,5 +100,3 @@
 		</form>
 	</div>
 </div>
-
-<script type="text/javascript" src="<?php print $path_to_theme ?>js/validate.js"></script>

@@ -30,5 +30,4 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 		</div>
 	</div>
 </div>
-</div>
 
