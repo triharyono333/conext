@@ -2480,7 +2480,7 @@ class FileURLRewritingTest extends FileTestCase {
     $filepath = 'misc/jquery.js';
     $url = file_create_url($filepath);
     $this->assertEqual(FILE_URL_TEST_CDN_1 . '/' . $filepath, $url, 'Correctly generated a CDN URL for a shipped file.');
-    $filepath = 'misc/favicon.ico';
+    $filepath = 'misc/favicon.png';
     $url = file_create_url($filepath);
     $this->assertEqual(FILE_URL_TEST_CDN_2 . '/' . $filepath, $url, 'Correctly generated a CDN URL for a shipped file.');
 
@@ -2489,7 +2489,7 @@ class FileURLRewritingTest extends FileTestCase {
     $filepath = 'misc/jquery.js';
     $url = file_create_url($filepath);
     $this->assertEqual(base_path() . '/' . $filepath, $url, 'Correctly generated a root-relative URL for a shipped file.');
-    $filepath = 'misc/favicon.ico';
+    $filepath = 'misc/favicon.png';
     $url = file_create_url($filepath);
     $this->assertEqual(base_path() . '/' . $filepath, $url, 'Correctly generated a root-relative URL for a shipped file.');
 
@@ -2498,7 +2498,7 @@ class FileURLRewritingTest extends FileTestCase {
     $filepath = 'misc/jquery.js';
     $url = file_create_url($filepath);
     $this->assertEqual('/' . base_path() . '/' . $filepath, $url, 'Correctly generated a protocol-relative URL for a shipped file.');
-    $filepath = 'misc/favicon.ico';
+    $filepath = 'misc/favicon.png';
     $url = file_create_url($filepath);
     $this->assertEqual('/' . base_path() . '/' . $filepath, $url, 'Correctly generated a protocol-relative URL for a shipped file.');
   }
