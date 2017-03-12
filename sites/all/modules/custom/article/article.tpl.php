@@ -10,28 +10,32 @@
 		</div>
 		<div class="container">
 			<div class="iso-container blog-posts">
-				<?php foreach($content['article_detail'] as $detail) { ?>
-				<div class="iso-item filter-all filter-category3">
-					<article class="post post-full">
-						<div class="post-image col-sm-5">
-							<div class="image">
-								<img src="<?php print $detail['article_image'] ?>" alt="<?php print $detail['title'] ?>">
-								<div class="image-extras">
-									<a href="<?php print $detail['article_link'] ?>" class="post-gallery"></a>
+				<?php if (empty($content['article_detail'])) { ?>
+					No article found
+				<?php } else { ?>
+					<?php foreach($content['article_detail'] as $detail) { ?>
+					<div class="iso-item filter-all filter-category3">
+						<article class="post post-full">
+							<div class="post-image col-sm-5">
+								<div class="image">
+									<img src="<?php print $detail['article_image'] ?>" alt="<?php print $detail['title'] ?>">
+									<div class="image-extras">
+										<a href="<?php print $detail['article_link'] ?>" class="post-gallery"></a>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="post-content col-sm-7">
-							<h3 class="post-title"><a href="<?php print $detail['article_link'] ?>"><?php print $detail['title'] ?></a></h3>
-							<div class="post-meta">
-								<span class="entry-author fn">By <a href="#"><?php print $detail['created_by'] ?></a></span>
-								<span class="entry-time"><span class="updated no-display">2014-09-09T15:57:08+00:00</span><span class="published"><?php print $detail['created_at'] ?></span></span>
+							<div class="post-content col-sm-7">
+								<h3 class="post-title"><a href="<?php print $detail['article_link'] ?>"><?php print $detail['title'] ?></a></h3>
+								<div class="post-meta">
+									<span class="entry-author fn">By <a href="#"><?php print $detail['created_by'] ?></a></span>
+									<span class="entry-time"><span class="updated no-display">2014-09-09T15:57:08+00:00</span><span class="published"><?php print $detail['created_at'] ?></span></span>
+								</div>
+								<p><?php print $detail['short_description'] ?></p>
+								<a href="<?php print $detail['article_link'] ?>" class="btn style2">Read More <span class="arrow"></span></a>
 							</div>
-							<p><?php print $detail['short_description'] ?></p>
-							<a href="<?php print $detail['article_link'] ?>" class="btn style2">Read More <span class="arrow"></span></a>
-						</div>
-					</article>
-				</div>
+						</article>
+					</div>
+					<?php } ?>
 				<?php } ?>
 			</div>
 			<div class="post-pagination">

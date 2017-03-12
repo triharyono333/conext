@@ -120,6 +120,9 @@ function article_node_insert($node) {
   switch ($node->type) {
     case 'article':  
 			if (!empty($node->field_article_send_to_group)) {
+				$role_array = [];
+				$role_filter = '';
+				
 				// build email element
 				$email_content = str_replace('img src="/sites/default/files', 'img src="'.$base_url.'/sites/default/files', $node->body[LANGUAGE_NONE][0]['value']);
 				$params = array(
@@ -133,8 +136,13 @@ function article_node_insert($node) {
 				foreach($node->field_article_send_to_group[LANGUAGE_NONE] as $role) {
 					$role_array[] = $role['value'];
 				}
-				$roles = implode(',', $role_array);
-				$users = db_query("SELECT u.uid, mail FROM users u INNER JOIN users_roles ur ON u.uid = ur.uid WHERE status = 1 AND rid IN (".$roles.")");
+				
+				if (!empty($role_array)) {
+					$roles = implode(',', $role_array);
+					$role_filter = " AND rid IN (".$roles.")";
+				}
+				
+				$users = db_query("SELECT u.uid, mail FROM users u INNER JOIN users_roles ur ON u.uid = ur.uid WHERE status = 1".$role_filter);
 				foreach($users as $user) {
 					$to = $user->mail;
 					$mail = drupal_mail('article', $key, $to, language_default(), $params, $from);

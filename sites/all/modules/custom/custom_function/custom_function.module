@@ -20,6 +20,15 @@ function custom_function_menu() {
 		'type' =>  MENU_CALLBACK,
 	);
 	
+	$items['prelaunch_login'] = array(
+		'title' => t('Prelaunch'),
+		'description' => 'Prelaunch',
+		'page callback' => 'prelaunch_login',
+		'access arguments' => true,
+		'access callback' => true,
+		'type' =>  MENU_CALLBACK,
+	);
+	
 	$items['register/verify/%/%'] = array(
 		'title' => t('Register Verify'),
 		'description' => 'register verify',
@@ -75,6 +84,18 @@ function custom_page() {
 	}
 	
 	return '';
+}
+
+function prelaunch_login() {
+	global $base_url;
+	if ($_POST) {
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+		if ($username == 'cnx' && $password == 'cnx123') {
+			$_SESSION['prelaunch_login'] = 1;
+		}
+	}
+	drupal_goto($base_url);
 }
 
 function register_verify($uid, $token) {
@@ -139,9 +160,11 @@ function conext_login_user ($username, $password, $success_url, $fail_url, $role
 }
 
 function conext_register_user ($params, $type = 'employer', $file_uri='') {
+	global $base_url;
 	if (isset($params)) {
 		if (user_load_by_mail($params['email_address'])) { // email exist
 			drupal_set_message('Email Exists', 'error');
+			($type == 'job_seeker') ? drupal_goto($base_url.'/job_seeker/register') : drupal_goto($base_url.'/employer/register');
 		} else {
 			$roles = ($type == 'job_seeker') ? array(DRUPAL_AUTHENTICATED_RID => 'authenticated user', 6 => 'Job Seeker') : array(DRUPAL_AUTHENTICATED_RID => 'authenticated user', 5 => 'Employer');
 			// create user node

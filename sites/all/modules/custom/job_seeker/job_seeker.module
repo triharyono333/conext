@@ -195,7 +195,7 @@ function job_seeker_login_submit() {
 
 function job_seeker_register() {
 	global $user, $base_url;
-	if (!empty($_SESSION['linkedin'])) {
+	if (!empty($_SESSION['linkedin']['person'])) {
 		$first_name = $_SESSION['linkedin']['person']['first-name'];
 		$last_name = $_SESSION['linkedin']['person']['last-name'];
 		$public_profile_url = $_SESSION['linkedin']['person']['public-profile-url'];
@@ -220,7 +220,7 @@ function job_seeker_register() {
 		'public_profile_url' => (empty($public_profile_url)) ? '' : $public_profile_url,
 		'email_address' => (empty($email_address)) ? '' : $email_address,
 	);
-	drupal_set_message("<pre>".print_r($content, true)."</pre>");
+	//drupal_set_message("<pre>".print_r($content, true)."</pre>");
 	
 	return theme('job_seeker_register', array('content' => $content));
 }

@@ -49,11 +49,10 @@ function about_theme($existing, $type, $theme, $path) {
 function about_mail($key, &$message, $params) {
 	$language = $message['language'];
   switch ($key) {
-		//switching on $key lets you create variations of the email based on the $key parameter
     case 'about_email':
-      $message['subject'] = t('Conext Contact Email');
-			//the email body is here, inside the $message array
+      $message['subject'] = $params['subject'];
       $message['body'][] = $params['body'];
+			$message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
       break;
   }
 }
@@ -76,13 +75,19 @@ function about() {
 }
 
 function about_action(){
-	$email_content = "Hi Tri < br /> Apa Kabar <br /><br />Thanks";
-  $params = array('body' => $email_content);
-  $key = 'about_email';
-  $to = "triharyono333@gmail.com";
-  $from = 'triharyono111@gmail.com';
-  $mail = drupal_mail('about', $key, $to, language_default(), $params, $from);
+	global $base_url;
 	
-	drupal_set_message('<pre>'.print_r($mail, true).'</pre>', 'notice');
-	return 'test';
+	if ($_POST) {
+		$email_content = "Name: ".$_POST['contact_name']."<br />Email Address: ".$_POST['email_address']."<br />Phone: ".$_POST['phone']."Comapany: ".$_POST['company']."<br /> Message:<br />".$_POST['message'];
+		$params = array('body' => $email_content, 'subject' => 'Conext Contact Email');
+		$key = 'about_email';
+		$to = variable_get('conext_contact_email_to');
+		$from = variable_get('conext_email_from');
+		$mail = drupal_mail('about', $key, $to, language_default(), $params, $from);
+		drupal_set_message('You have submitted the form successfully');
+		drupal_goto($base_url.'/about');
+	} else {
+		drupal_set_message('Invalid Page', 'error');
+		drupal_goto($base_url.'/about');
+	}
 }

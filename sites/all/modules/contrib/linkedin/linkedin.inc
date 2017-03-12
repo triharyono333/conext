@@ -207,9 +207,9 @@ function _linkedin_get_profile_fields($uid, $fields = array()) {
   $append .= _linkedin_build_fields_request($fields, $type);
   $url = $base_url . $append;
   $response = linkedin_get_fields($url, $tokens);
-	drupal_set_message("<pre>".print_r($tokens, true)."</pre>");
-	drupal_set_message("<pre>".print_r($url, true)."</pre>");
-	drupal_set_message("<pre>".print_r($response, true)."</pre>");
+	//drupal_set_message("<pre>".print_r($tokens, true)."</pre>");
+	//drupal_set_message("<pre>".print_r($url, true)."</pre>");
+	//drupal_set_message("<pre>".print_r($response, true)."</pre>");
 
   if (isset($response['error']['status']) && ($response['error']['status'] == 401 || $response['error']['status'] == 403)) {
     // No relationships between users, switch back to public profile and retry
