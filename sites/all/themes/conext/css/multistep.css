@@ -88,7 +88,7 @@ Basic Style
 .cd-breadcrumb.custom-icons li.current:nth-of-type(4) > *::before, .cd-multi-steps.custom-icons li.current:nth-of-type(4) > *::before {
   background-position: -60px -20px;
 }
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 319px) {
   .cd-breadcrumb, .cd-multi-steps {
     padding: 0 1.2em;
   }
@@ -108,7 +108,7 @@ Basic Style
 Triangle breadcrumb
 
 -------------------------------- */
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 319px) {
   .cd-breadcrumb.triangle {
     /* reset basic style */
     background-color: transparent;
@@ -211,7 +211,7 @@ Triangle breadcrumb
 Custom icons hover effects - breadcrumb and multi-steps
 
 -------------------------------- */
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 319px) {
   .no-touch .cd-breadcrumb.triangle.custom-icons li:first-of-type a:hover::before, .cd-breadcrumb.triangle.custom-icons li.current:first-of-type em::before, .no-touch .cd-multi-steps.text-center.custom-icons li:first-of-type a:hover::before, .cd-multi-steps.text-center.custom-icons li.current:first-of-type em::before {
     /* change custom icon using image sprites - hover effect or current item */
     background-position: 0 -40px;
@@ -231,7 +231,7 @@ Custom icons hover effects - breadcrumb and multi-steps
 Multi steps indicator 
 
 -------------------------------- */
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 319px) {
   .cd-multi-steps {
     /* reset style */
     background-color: transparent;
@@ -376,7 +376,7 @@ Add a counter to the multi-steps indicator
   content: counter(steps) " - ";
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 319px) {
   .cd-multi-steps.text-top.count li > *::before,
   .cd-multi-steps.text-bottom.count li > *::before {
     /* this is the spot indicator */

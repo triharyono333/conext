@@ -67,7 +67,7 @@ $path_to_file = $base_url."/sites/default/files/";
 	<meta charset="utf-8">
 	<meta name="description" content="Conext | Connecting Your Future">
 	<meta name="author" content="SoapTheme">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
 	<!-- Theme Styles -->
 	<link rel="stylesheet" href="<?php print $path_to_theme ?>css/bootstrap.min.css">
