@@ -8871,10 +8871,13 @@ ul.listing {
       content: '-';
       margin-right: 5px; }
 
+.post .post-image {
+  margin-bottom: 15px; }
+.post .post-content .post-meta {
+  margin-bottom: 5px; }
+
 .single-post .post .post-content {
   padding-top: 0; }
-.single-post .post .post-image {
-  margin-bottom: 15px; }
 
 .search-box {
   padding: 20px;
