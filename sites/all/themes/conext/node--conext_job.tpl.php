@@ -65,3 +65,11 @@ $theme_path = $base_url . '/' . $theme_path;
 		</div>
 	</div>
 </div>
+
+<script>
+	(function ($) {
+		$(document).ready(function () {
+			$("#about").addClass('active');
+		})
+	}(jQuery));
+</script>

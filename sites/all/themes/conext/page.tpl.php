@@ -78,7 +78,7 @@ body {
 <div id="page-wrapper">
 	<?php if (!empty($_SESSION['prelaunch_login'])) { ?>
 	<header id="header" class="header-color-white <?php print (drupal_is_front_page()) ? '' : 'white-box' ?>">
-		<input type="hidden" id="arg0" value="<?php print $arg0 ?>" >
+		<input type="hidden" id="arg0" value="<?php print (drupal_is_front_page()) ? 'home' : $arg0 ?>" >
 		<div class="container">
 			<div class="header-inner">
 				<div class="branding">

@@ -78,7 +78,7 @@ function about_action(){
 	global $base_url;
 	
 	if ($_POST) {
-		$email_content = "Name: ".$_POST['contact_name']."<br />Email Address: ".$_POST['email_address']."<br />Phone: ".$_POST['phone']."Comapany: ".$_POST['company']."<br /> Message:<br />".$_POST['message'];
+		$email_content = "Name: ".$_POST['contact_name']."<br />Email Address: ".$_POST['email_address']."<br />Phone: ".$_POST['phone']."<br />Company: ".$_POST['company']."<br /> Message:<br />".$_POST['message'];
 		$params = array('body' => $email_content, 'subject' => 'Conext Contact Email');
 		$key = 'about_email';
 		$to = variable_get('conext_contact_email_to');

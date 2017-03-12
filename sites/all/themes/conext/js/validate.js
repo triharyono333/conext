@@ -1,7 +1,7 @@
 (function ($) {
     $(document).ready(function () {
         var arg0 = $("#arg0").val();
-        if (arg0 == '' || arg0 == null || arg0 == 'node') $("#home").addClass('active');
+        if (arg0 == '' || arg0 == null || arg0 == 'home') $("#home").addClass('active');
         else $("#"+arg0).addClass('active');
         
         $("#about_submit").click(function () {
