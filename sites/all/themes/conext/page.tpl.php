@@ -3,6 +3,7 @@ global $user, $base_url, $language;
 $path_to_theme = $base_url . "/sites/all/themes/conext/";
 $arg0 = arg(0);
 $arg1 = arg(1);
+$section_class = get_section_class($arg0, $arg1);
 ?>
 
 <style>
@@ -297,10 +298,9 @@ body {
 	<?php if ($tabs): ?><div class="tabs"><?php print render($tabs); ?></div><?php endif; ?>
 	<?php if ($arg0 == 'employer' || $arg0 == 'job_seeker' || $arg0 == 'user') { ?>
 		<div class="head-spacer"><img src="<?php print $path_to_theme ?>images/spacer.gif" style="height: 92px;"></div>
-		<?php if ($arg1 == 'register' || $arg1 == 'post_job') $register_class = 'register' ?>
+		<?php //if ($arg1 == 'register' || $arg1 == 'post_job') $register_class = 'register' ?>
 	<?php } else { ?>
 		<?php $header_title = get_home_header_title($arg0) ?>
-		<?php if ($arg0 == 'jobs') $job_listing_class = 'job-listing' ?>
 		<div class="page-title-container image-banner">
 			<div class="page-title">
 				<div class="container">
@@ -311,7 +311,7 @@ body {
 	<?php } ?>
 
         <?php if ($messages): ?><div class="container"><div id="console" class="clearfix"><?php print $messages; ?></div></div><?php endif; ?>
-	<section id="content" class="<?php print (empty($register_class)) ? '' : $register_class ?> <?php print (empty($job_listing_class)) ? '' : $job_listing_class ?>">
+	<section id="content" class="<?php print $section_class ?>">
       <?php print render($page['content']); ?>
 	</section>
 

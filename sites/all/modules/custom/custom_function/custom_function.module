@@ -462,3 +462,12 @@ function is_city_exist($nama_kota) {
 	if (empty($city)) return false;
 	else return true;
 }
+
+function get_section_class($arg0, $arg1) {
+	$section_class = '';
+	if ($arg0 == 'about') $section_class = 'about-us';
+	else if ($arg0 == 'jobs') $section_class = 'job-listing';
+	else if ($arg1 == 'register' || $arg1 == 'post_job') $section_class = 'register';
+		
+	return $section_class;
+}
