@@ -8693,10 +8693,12 @@ body.woocommerce select:not(.default-style) + .customSelect {
 .how-to, .recent-posts {
   border-bottom: 1px solid #cccccc; }
 
-.how-to .icon-box.box {
-  text-align: center; }
-.how-to .icon-box .icon-container {
-  margin-bottom: 15px; }
+.how-to {
+  padding-top: 0; }
+  .how-to .icon-box.box {
+    text-align: center; }
+  .how-to .icon-box .icon-container {
+    margin-bottom: 15px; }
 
 .section.testimonials {
   padding-bottom: 0; }
