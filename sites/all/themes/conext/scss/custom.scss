@@ -14,11 +14,45 @@
 }
 #header {
     &.header-color-white {
+        #nav > ul > li {
+            &.my-account {
+                &:hover {
+                    a { background: none; color: #fff;}
+                }
+                a {
+                    padding: 10px;
+                    .fa { font-size: 25px;}
+                    &:hover { background: none; color: #fff;}
+                }
+                .sub-nav {
+                    a {
+                        color: #333;
+                        &:hover { color: #009ce7;}
+                    }
+                }
+            }
+        }
         &.header-sticky {
             .logo { @include at2x($theme-skin-logo, "png", 125px, 42px);}
             #nav > ul > li > a.rounded {
                 border-color: #ccc;
                 &:hover { border-color: #333; }
+            }
+            #nav > ul > li {
+                &.my-account {
+                    &:hover {
+                        a {color: #333333;}
+                    }
+                    a {
+                        &:hover { color: #333333;}
+                    }
+                    .sub-nav {
+                        a {
+                            color: #333;
+                            &:hover { color: #009ce7;}
+                        }
+                    }
+                }
             }
         }
         &.white-box {
@@ -38,18 +72,21 @@
                         &.rounded {  border-color: $theme-skin-color; }
                     }
                 }
+                &.my-account {
+                    &:hover {
+                        a { color: #333333;}
+                    }
+                    .sub-nav {
+                        a {
+                            color: #333;
+                            &:hover { color: #009ce7;}
+                        }
+                    }
+                }
             }
             &.header-sticky {
                 .logo { @include at2x($theme-skin-logo, "png", 125px, 42px); }
             }
-        }
-        #nav > ul > li {
-          &.my-account {
-            a {
-              padding: 10px;
-              .fa { font-size: 25px;}
-            }
-          }
         }
     }
 }

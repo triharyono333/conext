@@ -8552,6 +8552,20 @@ body.woocommerce select:not(.default-style) + .customSelect {
       #nav > ul > li > a.rounded {
         border: 1px solid #fff; }
 
+#header.header-color-white #nav > ul > li.my-account:hover a {
+  background: none;
+  color: #fff; }
+#header.header-color-white #nav > ul > li.my-account a {
+  padding: 10px; }
+  #header.header-color-white #nav > ul > li.my-account a .fa {
+    font-size: 25px; }
+  #header.header-color-white #nav > ul > li.my-account a:hover {
+    background: none;
+    color: #fff; }
+#header.header-color-white #nav > ul > li.my-account .sub-nav a {
+  color: #333; }
+  #header.header-color-white #nav > ul > li.my-account .sub-nav a:hover {
+    color: #009ce7; }
 #header.header-color-white.header-sticky .logo {
   background-image: url("../images/logo_conext.png");
   background-size: 125px 42px; }
@@ -8563,6 +8577,14 @@ body.woocommerce select:not(.default-style) + .customSelect {
   border-color: #ccc; }
   #header.header-color-white.header-sticky #nav > ul > li > a.rounded:hover {
     border-color: #333; }
+#header.header-color-white.header-sticky #nav > ul > li.my-account:hover a {
+  color: #333333; }
+#header.header-color-white.header-sticky #nav > ul > li.my-account a:hover {
+  color: #333333; }
+#header.header-color-white.header-sticky #nav > ul > li.my-account .sub-nav a {
+  color: #333; }
+  #header.header-color-white.header-sticky #nav > ul > li.my-account .sub-nav a:hover {
+    color: #009ce7; }
 #header.header-color-white.white-box {
   background: #fff; }
   #header.header-color-white.white-box .logo {
@@ -8582,6 +8604,12 @@ body.woocommerce select:not(.default-style) + .customSelect {
     color: #009ce7; }
     #header.header-color-white.white-box #nav > ul > li.active a.rounded {
       border-color: #009ce7; }
+  #header.header-color-white.white-box #nav > ul > li.my-account:hover a {
+    color: #333333; }
+  #header.header-color-white.white-box #nav > ul > li.my-account .sub-nav a {
+    color: #333; }
+    #header.header-color-white.white-box #nav > ul > li.my-account .sub-nav a:hover {
+      color: #009ce7; }
   #header.header-color-white.white-box.header-sticky .logo {
     background-image: url("../images/logo_conext.png");
     background-size: 125px 42px; }
@@ -8589,10 +8617,6 @@ body.woocommerce select:not(.default-style) + .customSelect {
       #header.header-color-white.white-box.header-sticky .logo {
         background-image: url("../images/logo_conext@2x.png");
         background-size: 125px 42px; } }
-#header.header-color-white #nav > ul > li.my-account a {
-  padding: 10px; }
-  #header.header-color-white #nav > ul > li.my-account a .fa {
-    font-size: 25px; }
 
 .page-title-container .entry-title {
   font-size: 90px;
