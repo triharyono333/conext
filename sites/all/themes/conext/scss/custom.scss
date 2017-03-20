@@ -38,16 +38,18 @@
                         &.rounded {  border-color: $theme-skin-color; }
                     }
                 }
-                &.my-account {
-                    a {
-                        padding: 10px;
-                        .fa { font-size: 25px;}
-                    }
-                }
             }
             &.header-sticky {
                 .logo { @include at2x($theme-skin-logo, "png", 125px, 42px); }
             }
+        }
+        #nav > ul > li {
+          &.my-account {
+            a {
+              padding: 10px;
+              .fa { font-size: 25px;}
+            }
+          }
         }
     }
 }

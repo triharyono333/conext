@@ -465,6 +465,19 @@
   .section.bookmark { top: 0 !important; margin-top: 0 !important;}
   .bookmark ul li { margin-top: 5px; margin-bottom: 5px;}
   .work-with-us .icon-box { width: 49%; }
+  .post-filters {
+    margin-top: 20px;
+    a {
+      &.btn { margin-bottom: 10px;}
+    }
+  }
+  .register, .login {
+    margin-top: 20px;
+    .actions .radio { text-align: left;}
+  }
+  .how-to { padding-top: 50px;}
+  .mobile-nav > .menu-item-has-children.opened > a { color: #009ce7;}
+  .mobile-nav .sub-nav { padding: 10px;}
 }
 
 /* 7. Styles for devices(>=768px and <= 991px) */

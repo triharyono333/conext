@@ -8582,10 +8582,6 @@ body.woocommerce select:not(.default-style) + .customSelect {
     color: #009ce7; }
     #header.header-color-white.white-box #nav > ul > li.active a.rounded {
       border-color: #009ce7; }
-  #header.header-color-white.white-box #nav > ul > li.my-account a {
-    padding: 10px; }
-    #header.header-color-white.white-box #nav > ul > li.my-account a .fa {
-      font-size: 25px; }
   #header.header-color-white.white-box.header-sticky .logo {
     background-image: url("../images/logo_conext.png");
     background-size: 125px 42px; }
@@ -8593,6 +8589,10 @@ body.woocommerce select:not(.default-style) + .customSelect {
       #header.header-color-white.white-box.header-sticky .logo {
         background-image: url("../images/logo_conext@2x.png");
         background-size: 125px 42px; } }
+#header.header-color-white #nav > ul > li.my-account a {
+  padding: 10px; }
+  #header.header-color-white #nav > ul > li.my-account a .fa {
+    font-size: 25px; }
 
 .page-title-container .entry-title {
   font-size: 90px;
