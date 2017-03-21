@@ -229,6 +229,7 @@
 }
 .post {
     .post-content {
+        ul { list-style: disc; margin-left: 25px;}
         .entry-title {
             font-size: 24px; font-weight: 700; border-bottom: 1px solid #cccccc; padding-bottom: 20px; margin-bottom: 20px; color: #000000;
             .job-status { font-size: 12px; text-transform: uppercase; display: inline-block; padding: 10px 13px; background: $heading-color; color: #ffffff;line-height: 1em;  vertical-align: middle; margin-left: 10px;}

@@ -8867,6 +8867,9 @@ body.woocommerce select:not(.default-style) + .customSelect {
   font-weight: 600;
   color: #000; }
 
+.post .post-content ul {
+  list-style: disc;
+  margin-left: 25px; }
 .post .post-content .entry-title {
   font-size: 24px;
   font-weight: 700;
