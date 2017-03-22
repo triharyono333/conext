@@ -18,9 +18,7 @@
 			<div class="heading-box">
 				<h2 class="box-title color-white">Who We Are</h2>
 			</div>
-			<h3 class="skin-color">Fully Adaptive to All Screen Sizes</h3>
-			<p>Miracle is designed in a way that it automatically adjusts to any screen which makes it a true responsive design.<br>
-				Each and every design element was created in a way that it will not look lame when seen on smaller screen size.</p>
+			<?php print $content['about_who_we_are'] ?>
 		</div>
 	</div>
 </div>
@@ -31,9 +29,7 @@
 			<div class="heading-box">
 				<h2 class="box-title color-white">What We Do</h2>
 			</div>
-			<h3 class="skin-color">Fully Adaptive to All Screen Sizes</h3>
-			<p>Miracle is designed in a way that it automatically adjusts to any screen which makes it a true responsive design.<br>
-				Each and every design element was created in a way that it will not look lame when seen on smaller screen size.</p>
+			<?php print $content['about_what_we_do'] ?>
 		</div>
 	</div>
 </div>
@@ -42,7 +38,7 @@
 	<div class="container">
 		<div class="heading-box">
 			<h2 class="box-title">Work With Us</h2>
-			<p class="desc-lg">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+			<p class="desc-lg"><?php print $content['about_work_with_us'] ?></p>
 		</div>
 		<div class="same-height">
 			<?php 
@@ -71,7 +67,7 @@
 	<div class="container">
 		<div class="heading-box">
 			<h2 class="box-title">Contact Us</h2>
-			<p class="desc-lg">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+			<p class="desc-lg">Call us today to discuss what we can. Learn about the jobs available at our website. Find out about career paths, open positions and learning oppotunities</p>
 		</div>
 		<form action="<?php print $content['action'] ?>" method="post">
 			<div class="row">

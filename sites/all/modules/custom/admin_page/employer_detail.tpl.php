@@ -9,8 +9,8 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
       <table border="0" class="views-table cols-3">
 				<?php foreach($content['employer'] as $employer) { ?>
 				<tr>
-					<td><strong>ID:</strong></td>
-					<td><?php print $employer->uid ?></td>
+					<td width="20%"><strong>ID:</strong></td>
+					<td width="80%"><?php print $employer->uid ?></td>
 				</tr>
 				<tr>
 					<td><strong>Salutation:</strong></td>

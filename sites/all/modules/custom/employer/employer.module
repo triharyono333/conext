@@ -169,6 +169,12 @@ function employer_mail($key, &$message, $params) {
       $message['body'][] = $params['body'];
 			$message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
       break;
+		case 'post_job_notification_email':
+      $message['subject'] = '[Job Posted] '.$params['body'];
+			//the email body is here, inside the $message array
+      $message['body'][] = $params['body'];
+			$message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+      break;
   }
 }
 
@@ -223,22 +229,15 @@ function employer_register_submit() {
 		if (valid_user_role(EMPLOYER_ROLE_ID)) { // existing user
 			drupal_goto($base_url.'/employer');
 		} else { // new register user
-			if (empty($_POST['skip_job_post'])) {
+			conext_register_user ($_POST, 'employer');
+			drupal_goto($base_url.'/employer/registration_thanks');
+			/*if (empty($_POST['skip_job_post'])) {
 				$_SESSION['employer_register'] = $_POST;
 				drupal_goto($base_url.'/employer/post_job');
 			} else {
 				conext_register_user ($_POST, 'employer');
-				// send email
-				/*$email_content = "Hi Tri < br /> Apa Kabar <br /><br />Thanks<br />".$token;
-				$params = array('body' => $email_content);
-				$key = 'register_verification_email';
-				$to = $user->mail;
-				$from = 'triharyono111@gmail.com';
-				$mail = drupal_mail('employer', $key, $to, language_default(), $params, $from);
-				drupal_set_message('<pre>'.print_r($mail, true).'</pre>', 'notice');*/
-			
 				drupal_goto($base_url.'/employer/registration_thanks');
-			}
+			}*/
 		}
 	} else {
 		drupal_goto($base_url.'/employer/login');
@@ -277,8 +276,16 @@ function employer_post_job_submit() {
 			$new_user = conext_register_user ($_SESSION['employer_register'], 'employer');
 			$_SESSION['employer_register'] = null;
 		}
-		
 		if (empty($_POST['skip_job_post'])) conext_post_job($_POST, $new_user);
+		
+		// send post job notification email
+		$email_content = $user->mail.' just posted a new job';
+		$params = array('body' => $email_content, 'subject' => $user->mail.' just posted a new job');
+		$key = 'post_job_notification_email';
+		$to = variable_get('conext_contact_email_to');
+		$from = variable_get('conext_email_from');
+		$mail = drupal_mail('employer', $key, $to, language_default(), $params, $from);
+		
 		if ($user->uid > 0) drupal_goto($base_url.'/employer/account');
 		else drupal_goto($base_url.'/employer/registration_complete');
 	} else {
@@ -339,4 +346,8 @@ function employer_account_submit() {
 
 function employer_registration_complete() {
 	return theme('employer_registration_complete');
+}
+
+function employer_registration_thanks() {
+	return theme('employer_registration_thanks');
 }

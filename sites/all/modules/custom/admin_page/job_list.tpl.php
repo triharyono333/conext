@@ -29,7 +29,11 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
       <table class="views-table cols-3">
 				<thead>
 					<tr>
-						<th scope="col">Title</th>
+						<?php print generate_sortable_header('title', 'Title', $content['job_url']) ?>
+						<?php print generate_sortable_header('first_name', 'Employer', $content['job_url']) ?>
+						<?php print generate_sortable_header('created_at', 'Date Posted', $content['job_url']) ?>
+						<?php print generate_sortable_header('industry', 'Industry', $content['job_url']) ?>
+						<?php print generate_sortable_header('total_applied', 'Applied', $content['job_url']) ?>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -37,6 +41,10 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 					<?php foreach($content['jobs'] as $job) { ?>
           <tr class="odd views-row-first">
 						<td class="views-field views-field-title"><?php print $job->title ?></td>
+						<td class="views-field views-field-title"><?php print $job->first_name ?> <?php print $job->last_name ?></td>
+						<td class="views-field views-field-title"><?php print $job->created_at ?></td>
+						<td class="views-field views-field-title"><?php print $job->industry ?></td>
+						<td class="views-field views-field-title"><?php print (empty($job->total_applied)) ? '-' : $job->total_applied ?></td>
 						<td class="views-field views-field-edit-node">
 							<a href="<?php print $base_url ?>/admin/job/detail/<?php print $job->nid ?>">View</a></td>
 					</tr>
@@ -47,7 +55,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 		
 		<div style="text-align: center;">
 			<?php 
-			$paging_url = (empty($_GET['keyword'])) ? $base_url.'/admin/employer?' : $base_url.'/admin/employer?keyword='.$_GET['keyword'].'&';
+			$paging_url = (empty($_GET['keyword'])) ? $base_url.'/admin/job?' : $base_url.'/admin/job?keyword='.$_GET['keyword'].'&';
 			$cur_page = (empty($_GET['page'])) ? '1' : $_GET['page'];
 			?>
 			<?php $prev_page = $cur_page-1; ?>

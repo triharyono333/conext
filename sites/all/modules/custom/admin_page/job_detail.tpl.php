@@ -11,8 +11,8 @@ $job = $content['job'];
 			<form method="post" action="<?php print $base_url.'/admin/job/detail/'.$job['nid'] ?>">
 				<table border="0" class="views-table cols-3">
 					<tr>
-						<td><strong>ID:</strong></td>
-						<td><?php print $job['nid'] ?></td>
+						<td width="20%"><strong>ID:</strong></td>
+						<td width="80%"><?php print $job['nid'] ?></td>
 					</tr>
 					<tr>
 						<td><strong>Employer:</strong></td>
@@ -64,6 +64,15 @@ $job = $content['job'];
 						</td>
 					</tr>
 					<tr>
+						<td><strong>Job Type:</strong></td>
+						<?php $job_types = explode("||", $job['job_types']) ?>
+						<td>
+							<?php foreach($job_types as $job_type) { ?>
+							 - <?php print $job_type ?> <br />
+							<?php } ?>
+						</td>
+					</tr>
+					<tr>
 						<td><strong>Publish Job:</strong></td>
 						<td><?php print ($job['publish_job_public']) ? 'Publish this Job to Public' : 'Submit to Conext' ?></td>
 					</tr>
@@ -72,18 +81,28 @@ $job = $content['job'];
 						<td><?php print $job['created_at'] ?></td>
 					</tr>
 					<tr>
+						<td><strong>Job Seeker Applied:</strong></td>
+						<td>
+							<?php if (!empty($job['job_seekers'])) { ?>
+								<?php foreach($job['job_seekers'] as $job_seeker) { ?>
+								 - <a href="<?php print $base_url.'/admin/job_seeker/detail/'.$job_seeker->user_id ?>"><?php print $job_seeker->first_name ?> <?php print $job_seeker->last_name ?><a/> <br />
+								<?php } ?>
+							<?php } else { print '-'; } ?>
+						</td>
+					</tr>
+					<tr>
 						<td><strong>Job Status:</strong></td>
 						<td>
 							<select name="job_status">
 								<option <?php print ($job['job_status'] == WAITING_FOR_APPROVAL) ? 'selected' : '' ?> value="<?php print WAITING_FOR_APPROVAL ?>"><?php print WAITING_FOR_APPROVAL ?><option>
 								<option <?php print ($job['job_status'] == PUBLISHED) ? 'selected' : '' ?> value="<?php print PUBLISHED ?>"><?php print PUBLISHED ?><option>
 								<option <?php print ($job['job_status'] == SUBMITTED) ? 'selected' : '' ?> value="<?php print SUBMITTED ?>"><?php print SUBMITTED ?><option>
-							</select>
+							</select>&nbsp;
+							<input class="form-submit" type="submit" value="Update Status">
 						</td>
 					</tr>
 					<tr>
-						<td><input class="form-submit" type="submit" value="Update Status"></td>
-						<td><a href="<?php print $base_url ?>/admin/job">Back to List</a></td>
+						<td colspan="2"><a href="<?php print $base_url ?>/admin/job">Back to List</a></td>
 					</tr>
 				</table>
 			</form>

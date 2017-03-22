@@ -17,9 +17,17 @@ $theme_path = $base_url . '/' . $theme_path;
 		<div id="main" class="col-sm-9 col-md-8">
 			<article class="post box-lg">
 				<div class="post-content">
-					<h2 class="entry-title"><?php print $job->title ?> <span class="job-status">Permanent</span></h2>
-					<p>The successful individual will be working within a small treatment service with patients that have either Learning Disabilities and/or mental health problems. The post holder will be required t to provide specialist care for service users and take a hands on approach to the role.</p>
-					<p>This is a new service for an already well established organization providing support services to adults with learning disabilities.</p>
+					<h2 class="entry-title"><?php print $job->title ?> 
+						<?php 
+						if (!empty($job->job_type)) {
+							$job_types = explode("||", $job->job_type) 
+						?>
+							<?php foreach($job_types as $job_type) { ?>
+								<span class="job-status"><?php print $job_type ?></span>
+							<?php 
+							}
+						} ?>
+					</h2>
 					<?php print $job->short_description ?>
 					<h5>Main Requirements:</h5>
 					<?php print $job->requirement ?>
@@ -61,8 +69,12 @@ $theme_path = $base_url . '/' . $theme_path;
 					</li>
 				</ul>
 				<div class="button-wrapper">
+					<?php if (valid_user_role(EMPLOYER_ROLE_ID)) { ?>
+					<span style="text-align: center; color: blue; display: block;"><?php print $job->job_status ?></span>
+					<?php } else { ?>
 					<?php if (empty($content['applied'])) { ?><a href="<?php print $base_url.'/job/apply/'.$node->nid.'/'.$user->uid ?>" class="btn style2 full-width">APPLY THIS JOB <span class="arrow"></span></a><?php } ?>
 					<a href="<?php print $base_url ?>/jobs" class="btn-text">Back to Search Result</a>
+					<?php } ?>
 				</div>
 			</div>
 		</div>

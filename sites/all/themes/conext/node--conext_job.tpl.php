@@ -4,7 +4,7 @@ $theme_path = $base_url . '/' . $theme_path;
 //$job_detail = $content['job_detail'];
 //drupal_set_message('<pre>'.print_r($node, true).'</pre>');
 ?>
-
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <div class="container">
 	<div class="row">
 		<div class="sidebar col-sm-4 col-md-3">
@@ -44,8 +44,12 @@ $theme_path = $base_url . '/' . $theme_path;
 						<textarea rows="8" class="input-text full-width" placeholder="Cover Letter" id="cover_letter" name="cover_letter"></textarea>
 					</div>
 					<div class="form-group">
+						<div class="g-recaptcha" data-sitekey="6LcEMxkUAAAAAL7gviCCnxLnZ943bUenHnFjofnw"></div>
+					</div>
+					<div class="form-group">
 						<input type="hidden" name="job_applied" id="job_applied" value="<?php print $title ?>" >
-						<input type="hidden" name="job_applied" id="job_applied" value="<?php print $node->nid ?>" >
+						<input type="hidden" name="nid" id="nid" value="<?php print $node->nid ?>" >
+						<input type="hidden" name="verify_url" id="verify_url" value="<?php print $base_url.'/job_opening/verify_captcha' ?>" >
 						<button class="btn style2" id="job_opening_submit">Apply <span class="arrow"></span></button>
 					</div>
 				</form>
@@ -60,7 +64,7 @@ $theme_path = $base_url . '/' . $theme_path;
 				<h2>Apply Today And Build Your Resume</h2>
 			</div>
 			<div class="callout-action">
-				<a class="btn style3" href="#">Get Started</a>
+				<a class="btn style3" href="<?php print $base_url ?>/job_seeker">Get Started</a>
 			</div>
 		</div>
 	</div>
