@@ -29,7 +29,7 @@
     zoom: 1;
 }
 html { font-size: 16px; min-height: 100%; overflow-x: hidden !important; }
-body { font:75%/150% $font-stack; background-color: #fff; color:$primary-color; overflow-x: hidden !important; -webkit-font-smoothing: antialiased; -ms-overflow-style: scrollbar; /*oveflow-y: scroll;*/ }
+body { font:75%/150% $font-stack; background-color: #fafafa; color:$primary-color; overflow-x: hidden !important; -webkit-font-smoothing: antialiased; -ms-overflow-style: scrollbar; /*oveflow-y: scroll;*/ }
 
 iframe, img { border:0; }
 img { border-style: none; height: auto; max-width: 100%; vertical-align: top; }
