@@ -28,6 +28,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 					</thead>
 					<tbody>
 						<?php foreach($content['jobs'] as $key=>$job) { ?>
+						<?php $job_exist = 1 ?>
 						<tr>
 							<td>
 								<span class="position"><a href="<?php print $base_url."/".drupal_get_path_alias("node/".$job->drupal_job_id) ?>"><?php print $key+1 ?>. <?php print $job->title ?> - <?php print $job->location ?></a></span>
@@ -43,7 +44,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 				</table>
 				<?php } ?>
 				<div class="button-wrapper">
-					<a href="<?php print $base_url ?>/employer/post_job" class="btn style2">POST ANOTHER JOB</a>
+					<a href="<?php print $base_url ?>/employer/post_job" class="btn style2"><?php print (empty($job_exist)) ? 'POST JOB' : 'POST ANOTHER JOB' ?></a>
 				</div>
 			</div>
 		</div>

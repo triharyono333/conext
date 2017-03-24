@@ -50,7 +50,7 @@ function about_mail($key, &$message, $params) {
 	$language = $message['language'];
   switch ($key) {
     case 'about_email':
-      $message['subject'] = $params['subject'];
+      $message['subject'] = '[Conext.id] '.$params['subject'];
       $message['body'][] = $params['body'];
 			$message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
       break;
@@ -67,7 +67,10 @@ function about() {
 	
 	$content = array(
 		'action' => $base_url. "/about_action",
-		'jobs' => $job_detail
+		'jobs' => $job_detail,
+		'about_who_we_are' => variable_get('about_who_we_are'),
+		'about_what_we_do' => variable_get('about_what_we_do'),
+		'about_work_with_us' => variable_get('about_work_with_us'),
 	);
 	
 	//drupal_set_message('<pre>'.print_r($content, true).'</pre>');
@@ -78,12 +81,25 @@ function about_action(){
 	global $base_url;
 	
 	if ($_POST) {
+		// save the contact data
+		$query = "INSERT INTO conext_contact (name, email, phone, company, subject, message, created_at) VALUES (:name, :email, :phone, :company, :subject, :message, NOW())";
+		db_query($query, array(
+			'name' => $_POST['contact_name'],
+			'email' => $_POST['email_address'],
+			'phone' => $_POST['phone'],
+			'company' => $_POST['company'],
+			'subject' => $_POST['subject'],
+			'message' => $_POST['message']
+		));
+		
+		// send email
 		$email_content = "Name: ".$_POST['contact_name']."<br />Email Address: ".$_POST['email_address']."<br />Phone: ".$_POST['phone']."<br />Company: ".$_POST['company']."<br /> Message:<br />".$_POST['message'];
 		$params = array('body' => $email_content, 'subject' => 'Conext Contact Email');
 		$key = 'about_email';
 		$to = variable_get('conext_contact_email_to');
 		$from = variable_get('conext_email_from');
 		$mail = drupal_mail('about', $key, $to, language_default(), $params, $from);
+		
 		drupal_set_message('You have submitted the form successfully');
 		drupal_goto($base_url.'/about');
 	} else {

@@ -29,7 +29,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							<input type="text" class="input-text full-width" placeholder="Address" id="address" name="address">
 						</div>
 						<div class="form-group">
-							<input type="text" class="input-text full-width" placeholder="Appartment, unit, etc. (optional)" id="address_optional" name="address_optional">
+							<input type="text" class="input-text full-width" placeholder="Apartment, unit, etc. (optional)" id="address_optional" name="address_optional">
 						</div>
 						<div class="form-group">
 							<input type="text" class="input-text full-width" placeholder="Town / City" id="city" name="city">
@@ -42,6 +42,15 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							<select class="selector full-width country" id="country" name="country">
 								<option value="">Select a Country</option>
 								<option value="Indonesia">Indonesia</option>
+							</select>
+						</div>
+						<div class="form-group dropdown">
+							<select class="selector full-width salary_max" id="expected_salary" name="expected_salary">
+								<option value="">Expected Salary</option>
+								<option value="1">Rp. 1.000.000</option>
+								<?php foreach($content['expected_salary'] as $value) { ?>
+									<option value="<?php print $value ?>"><?php print format_salary(($value > 50) ? '> 50' : $value) ?></option>
+								<?php } ?>
 							</select>
 						</div>
 					</div>
@@ -57,7 +66,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 					<div class="box">
 						<h4>Current Position</h4>
 						<div class="form-group">
-							<input type="text" class="input-text full-width" placeholder="Title, eg; Marke&ng Manager, Graphic Designer, Etc" id="current_title" name="current_title">
+							<input type="text" class="input-text full-width" placeholder="Title, eg; Marketing Manager, Graphic Designer, Etc" id="current_title" name="current_title">
 						</div>
 						<div class="form-group">
 							<input type="text" class="input-text full-width" placeholder="Company Name" id="current_company" name="current_company">

@@ -56,7 +56,25 @@
                 alert("Please fill all mandatory fields");
                 return false;
             } else {
-                return true;
+                captcha_response = grecaptcha.getResponse();
+                if (captcha_response == null || captcha_response == '') {
+                    alert('Invalid Captcha');
+                    return false;
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: $("#verify_url").val(),
+                        data: "g-recaptcha-response=" + grecaptcha.getResponse()
+                    }).done(function(status) {
+                        alert(status);
+                        if (status == "ok") {
+                            return true;
+                        } else {
+                            alert('Invalid Captcha');
+                            return false;
+                        }
+                    });
+                }
             }
         });
 
@@ -203,12 +221,13 @@
             var password = $("#password");
             var re_password = $("#re_password");
 
-            if (country.val() == "" || first_name.val() == "" || email_address.val() == "" || !is_valid_email_address(email_address.val())) {
+            if (country.val() == "" || first_name.val() == "" || email_address.val() == "" || !is_valid_email_address(email_address.val()) || password.val() == "") {
                 if (first_name.val() == "")
                     first_name.addClass(class_error);
                 if (email_address.val() == "" || !is_valid_email_address(email_address.val()))
                     email_address.addClass(class_error);
                 if (country.val() == "") $(".country").addClass(class_error);
+                if (password.val() == "") password.addClass(class_error);
 
                 alert("Please fill all mandatory fields");
                 return false;
@@ -228,6 +247,7 @@
                 selecteditems.push($(ob).val());
             });  
             $("#job_type").val(selecteditems);
+            if ($(e.target).attr('id') == "job_submit_1") $("#main_search").val('1');
         });
         
         $("#cv_file").change(function () {

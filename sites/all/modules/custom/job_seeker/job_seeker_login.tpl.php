@@ -8,12 +8,11 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 		<div class="text-center">
 			<div class="heading-box">
 				<h2 class="box-title">Job Seeker</h2>
-				<p class="desc-lg">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
 			</div>
 			<div class="authentication">
 				<form action="<?php print $base_url ?>/job_seeker/login/submit" method="post" id="job_seeker_form">
 					<div class="form-group">
-						<input type="text" class="input-text full-width" placeholder="Username" id="username" name="username">
+						<input type="text" class="input-text full-width" placeholder="E-mail" id="username" name="username">
 					</div>
 					<div class="form-group">
 						<input type="password" type="text" class="input-text full-width" placeholder="Password" id="password" name="password"> 

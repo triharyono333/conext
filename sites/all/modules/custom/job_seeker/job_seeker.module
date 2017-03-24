@@ -125,6 +125,7 @@ function job_seeker_account() {
 		$education_cities = db_query("SELECT id, nama_kota FROM conext_kota");
 		$months = conext_get_month();
 		$years = conext_get_year();
+		$salary_range = get_salary_range();
 		$account = db_query("SELECT * FROM users a INNER JOIN conext_job_seeker b ON a.uid = b.user_id WHERE user_id = :user_id", array('user_id' => $user->uid));
 
 		$query_job_applieds = "SELECT title, location, drupal_job_id, b.created_at FROM conext_job a 
@@ -149,7 +150,8 @@ function job_seeker_account() {
 			'months' => $months,
 			'years' => $years,
 			'jobs' => $jobs,
-			'account' => $account
+			'account' => $account,
+			'expected_salary' => $salary_range['salary_max']
 		);
 
 		return theme('job_seeker_account', array('content' => $content));
@@ -195,11 +197,11 @@ function job_seeker_login_submit() {
 
 function job_seeker_register() {
 	global $user, $base_url;
-	if (!empty($_SESSION['linkedin']['person'])) {
-		$first_name = $_SESSION['linkedin']['person']['first-name'];
-		$last_name = $_SESSION['linkedin']['person']['last-name'];
-		$public_profile_url = $_SESSION['linkedin']['person']['public-profile-url'];
-		$email_address = $_SESSION['linkedin']['person']['email-address'];
+	if (!empty($_SESSION['linkedin']['response'])) {
+		$first_name = $_SESSION['linkedin']['response']['person']['first-name'];
+		$last_name = $_SESSION['linkedin']['response']['person']['last-name'];
+		$public_profile_url = $_SESSION['linkedin']['response']['person']['public-profile-url'];
+		$email_address = $_SESSION['linkedin']['response']['person']['email-address'];
 	}
 	
 	$industries = get_term_list ('company_industry');
@@ -207,6 +209,7 @@ function job_seeker_register() {
 	$education_cities = db_query("SELECT id, nama_kota FROM conext_kota");
 	$months = conext_get_month();
 	$years = conext_get_year();
+	$salary_range = get_salary_range();
 	
 	$content = array(
 		'industries' => $industries,
@@ -219,6 +222,7 @@ function job_seeker_register() {
 		'last_name' => (empty($last_name)) ? '' : $last_name,
 		'public_profile_url' => (empty($public_profile_url)) ? '' : $public_profile_url,
 		'email_address' => (empty($email_address)) ? '' : $email_address,
+		'expected_salary' => $salary_range['salary_max']
 	);
 	//drupal_set_message("<pre>".print_r($content, true)."</pre>");
 	

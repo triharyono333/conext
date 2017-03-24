@@ -43,6 +43,15 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							<option <?php if ($account->address_country == 'Indonesia') print 'selected' ?> value="Indonesia">Indonesia</option>
 						</select>
 					</div>
+					<div class="form-group dropdown">
+						<select class="selector full-width salary_max" id="expected_salary" name="expected_salary">
+							<option value="">Expected Salary</option>
+							<option <?php print ($account->expected_salary == 1) ? 'selected' : '' ?> value="1">Rp. 1.000.000</option>
+							<?php foreach($content['expected_salary'] as $value) { ?>
+								<option <?php print ($account->expected_salary == $value) ? 'selected' : '' ?> value="<?php print $value ?>"><?php print format_salary(($value > 50) ? '> 50' : $value) ?></option>
+							<?php } ?>
+						</select>
+					</div>
 				</div>
 				<div class="box">
 					<h4>Set Password <span class="info">Min 6 char</span></h4>
@@ -66,13 +75,13 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							<select class="selector" style="width: 100px;" id="work_month_start" name="work_month_start">
 								<option value="">MM</option>
 								<?php foreach($content['months'] as $month) { ?>
-									<option <?php if ($current_work_start[0] == $month) print 'selected' ?> value="<?php print $month ?>"><?php print $month ?></option>
+									<option <?php if (!empty($current_work_start[1]) && $current_work_start[1] == $month) print 'selected' ?> value="<?php print $month ?>"><?php print $month ?></option>
 								<?php } ?>
 							</select>
 							<select class="selector" style="width: 100px;" id="work_year_start" name="work_year_start">
 								<option value="">YYYY</option>
 								<?php foreach($content['years'] as $year) { ?>
-									<option <?php if (!empty($current_work_start[1]) && ($current_work_start[1] == $year)) print 'selected' ?> value="<?php print $year ?>"><?php print $year ?></option>
+									<option <?php if (!empty($current_work_start[0]) && ($current_work_start[0] == $year)) print 'selected' ?> value="<?php print $year ?>"><?php print $year ?></option>
 								<?php } ?>
 							</select>
 						</div>
@@ -82,13 +91,13 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							<select class="selector" style="width: 100px;" id="work_month_end" name="work_month_end">
 								<option value="">MM</option>
 								<?php foreach($content['months'] as $month) { ?>
-									<option <?php if ($current_work_end[0] == $month) print 'selected' ?> value="<?php print $month ?>"><?php print $month ?></option>
+									<option <?php if (!empty($current_work_end[1]) && $current_work_end[1] == $month) print 'selected' ?> value="<?php print $month ?>"><?php print $month ?></option>
 								<?php } ?>
 							</select>
 							<select class="selector" style="width: 100px;" id="work_year_end" name="work_year_end">
 								<option value="">YYYY</option>
 								<?php foreach($content['years'] as $year) { ?>
-									<option <?php if (!empty($current_work_end[1]) && ($current_work_end[1] == $year)) print 'selected' ?> value="<?php print $year ?>"><?php print $year ?></option>
+									<option <?php if (!empty($current_work_end[0]) && ($current_work_end[0] == $year)) print 'selected' ?> value="<?php print $year ?>"><?php print $year ?></option>
 								<?php } ?>
 							</select>
 						</div>

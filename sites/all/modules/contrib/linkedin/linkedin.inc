@@ -134,15 +134,36 @@ function linkedin_access_token($account) {
 			$append .= _linkedin_build_fields_request(array('first-name', 'last-name', 'public-profile-url', 'email-address'), 'auth');
 			$url = "https://api.linkedin.com/v1/people/" . $append;
 			$response2 = linkedin_get_fields($url, $tokens);
-			
+			//print $uid; exit;
       if ($uid > 0) {
+				// login user
+				$account = user_load($uid);
+				$form_state = array();
+				$form_state['uid'] = $account->uid;      
+				user_login_submit(array(), $form_state);
+				drupal_goto('job_seeker/account');
         //module_invoke_all('linkedin_external_login', $uid);
       }
       else {
+				if (!empty($response2['person'])) {
+					$uid = db_query("SELECT uid FROM {users} WHERE mail = :mail ", array('mail' => $response2['person']['email-address']))->fetchField();
+					if ($uid > 0) {
+						$has_connect_w_linkedin = db_query("SELECT uid FROM linkedin_token WHERE uid = :uid", array('uid' => $uid))->fetchField();
+						if ($has_connect_w_linkedin > 0) {
+							db_query("UPDATE linkedin_token SET token_key = :token_key, token_secret = :token_secret", array('token_key' => $oauth['oauth_token'], 'token_secret' => $oauth['oauth_token_secret']));
+							// login user
+							$account = user_load($uid);
+							$form_state = array();
+							$form_state['uid'] = $account->uid;      
+							user_login_submit(array(), $form_state);
+							drupal_goto('job_seeker/account');
+						}
+					} 
+				}
         //module_invoke_all('linkedin_tie_external_login', $uid, $oauth['oauth_token'], $oauth['oauth_token_secret']);
       }
 			
-			$_SESSION['linkedin'] = $response2;
+			$_SESSION['linkedin'] = array('response' => $response2, 'token' => $tokens);
 			drupal_goto('job_seeker/register');
     }
   }

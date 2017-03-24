@@ -6,12 +6,12 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 	<div class="text-center">
 		<div class="heading-box">
 			<h2 class="box-title">Employer</h2>
-			<p class="desc-lg">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+			<p class="desc-lg">Start Submitting Jobs to Conext</p>
 		</div>
 		<div class="authentication">
 			<form method="post" action="<?php print $base_url . '/employer/login' ?>">
 				<div class="form-group">
-					<input type="text" class="input-text full-width" placeholder="Username" id="username" name="username">
+					<input type="text" class="input-text full-width" placeholder="E-mail" id="username" name="username">
 				</div>
 				<div class="form-group">
 					<input type="password" class="input-text full-width" placeholder="Password" id="password" name="password">

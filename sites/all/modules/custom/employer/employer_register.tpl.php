@@ -9,12 +9,6 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 				<h2 class="box-title">Registration</h2>
 			</div>
 		</div>
-		<div class="multisteps">
-			<ol class="cd-multi-steps text-bottom count">
-				<li class="current"><a>Account Detail</a></li>
-				<li><a>Job Posting</a></li>
-			</ol>
-		</div>
 		<form id="employer_profile" method="post" action="<?php print $base_url.'/employer/register/submit' ?>">
 			<div class="row">
 				<div class="col-sm-6">
@@ -78,7 +72,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 			</div>
 			<div class="button-wrapper text-center">
 				<button id="employer_register_submit" type="submit" class="btn style2">Next Step <span class="arrow"></span></button>
-				<?php if ($content['user']->uid == 0) { ?><a id="employer_register_skip_job" href="#" class="btn-text">Skip JOB POSTING and complete registration</a><?php } ?>
+				<!--<?php if ($content['user']->uid == 0) { ?><a id="employer_register_skip_job" href="#" class="btn-text">Skip JOB POSTING and complete registration</a><?php } ?>-->
 			</div>
 			<input type="hidden" name="skip_job_post" id="skip_job_post" value="">
 		</form>

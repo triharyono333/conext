@@ -26,7 +26,7 @@ function admin_page_menu() {
 	);
 	
 	$items['admin/job_seeker'] = array(
-		'title' => t('Admin Employer'),
+		'title' => t('Admin Jpb Seeker'),
 		'description' => 'Admin Job Seeker',
 		'page callback' => 'admin_job_seeker',
 		'access arguments' => array('access admin job seeker'),
@@ -62,6 +62,38 @@ function admin_page_menu() {
 		'description' => 'Admin Job Detail',
 		'page callback' => 'admin_job_detail',
 		'access arguments' => array('access admin job'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/contact'] = array(
+		'title' => t('Admin Contact'),
+		'description' => 'Admin Contact',
+		'page callback' => 'admin_contact',
+		'access arguments' => array('access admin contact'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/contact/detail'] = array(
+		'title' => t('Admin Contact Detail'),
+		'description' => 'Admin Contact Detail',
+		'page callback' => 'admin_contact_detail',
+		'access arguments' => array('access admin contact'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/applied_job_opening'] = array(
+		'title' => t('Admin Applied Job Opening'),
+		'description' => 'Admin Applied Job Opening',
+		'page callback' => 'admin_applied_job_opening',
+		'access arguments' => array('access admin applied_job_opening'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/applied_job_opening/detail'] = array(
+		'title' => t('Admin Applied Job Opening Detail'),
+		'description' => 'Admin Applied Job Opening Detail',
+		'page callback' => 'admin_applied_job_opening_detail',
+		'access arguments' => array('access admin applied_job_opening'),
 		'type' =>  MENU_CALLBACK,
 	);
 		
@@ -103,6 +135,12 @@ function admin_page_permission() {
     ), 
 		'access other setting' => array(
       'title' => t('Access Other Setting'),
+    ), 
+		'access admin contact' => array(
+      'title' => t('Access Admin Contact'),
+    ), 
+		'access admin applied_job_opening' => array(
+      'title' => t('Access Admin Applied Job Opening'),
     )
   );
 }
@@ -140,6 +178,26 @@ function admin_page_theme($existing, $type, $theme, $path) {
 		'job_detail' => array(
 			'variables' => array('content' => NULL),
 			'template' => 'job_detail',
+			'path' => drupal_get_path('module', 'admin_page')
+		),
+		'contact_list' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'contact_list',
+			'path' => drupal_get_path('module', 'admin_page')
+		),
+		'contact_detail' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'contact_detail',
+			'path' => drupal_get_path('module', 'admin_page')
+		),
+		'applied_job_opening_list' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'applied_job_opening_list',
+			'path' => drupal_get_path('module', 'admin_page')
+		),
+		'applied_job_opening_detail' => array(
+			'variables' => array('content' => NULL),
+			'template' => 'applied_job_opening_detail',
 			'path' => drupal_get_path('module', 'admin_page')
 		)
 	);
@@ -185,7 +243,16 @@ function admin_employer_detail(){
 }
 
 function admin_job_seeker(){
+	global $base_url;
+	
+	if (empty($_GET['order'])) {
+		$order = " ORDER BY a.created DESC ";
+	} else {
+		$order = " ORDER BY ".$_GET['order']." ".$_GET['sort'];
+	}
+		
 	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE mail LIKE '%".$_GET['keyword']."%' OR name LIKE '%".$_GET['keyword']."%' OR first_name LIKE '%".$_GET['keyword']."%' OR last_name LIKE '%".$_GET['keyword']."%' ";
+	
 	$query_job_seekers_total = "SELECT COUNT(uid) FROM users a 
 		INNER JOIN conext_job_seeker b ON a.uid = b.user_id".$keyword;
  	$job_seekers_total = db_query($query_job_seekers_total)->fetchField();
@@ -196,13 +263,16 @@ function admin_job_seeker(){
 	$page = empty($_GET['page']) ? 1 : $_GET['page'];
 	$offset = ($page - 1)  * $limit;
 	
-	$query_job_seekers = "SELECT * FROM users a 
-		INNER JOIN conext_job_seeker b ON a.uid = b.user_id".$keyword." LIMIT ".$limit." OFFSET ".$offset;
+	$query_job_seekers = "SELECT *, floor(DATEDIFF(concat(current_work_end, '/28'), concat(current_work_start, '/28')) / 365) AS experience_year FROM users a 
+		INNER JOIN conext_job_seeker b ON a.uid = b.user_id". $keyword . $order ." LIMIT ".$limit." OFFSET ".$offset;
  	$job_seekers = db_query($query_job_seekers);
+	
+	$job_seeker_url = (empty($_GET['keyword'])) ? $base_url.'/admin/job_seeker?keyword=' : $base_url.'/admin/job_seeker?keyword='.$_GET['keyword'];
 	
 	$content = array(
 		'job_seekers' => $job_seekers,
-		'pages' => $pages
+		'pages' => $pages,
+		'job_seeker_url' => $job_seeker_url
 	);
 	
 	return theme('job_seeker_list', array('content' => $content));
@@ -223,6 +293,12 @@ function admin_job_seeker_detail(){
 }
 
 function admin_job(){
+	if (empty($_GET['order'])) {
+		$order = " ORDER BY a.created DESC ";
+	} else {
+		$order = " ORDER BY ".$_GET['order']." ".$_GET['sort'];
+	}
+	
 	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE a.title LIKE '%".$_GET['keyword']."%' OR b.title LIKE '%".$_GET['keyword']."%'";
 	$query_jobs_total = "SELECT COUNT(nid) FROM node a 
 		INNER JOIN conext_job b ON a.nid = b.drupal_job_id".$keyword;
@@ -234,13 +310,20 @@ function admin_job(){
 	$page = empty($_GET['page']) ? 1 : $_GET['page'];
 	$offset = ($page - 1)  * $limit;
 	
-	$query_jobs = "SELECT * FROM node a 
-		INNER JOIN conext_job b ON a.nid = b.drupal_job_id".$keyword." LIMIT ".$limit." OFFSET ".$offset;
+	$query_jobs = "SELECT *, e.name as industry FROM node a 
+		INNER JOIN conext_job b ON a.nid = b.drupal_job_id
+		LEFT JOIN (SELECT COUNT(id) as total_applied, job_seeker_id, job_id FROM conext_job_applied) c ON b.drupal_job_id = c.job_id
+		LEFT JOIN conext_employer d ON b.employer_id = d.user_id
+		LEFT JOIN taxonomy_term_data e ON b.industry = e.tid"
+		. $keyword . $order . " LIMIT ".$limit." OFFSET ".$offset;
  	$jobs = db_query($query_jobs);
+	
+	$job_url = (empty($_GET['keyword'])) ? $base_url.'/admin/job?keyword=' : $base_url.'/admin/job?keyword='.$_GET['keyword'];
 	
 	$content = array(
 		'jobs' => $jobs,
-		'pages' => $pages
+		'pages' => $pages,
+		'job_url' => $job_url
 	);
 	
 	return theme('job_list', array('content' => $content));
@@ -269,6 +352,7 @@ function admin_job_detail(){
 		$industry_name = $industry->name;
 		
 		$employer = db_query('SELECT mail FROM users WHERE uid = '.$job->employer_id)->fetchField();
+		$job_seekers = db_query('SELECT user_id, first_name, last_name FROM conext_job_applied a LEFT JOIN conext_job_seeker b ON a.job_seeker_id = b.user_id WHERE job_id = '.$job->drupal_job_id);
 		
 		$job_list = array(
 			'nid' => $nid,
@@ -285,7 +369,9 @@ function admin_job_detail(){
 			'benefit' => $job->benefit,
 			'publish_job_public' => $job->publish_job_public,
 			'job_status' => $job->job_status,
-			'created_at' => $job->created_at
+			'job_types' => $job->job_type,
+			'created_at' => $job->created_at,
+			'job_seekers' => $job_seekers
 		);
 	}
 	
@@ -294,6 +380,75 @@ function admin_job_detail(){
 	);
 	
 	return theme('job_detail', array('content' => $content));
+}
+
+function admin_contact(){
+	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE name LIKE '%".$_GET['keyword']."%' OR email LIKE '%".$_GET['keyword']."%' OR subject LIKE '%".$_GET['keyword']."%' OR message LIKE '%".$_GET['keyword']."%' OR company LIKE '%".$_GET['keyword']."%' ";
+	$query_contact_total = "SELECT COUNT(id) FROM conext_contact ".$keyword;
+ 	$job_contact_total = db_query($query_contact_total)->fetchField();
+	
+	// for paging
+	$limit = 50;
+	$pages = ceil($job_contact_total / $limit);
+	$page = empty($_GET['page']) ? 1 : $_GET['page'];
+	$offset = ($page - 1)  * $limit;
+	
+	$query_contacts = "SELECT * FROM conext_contact ".$keyword." LIMIT ".$limit." OFFSET ".$offset;
+ 	$contacts = db_query($query_contacts);
+	
+	$content = array(
+		'contacts' => $contacts,
+		'pages' => $pages
+	);
+	
+	return theme('contact_list', array('content' => $content));
+}
+
+function admin_contact_detail(){
+	$id = arg(3);
+	if (!empty($id)) {
+		$query_contact = "SELECT * FROM conext_contact WHERE id = :id";
+		$contact = db_query($query_contact, array('id' => $id));
+
+		$content = array(
+			'contact' => $contact
+		);
+	}
+	return theme('contact_detail', array('content' => $content));
+}
+
+function admin_applied_job_opening(){
+	$keyword = (empty($_GET['keyword'])) ? '' : " AND title LIKE '%".$_GET['keyword']."%' ";
+	$query_job_applied_total = "SELECT COUNT(nid) FROM node a LEFT JOIN field_data_field_job_applied b ON a.nid=b.entity_id  WHERE type = 'conext_job_applied' ".$keyword;
+ 	$job_applied_total = db_query($query_job_applied_total)->fetchField();
+	
+	// for paging
+	$limit = 50;
+	$pages = ceil($job_applied_total / $limit);
+	$page = empty($_GET['page']) ? 1 : $_GET['page'];
+	$offset = ($page - 1)  * $limit;
+	
+	$query_job_applieds = "SELECT nid, title, field_job_applied_value FROM node a LEFT JOIN field_data_field_job_applied b ON a.nid=b.entity_id WHERE type = 'conext_job_applied' ".$keyword." LIMIT ".$limit." OFFSET ".$offset;
+ 	$job_applieds = db_query($query_job_applieds);
+	
+	$content = array(
+		'contacts' => $job_applieds,
+		'pages' => $pages
+	);
+	
+	return theme('applied_job_opening_list', array('content' => $content));
+}
+
+function admin_applied_job_opening_detail(){
+	$nid = arg(3);
+	if (!empty($nid)) {
+		$job_applied = node_load($nid);
+
+		$content = array(
+			'job_applied' => $job_applied
+		);
+	}
+	return theme('applied_job_opening_detail', array('content' => $content));
 }
 
 function admin_job_seeker_export() {
@@ -353,12 +508,26 @@ function admin_job_seeker_export() {
 	// SET HEADER - END
 	
 	// SET CONTENT - START
-	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE mail LIKE '%".$_GET['keyword']."%' OR name LIKE '%".$_GET['keyword']."%' OR first_name LIKE '%".$_GET['keyword']."%' OR last_name LIKE '%".$_GET['keyword']."%' ";
+	//$keyword = (empty($_GET['keyword'])) ? '' : " WHERE mail LIKE '%".$_GET['keyword']."%' OR name LIKE '%".$_GET['keyword']."%' OR first_name LIKE '%".$_GET['keyword']."%' OR last_name LIKE '%".$_GET['keyword']."%' ";
+	$job_seeker_ids = implode("','", $_POST['job_seeker_ids']);
 	$query_job_seekers = "SELECT * FROM users a 
-		INNER JOIN conext_job_seeker b ON a.uid = b.user_id".$keyword;
+		INNER JOIN conext_job_seeker b ON a.uid = b.user_id WHERE user_id IN ('".$job_seeker_ids."')";
  	$job_seekers = db_query($query_job_seekers);
 	
 	foreach($job_seekers as $job_seeker) {
+		// get experince years
+		$experience_year = '-';
+		if (!empty($job_seeker->current_work_start) && !empty($job_seeker->current_work_end)) {
+			$current_work_start = explode('/', $job_seeker->current_work_start);
+			$current_work_end = explode('/', $job_seeker->current_work_end);
+			$work_start = new DateTime($current_work_start[0].'-'.$current_work_start[1].'-28');
+			$work_end = new DateTime($current_work_end[0].'-'.$current_work_end[1].'-28');
+			$day_diff = $work_start->diff($work_end);
+			$experience_year = floor($day_diff->days / 365).' years';
+		}
+		// salary expectation
+		$expected_salary = (empty($job_seeker->expected_salary)) ? '-' : format_salary($job_seeker->expected_salary);
+		
 		$objPHPExcel->getActiveSheet()->SetCellValue('A'.$rowCount, $job_seeker->created_at);
 		$objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount, $rowCount-2);
 		$objPHPExcel->getActiveSheet()->SetCellValue('C'.$rowCount, $job_seeker->first_name);
@@ -369,13 +538,13 @@ function admin_job_seeker_export() {
 		$objPHPExcel->getActiveSheet()->SetCellValue('H'.$rowCount, $job_seeker->address_province);
 		$objPHPExcel->getActiveSheet()->SetCellValue('I'.$rowCount, $job_seeker->address_country);
 		$objPHPExcel->getActiveSheet()->SetCellValue('J'.$rowCount, $job_seeker->address_zip);
-		$objPHPExcel->getActiveSheet()->SetCellValue('K'.$rowCount, $job_seeker->current_company);
-		$objPHPExcel->getActiveSheet()->SetCellValue('L'.$rowCount, $job_seeker->current_title);
+		$objPHPExcel->getActiveSheet()->SetCellValue('K'.$rowCount, $job_seeker->current_title);
+		$objPHPExcel->getActiveSheet()->SetCellValue('L'.$rowCount, $job_seeker->current_company);
 		$objPHPExcel->getActiveSheet()->SetCellValue('M'.$rowCount, $job_seeker->current_work_start.' - '.$job_seeker->current_work_end);
 		$objPHPExcel->getActiveSheet()->SetCellValue('N'.$rowCount, $job_seeker->current_city);
 		$objPHPExcel->getActiveSheet()->SetCellValue('O'.$rowCount, $job_seeker->current_industry);
-		$objPHPExcel->getActiveSheet()->SetCellValue('P'.$rowCount, '-');
-		$objPHPExcel->getActiveSheet()->SetCellValue('Q'.$rowCount, '-');
+		$objPHPExcel->getActiveSheet()->SetCellValue('P'.$rowCount, $experience_year);
+		$objPHPExcel->getActiveSheet()->SetCellValue('Q'.$rowCount, $expected_salary);
 		$objPHPExcel->getActiveSheet()->SetCellValue('R'.$rowCount, $job_seeker->education);
 		$objPHPExcel->getActiveSheet()->SetCellValue('S'.$rowCount, $job_seeker->graduation);
 		$objPHPExcel->getActiveSheet()->SetCellValue('T'.$rowCount, $job_seeker->major);
@@ -386,7 +555,7 @@ function admin_job_seeker_export() {
 	// SET CONTENT - END
 	
 	$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
-	$filename = 'conext_employer.xlsx';
+	$filename = 'conext_jobseeker.xlsx';
 	header('Content-Type: application/vnd.ms-excel');
 	header('Content-Disposition: attachment;filename="'.$filename.'"');
 	header('Cache-Control: max-age=0');
@@ -418,6 +587,24 @@ function other_setting_form($form, &$form_state) {
 			'#type' => 'text_format',
 			'#default_value' => variable_get('office_address'),
 	);
+	$form['about_who_we_are'] = array(
+			'#type' => 'textfield', 
+			'#title' => 'About Us- Who We Are',
+			'#type' => 'text_format',
+			'#default_value' => variable_get('about_who_we_are'),
+	);
+	$form['about_what_we_do'] = array(
+			'#type' => 'textfield', 
+			'#title' => 'About Us- What We Do',
+			'#type' => 'text_format',
+			'#default_value' => variable_get('about_what_we_do'),
+	);
+	$form['about_work_with_us'] = array(
+			'#type' => 'textfield', 
+			'#title' => 'About Us- Work With Us',
+			'#type' => 'text_format',
+			'#default_value' => variable_get('about_work_with_us'),
+	);
 	$form['twitter'] = array(
 			'#type' => 'textfield', 
 			'#title' => 'Twitter',
@@ -447,6 +634,9 @@ function other_setting_form_submit($form, &$form_state) {
 	$conext_contact_email_to = variable_set('conext_contact_email_to', $form['conext_contact_email_to']['#value']);
 	$about_conext = variable_set('about_conext', $form['about_conext']['value']['#value']);
 	$office_address = variable_set('office_address', $form['office_address']['value']['#value']);
+	$about_who_we_are = variable_set('about_who_we_are', $form['about_who_we_are']['value']['#value']);
+	$about_what_we_do = variable_set('about_what_we_do', $form['about_what_we_do']['value']['#value']);
+	$about_what_we_do = variable_set('about_work_with_us', $form['about_work_with_us']['value']['#value']);
 	$twitter = variable_set('twitter', $form['twitter']['#value']);
 	$facebook = variable_set('facebook', $form['facebook']['#value']);
 	$linkedin = variable_set('linkedin', $form['linkedin']['#value']);

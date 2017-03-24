@@ -165,13 +165,14 @@ body {
 	<div id="slideshow">
 		<div class="post-slider style4 owl-carousel box">
 			<div class="soap-mfp-popup">
-				<img src="<?php print $path_to_theme ?>images/hero-banner.jpg" alt="">
+				<?php $banner_title = get_banner_and_title('home') ?>
+				<img src="<?php print $banner_title['banner_image'] ?>" alt="">
 				<div class="slide-text">
 					<div class="caption-wrapper">
 						<div class="container">
 							<h3 class="caption caption-animated size-md" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="0">Apply Today And</h3><br>
 							<h2 class="caption caption-animated size-lg" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="1">Build Your <span class="blue">Resume</span></h2><br>
-							<div class="caption-animated" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="3"><a href="#" class="btn style2">Apply Now <span class="arrow"></span></a></div>
+							<div class="caption-animated" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="3"><a href="<?php print $base_url ?>/job_seeker/login" class="btn style2">Apply Now <span class="arrow"></span></a></div>
 						</div>
 					</div>
 				</div>
@@ -196,7 +197,7 @@ body {
 								<img src="<?php print $intro_image ?>" border="0" align="<?php print $intro->title ?>">
 							</div>
 							<div class="box-content">
-								<h3 class="box-title"><a href="#">1. Create An Account</a></h3>
+								<h3 class="box-title"><a href="#"><?php print $intro->title ?></a></h3>
 								<?php print $intro->body[LANGUAGE_NONE][0]['value'] ?>
 							</div>
 						</div>
@@ -223,7 +224,7 @@ body {
 							<div class="shortcode-banner-content">
 								<h3 class="banner-title"><?php print $article->title ?></h3>
 								<div class="details">
-									<p><?php print $article->field_article_short_description[LANGUAGE_NONE][0]['value'] ?></p>
+									<p><?php print (empty($article->field_article_short_description)) ? '' : $article->field_article_short_description[LANGUAGE_NONE][0]['value'] ?></p>
 								</div>
 								<a href="<?php print $base_url.'/'.drupal_get_path_alias("node/".$article->nid) ?>" class="btn style2">Read More <span class="arrow"></span></a>
 							</div>
@@ -264,7 +265,6 @@ body {
 			<div class="container">
 				<div class="heading-box">
 					<h2 class="box-title">Clients</h2>
-					<p>Lipsum dolor sit amet text supposed to be here...</p>
 				</div>
 				<div class="overflow-hidden">
 					<div class="brand-slider owl-carousel" data-items="4" data-itemsPerDisplayWidth="[[0, 1], [480, 1], [768, 2], [992, 3], [1200, 4]]">
@@ -288,7 +288,7 @@ body {
 						<h2>Start Building Your Own Job Board Now </h2>
 					</div>
 					<div class="callout-action">
-						<a class="btn style3" href="#">Get Started</a>
+						<a class="btn style3" href="<?php print $base_url ?>/employer/login">Get Started</a>
 					</div>
 				</div>
 			</div>
@@ -300,17 +300,17 @@ body {
 		<div class="head-spacer"><img src="<?php print $path_to_theme ?>images/spacer.gif" style="height: 92px;"></div>
 		<?php //if ($arg1 == 'register' || $arg1 == 'post_job') $register_class = 'register' ?>
 	<?php } else { ?>
-		<?php $header_title = get_home_header_title($arg0) ?>
-		<div class="page-title-container image-banner">
+		<?php $banner_title = get_banner_and_title($arg0) ?>
+		<div class="page-title-container image-banner" style="background-image: url('<?php print $banner_title['banner_image'] ?>')">
 			<div class="page-title">
 				<div class="container">
-					<h1 class="entry-title"><?php print $header_title ?></h1>
+					<h1 class="entry-title"><?php print $banner_title['header_title'] ?></h1>
 				</div>
 			</div>
 		</div>
 	<?php } ?>
 
-        <?php if ($messages): ?><div class="container"><div id="console" class="clearfix"><?php print $messages; ?></div></div><?php endif; ?>
+  <?php if ($messages): ?><div class="container"><div id="console" class="clearfix"><?php print $messages; ?></div></div><?php endif; ?>
 	<section id="content" class="<?php print $section_class ?>">
       <?php print render($page['content']); ?>
 	</section>
@@ -325,7 +325,7 @@ body {
 					<div class="col-sm-4">
 						<h2 class="section-title box">About Conext</h2>
 						<?php print $other_setting['about_conext'] ?>
-						<a href="#" class="btn style2">Learn More <span class="arrow"></span></a>
+						<a href="<?php print $base_url ?>/about" class="btn style2">Learn More <span class="arrow"></span></a>
 					</div>
 					<div class="col-sm-4">
 						<h2 class="section-title box">Headquarter</h2>
@@ -334,9 +334,9 @@ body {
 					<div class="col-sm-4">
 						<h2 class="section-title box">Follow Us</h2>
 						<div class="social-icons box size-lg style3">
-							<a href="<?php print $other_setting['linkedin'] ?>" class="social-icon"><i class="fa fa-linkedin has-circle" data-toggle="tooltip" data-placement="top" title="LinkedIn"></i></a>
-							<a href="<?php print $other_setting['facebook'] ?>" class="social-icon"><i class="fa fa-facebook has-circle" data-toggle="tooltip" data-placement="top" title="Facebook"></i></a>
-							<a href="<?php print $other_setting['twitter'] ?>" class="social-icon"><i class="fa fa-twitter has-circle" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
+							<a target="_blank" href="<?php print $other_setting['linkedin'] ?>" class="social-icon"><i class="fa fa-linkedin has-circle" data-toggle="tooltip" data-placement="top" title="LinkedIn"></i></a>
+							<a target="_blank" href="<?php print $other_setting['facebook'] ?>" class="social-icon"><i class="fa fa-facebook has-circle" data-toggle="tooltip" data-placement="top" title="Facebook"></i></a>
+							<a target="_blank" href="<?php print $other_setting['twitter'] ?>" class="social-icon"><i class="fa fa-twitter has-circle" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
 						</div>
 						<p>© 2017 Conext.id. All rights reserved</p>
 						<!--<a href="#" class="back-to-top"><span></span></a>-->
