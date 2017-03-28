@@ -171,7 +171,7 @@ body {
 					<div class="caption-wrapper">
 						<div class="container">
 							<h3 class="caption caption-animated size-md" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="0">Apply Today And</h3><br>
-							<h2 class="caption caption-animated size-lg" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="1">Build Your <span class="blue">Resume</span></h2><br>
+							<h2 class="caption caption-animated size-lg" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="1">Build Your <span class="blue">Career</span></h2><br>
 							<div class="caption-animated" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="3"><a href="<?php print $base_url ?>/job_seeker/login" class="btn style2">Apply Now <span class="arrow"></span></a></div>
 						</div>
 					</div>
@@ -192,7 +192,7 @@ body {
 						$intro_delay += 0.25;
 					?>
 					<div class="col-sm-4">
-						<div class="icon-box animated box" data-animation-type="fadeInDown" data-animation-delay="<?php print $intro_delay ?>">
+						<div class="icon-box animated box" data-animation-delay="<?php print $intro_delay ?>">
 							<div class="icon-container">
 								<img src="<?php print $intro_image ?>" border="0" align="<?php print $intro->title ?>">
 							</div>
@@ -237,8 +237,7 @@ body {
 		<div class="section testimonials">
 			<div class="container">
 				<div class="heading-box">
-					<h2 class="box-title">Testimony</h2>
-					<p>What Are People Say...</p>
+					<h2 class="box-title">Client Testimonial</h2>
 				</div>
 			</div>
 			<div class="image-banner image-testimony">
@@ -249,12 +248,12 @@ body {
 						foreach($testimonial as $testimonial) {
 						?>
 						<div class="testimonial box-lg">
-							<div class="testimonial-author">
-								<span class="testimonial-author-name"><?php print $testimonial->title ?></span> <span class="testimonial-author-job"><?php print $testimonial->field_company[LANGUAGE_NONE][0]['value'] ?></span>
-							</div>
 							<div class="testimonial-content">
 								<blockquote><?php print $testimonial->body[LANGUAGE_NONE][0]['value'] ?></blockquote>
 							</div>
+                            <div class="testimonial-author">
+                                <span class="testimonial-author-name"><?php print $testimonial->title ?></span> <span class="testimonial-author-job">, <?php print $testimonial->field_company[LANGUAGE_NONE][0]['value'] ?></span>
+                            </div>
 						</div>
 						<?php } ?>
 					</div>
@@ -284,11 +283,11 @@ body {
 		<div class="callout-box style3">
 			<div class="container">
 				<div class="callout-content">
+                    <div class="callout-action">
+                        <a class="btn style3" href="<?php print $base_url ?>/employer/login">Employers</a>
+                    </div>
 					<div class="callout-text">
-						<h2>Start Building Your Own Job Board Now </h2>
-					</div>
-					<div class="callout-action">
-						<a class="btn style3" href="<?php print $base_url ?>/employer/login">Get Started</a>
+						<h2>Post Vacancies Here </h2>
 					</div>
 				</div>
 			</div>
@@ -336,7 +335,7 @@ body {
 						<div class="social-icons box size-lg style3">
 							<a target="_blank" href="<?php print $other_setting['linkedin'] ?>" class="social-icon"><i class="fa fa-linkedin has-circle" data-toggle="tooltip" data-placement="top" title="LinkedIn"></i></a>
 							<a target="_blank" href="<?php print $other_setting['facebook'] ?>" class="social-icon"><i class="fa fa-facebook has-circle" data-toggle="tooltip" data-placement="top" title="Facebook"></i></a>
-							<a target="_blank" href="<?php print $other_setting['twitter'] ?>" class="social-icon"><i class="fa fa-twitter has-circle" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
+							<a target="_blank" href="<?php print $other_setting['twitter'] ?>" class="social-icon"><i class="fa fa-instagram has-circle" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
 						</div>
 						<p>© 2017 Conext.id. All rights reserved</p>
 						<!--<a href="#" class="back-to-top"><span></span></a>-->

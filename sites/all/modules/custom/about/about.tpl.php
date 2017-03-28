@@ -16,7 +16,7 @@
 	<div class="section text-center">
 		<div class="container">
 			<div class="heading-box">
-				<h2 class="box-title color-white">Who We Are</h2>
+				<h2 class="box-title">Who We Are</h2>
 			</div>
 			<?php print $content['about_who_we_are'] ?>
 		</div>
@@ -27,7 +27,7 @@
 	<div class="section text-center">
 		<div class="container">
 			<div class="heading-box">
-				<h2 class="box-title color-white">What We Do</h2>
+				<h2 class="box-title">What We Do</h2>
 			</div>
 			<?php print $content['about_what_we_do'] ?>
 		</div>
@@ -37,8 +37,8 @@
 	<div id="workwithus" class="target-bookmark"></div>
 	<div class="container">
 		<div class="heading-box">
-			<h2 class="box-title">Work With Us</h2>
-			<p class="desc-lg"><?php print $content['about_work_with_us'] ?></p>
+			<h2 class="box-title">Career With Conext</h2>
+<!--			<p class="desc-lg">--><?php //print $content['about_work_with_us'] ?><!--</p>-->
 		</div>
 		<div class="same-height">
 			<?php 
@@ -67,7 +67,7 @@
 	<div class="container">
 		<div class="heading-box">
 			<h2 class="box-title">Contact Us</h2>
-			<p class="desc-lg">Call us today to discuss what we can. Learn about the jobs available at our website. Find out about career paths, open positions and learning oppotunities</p>
+<!--			<p class="desc-lg">Call us today to discuss what we can. Learn about the jobs available at our website. Find out about career paths, open positions and learning oppotunities</p>-->
 		</div>
 		<form action="<?php print $content['action'] ?>" method="post">
 			<div class="row">
