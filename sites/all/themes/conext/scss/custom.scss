@@ -33,7 +33,7 @@
             }
         }
         &.header-sticky {
-            .logo { @include at2x($theme-skin-logo, "png", 125px, 42px);}
+            .logo { @include at2x($theme-skin-logo, "png", 125px, 42px); width: 125px; height: 42px;}
             #nav > ul > li > a.rounded {
                 border-color: #ccc;
                 &:hover { border-color: #333; }
@@ -92,7 +92,7 @@
 }
 .page-title-container .entry-title { font-size: 90px; font-weight: 600;}
 .page-title-container .page-title { min-height: 342px;}
-#slideshow { height: 550px !important; overflow: hidden; }
+#slideshow { height: 470px !important; overflow: hidden; }
 .post-slider.style4 .caption { margin-bottom: 0;}
 .post-slider.style4 .caption-wrapper {
     text-align: right;
@@ -151,31 +151,32 @@
 .image-testimony { background-image: url($image-testimony); min-height: 400px; background-position: center top; text-align: center;}
 .testimonials {
     .owl-wrapper-outer { min-height: 400px;}
-    &.style1 .owl-wrapper-outer { padding-top: 9%;}
+    &.style1 .owl-wrapper-outer { padding-top: 5%; }
     .testimonial {
-        display: table; margin: 0 100px; text-align: left; color: #ffffff;
-        .testimonial-author, .testimonial-content { display: table-cell; vertical-align: middle;}
+        margin: 0 100px; text-align: left; color: #ffffff;
+        //.testimonial-author, .testimonial-content { }
         .testimonial-author {
-            padding: 0 20px;
+            padding: 0 20px; text-align: center;
             span {
-                display: block; line-height: 1em; white-space: nowrap;
-                &.testimonial-author-name { font-size: 36px; margin-bottom: 15px;}
+                line-height: 1em; white-space: nowrap;
+                &.testimonial-author-name { font-size: 18px; margin-bottom: 15px;}
                 &.testimonial-author-job { font-size: 18px;}
             }
         }
         .testimonial-content {
             blockquote {
-                @extend .custom-font2; font-size: 18px; font-style: italic; line-height: 1.5em; padding: 60px 70px; margin-bottom: 0;
+                @extend .custom-font2; font-style: italic; line-height: 1.5em; padding: 60px 70px; margin-bottom: 0;
                 &:before, &:after { font-family: 'FontAwesome'; font-style: normal; }
                 &:before { margin-right: 15px;}
                 &:after { margin-left: 15px;content: "\f10e"; position: absolute; right: 16px; bottom: 30px;}
+                p { font-size: 24px;}
             }
         }
     }
     &.style1 {
         .owl-controls {
             .owl-prev, .owl-next {
-                margin-top: 0;
+                margin-top: -13px; top: 50%;
                 &:before { height: auto !important; color: rgba(255, 255, 255, 0.2);}
                 &:hover {
                     &:before {
@@ -399,7 +400,7 @@ ol {
     }
 }
 .contact-us { background: #eeeeee;}
-.who-we-are { background: #cccccc;}
+.who-we-are { background: #f7f7f7;}
 
 .authentication {
     max-width: 500px; background: #eeeeee; padding: 30px; margin: 0 auto; text-align: center;

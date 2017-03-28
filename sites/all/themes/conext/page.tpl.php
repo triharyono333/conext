@@ -192,7 +192,7 @@ body {
 						$intro_delay += 0.25;
 					?>
 					<div class="col-sm-4">
-						<div class="icon-box animated box" data-animation-type="fadeInDown" data-animation-delay="<?php print $intro_delay ?>">
+						<div class="icon-box animated box" data-animation-delay="<?php print $intro_delay ?>">
 							<div class="icon-container">
 								<img src="<?php print $intro_image ?>" border="0" align="<?php print $intro->title ?>">
 							</div>
@@ -237,8 +237,7 @@ body {
 		<div class="section testimonials">
 			<div class="container">
 				<div class="heading-box">
-					<h2 class="box-title">Testimony</h2>
-					<p>What Are People Say...</p>
+					<h2 class="box-title">Client Testimonial</h2>
 				</div>
 			</div>
 			<div class="image-banner image-testimony">
@@ -249,12 +248,12 @@ body {
 						foreach($testimonial as $testimonial) {
 						?>
 						<div class="testimonial box-lg">
-							<div class="testimonial-author">
-								<span class="testimonial-author-name"><?php print $testimonial->title ?></span> <span class="testimonial-author-job"><?php print $testimonial->field_company[LANGUAGE_NONE][0]['value'] ?></span>
-							</div>
 							<div class="testimonial-content">
 								<blockquote><?php print $testimonial->body[LANGUAGE_NONE][0]['value'] ?></blockquote>
 							</div>
+                            <div class="testimonial-author">
+                                <span class="testimonial-author-name"><?php print $testimonial->title ?></span> <span class="testimonial-author-job">, <?php print $testimonial->field_company[LANGUAGE_NONE][0]['value'] ?></span>
+                            </div>
 						</div>
 						<?php } ?>
 					</div>
@@ -336,7 +335,7 @@ body {
 						<div class="social-icons box size-lg style3">
 							<a target="_blank" href="<?php print $other_setting['linkedin'] ?>" class="social-icon"><i class="fa fa-linkedin has-circle" data-toggle="tooltip" data-placement="top" title="LinkedIn"></i></a>
 							<a target="_blank" href="<?php print $other_setting['facebook'] ?>" class="social-icon"><i class="fa fa-facebook has-circle" data-toggle="tooltip" data-placement="top" title="Facebook"></i></a>
-							<a target="_blank" href="<?php print $other_setting['twitter'] ?>" class="social-icon"><i class="fa fa-twitter has-circle" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
+							<a target="_blank" href="<?php print $other_setting['twitter'] ?>" class="social-icon"><i class="fa fa-instagram has-circle" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
 						</div>
 						<p>© 2017 Conext.id. All rights reserved</p>
 						<!--<a href="#" class="back-to-top"><span></span></a>-->

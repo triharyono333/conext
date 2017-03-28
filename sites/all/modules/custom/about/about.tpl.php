@@ -16,7 +16,7 @@
 	<div class="section text-center">
 		<div class="container">
 			<div class="heading-box">
-				<h2 class="box-title color-white">Who We Are</h2>
+				<h2 class="box-title">Who We Are</h2>
 			</div>
 			<?php print $content['about_who_we_are'] ?>
 		</div>
@@ -27,7 +27,7 @@
 	<div class="section text-center">
 		<div class="container">
 			<div class="heading-box">
-				<h2 class="box-title color-white">What We Do</h2>
+				<h2 class="box-title">What We Do</h2>
 			</div>
 			<?php print $content['about_what_we_do'] ?>
 		</div>
@@ -38,7 +38,11 @@
 	<div class="container">
 		<div class="heading-box">
 			<h2 class="box-title">Career With Conext</h2>
+<<<<<<< HEAD
 			<p class="desc-lg"><?php print $content['about_work_with_us'] ?></p>
+=======
+<!--			<p class="desc-lg">--><?php //print $content['about_work_with_us'] ?><!--</p>-->
+>>>>>>> 17ed646c99a0994e8aab8278137b8c5fb86fcac3
 		</div>
 		<div class="same-height">
 			<?php 

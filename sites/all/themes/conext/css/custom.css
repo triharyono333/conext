@@ -3101,19 +3101,21 @@ ul.filter-categories > li {
   color: #000;
   /*@include transition((height 0.4s ease 0s, opacity 0.3s ease 0s));*/ }
   #header.header-color-white {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.35);
     color: #fff; }
     #header.header-color-white .header-inner {
-      margin-top: 17px; }
+      margin-top: 12px; }
     #header.header-color-white .logo {
       background-image: url("../images/logo_conext_white.png");
-      background-size: 166px 56px;
+      background-size: 200px 67px;
       background-repeat: no-repeat;
-      margin-bottom: 0; }
+      margin-bottom: 0;
+      width: 200px;
+      height: 67px; }
       @media all and (-webkit-min-device-pixel-ratio: 1.5), all and (-o-min-device-pixel-ratio: 3 / 2), all and (min--moz-device-pixel-ratio: 1.5), all and (min-device-pixel-ratio: 1.5) {
         #header.header-color-white .logo {
           background-image: url("../images/logo_conext_white@2x.png");
-          background-size: 166px 56px; } }
+          background-size: 200px 67px; } }
       #header.header-color-white .logo img {
         margin-right: 5px;
         filter: alpha(opacity=0);
@@ -3121,8 +3123,8 @@ ul.filter-categories > li {
         -moz-opacity: 0;
         -khtml-opacity: 0;
         opacity: 0;
-        width: 166px;
-        height: 56px; }
+        width: 200px;
+        height: 67px; }
     #header.header-color-white.header-sticky {
       position: fixed;
       background: rgba(255, 255, 255, 0.9);
@@ -4726,12 +4728,14 @@ ul.filter-categories > li {
   left: 0;
   top: 0;
   bottom: 0;
-  height: 100%; }
+  height: 470px; }
   .post-slider.style4 .slide-text:before {
     display: inline-block;
     content: "";
     height: 100%;
     vertical-align: middle; }
+  .post-slider.style4 .slide-text .caption-wrapper h3, .post-slider.style4 .slide-text .caption-wrapper h2 {
+    background: rgba(0, 0, 0, 0.35); }
 .post-slider.style5 .owl-pagination {
   text-align: right;
   bottom: 25px;
@@ -8568,7 +8572,9 @@ body.woocommerce select:not(.default-style) + .customSelect {
     color: #009ce7; }
 #header.header-color-white.header-sticky .logo {
   background-image: url("../images/logo_conext.png");
-  background-size: 125px 42px; }
+  background-size: 125px 42px;
+  width: 125px;
+  height: 42px; }
   @media all and (-webkit-min-device-pixel-ratio: 1.5), all and (-o-min-device-pixel-ratio: 3 / 2), all and (min--moz-device-pixel-ratio: 1.5), all and (min-device-pixel-ratio: 1.5) {
     #header.header-color-white.header-sticky .logo {
       background-image: url("../images/logo_conext@2x.png");
@@ -8626,7 +8632,7 @@ body.woocommerce select:not(.default-style) + .customSelect {
   min-height: 342px; }
 
 #slideshow {
-  height: 550px !important;
+  height: 470px !important;
   overflow: hidden; }
 
 .post-slider.style4 .caption {
@@ -8762,28 +8768,23 @@ body.woocommerce select:not(.default-style) + .customSelect {
 .testimonials .owl-wrapper-outer {
   min-height: 400px; }
 .testimonials.style1 .owl-wrapper-outer {
-  padding-top: 9%; }
+  padding-top: 5%; }
 .testimonials .testimonial {
-  display: table;
   margin: 0 100px;
   text-align: left;
   color: #ffffff; }
-  .testimonials .testimonial .testimonial-author, .testimonials .testimonial .testimonial-content {
-    display: table-cell;
-    vertical-align: middle; }
   .testimonials .testimonial .testimonial-author {
-    padding: 0 20px; }
+    padding: 0 20px;
+    text-align: center; }
     .testimonials .testimonial .testimonial-author span {
-      display: block;
       line-height: 1em;
       white-space: nowrap; }
       .testimonials .testimonial .testimonial-author span.testimonial-author-name {
-        font-size: 36px;
+        font-size: 18px;
         margin-bottom: 15px; }
       .testimonials .testimonial .testimonial-author span.testimonial-author-job {
         font-size: 18px; }
   .testimonials .testimonial .testimonial-content blockquote {
-    font-size: 18px;
     font-style: italic;
     line-height: 1.5em;
     padding: 60px 70px;
@@ -8799,8 +8800,11 @@ body.woocommerce select:not(.default-style) + .customSelect {
       position: absolute;
       right: 16px;
       bottom: 30px; }
+    .testimonials .testimonial .testimonial-content blockquote p {
+      font-size: 24px; }
 .testimonials.style1 .owl-controls .owl-prev, .testimonials.style1 .owl-controls .owl-next {
-  margin-top: 0; }
+  margin-top: -13px;
+  top: 50%; }
   .testimonials.style1 .owl-controls .owl-prev:before, .testimonials.style1 .owl-controls .owl-next:before {
     height: auto !important;
     color: rgba(255, 255, 255, 0.2); }
@@ -9097,7 +9101,7 @@ ol.job-listing li {
   background: #eeeeee; }
 
 .who-we-are {
-  background: #cccccc; }
+  background: #f7f7f7; }
 
 .authentication {
   max-width: 500px;
