@@ -39,9 +39,10 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 					</div>
 					<div class="form-group dropdown">
 						<select class="selector full-width country" id="country" name="country">
-							<option value="">Select a Country</option>
+							<!--<option value="">Select a Country</option>
 							<option <?php if ($account->address_country == 'Indonesia') print 'selected' ?> value="Indonesia">Indonesia</option>
-						</select>
+						</select>-->
+						<input type="text" class="input-text" placeholder="Country" id="country" name="country" value="<?php $account->address_country ?>">
 					</div>
 					<div class="form-group dropdown">
 						<select class="selector full-width salary_max" id="expected_salary" name="expected_salary">
@@ -148,7 +149,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							</div>
 						</div>
 						<div class="col-sm-6">
-							<input type="text" class="input-text full-width" placeholder="Mayor" id="major" name="major" value="<?php print $account->major ?>">
+							<input type="text" class="input-text full-width" placeholder="Major" id="major" name="major" value="<?php print $account->major ?>">
 						</div>
 					</div>
 					<div class="row">

@@ -171,7 +171,7 @@ body {
 					<div class="caption-wrapper">
 						<div class="container">
 							<h3 class="caption caption-animated size-md" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="0">Apply Today And</h3><br>
-							<h2 class="caption caption-animated size-lg" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="1">Build Your <span class="blue">Resume</span></h2><br>
+							<h2 class="caption caption-animated size-lg" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="1">Build Your <span class="blue">Career</span></h2><br>
 							<div class="caption-animated" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="3"><a href="<?php print $base_url ?>/job_seeker/login" class="btn style2">Apply Now <span class="arrow"></span></a></div>
 						</div>
 					</div>
@@ -284,11 +284,11 @@ body {
 		<div class="callout-box style3">
 			<div class="container">
 				<div class="callout-content">
-					<div class="callout-text">
-						<h2>Start Building Your Own Job Board Now </h2>
-					</div>
 					<div class="callout-action">
-						<a class="btn style3" href="<?php print $base_url ?>/employer/login">Get Started</a>
+						<a class="btn style3" href="<?php print $base_url ?>/employer/login">Employers</a>
+					</div>
+					<div class="callout-text">
+						<h2>Post Vacancies Here</h2>
 					</div>
 				</div>
 			</div>

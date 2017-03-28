@@ -181,7 +181,7 @@ function job_seeker_account_submit() {
 function job_seeker_login () {
 	global $user, $base_url;
 	
-	if (valid_user_role(JOB_SEEKER_ROLE_ID)) drupal_goto($base_url.'/job_seeker/account');
+	if (valid_user_role(JOB_SEEKER_ROLE_ID)) drupal_goto($base_url.'/jobs');
 	
 	return theme('job_seeker_login');
 }
