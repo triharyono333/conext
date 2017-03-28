@@ -119,7 +119,8 @@ function article_node_insert($node) {
 	global $base_url;
   switch ($node->type) {
     case 'article':  
-			if (!empty($node->field_article_send_to_group)) {
+			//drupal_set_message('<pre>'.print_r($node, true).'</pre>', 'notice');
+			if (!empty($node->field_article_send_to_group[LANGUAGE_NONE])) {
 				$role_array = [];
 				$role_filter = '';
 				
@@ -149,7 +150,7 @@ function article_node_insert($node) {
 				foreach($users as $user) {
 					$to = $user->mail;
 					$mail = drupal_mail('article', $key, $to, language_default(), $params, $from);
-					//drupal_set_message('<pre>'.print_r($mail, true).'</pre>', 'notice');
+					drupal_set_message('<pre>'.print_r($mail, true).'</pre>', 'notice');
 				}
 			}
       break;

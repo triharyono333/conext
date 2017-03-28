@@ -371,6 +371,7 @@ function conext_post_job($params, $new_user = '') {
 		}
 	}
 	$publish_job_public = ($params['publish_job_public'] == 'publish_job') ? 1 : 0;
+	$job_status = ($params['publish_job_public'] == 'publish_job') ? WAITING_FOR_APPROVAL : SUBMITTED;
 	
 	$query = "INSERT INTO {conext_job} (drupal_job_id, title, location, qualification, salary_min, salary_max, industry, requirement, responsibility, short_description, benefit, job_type, job_status, published_at, employer_id, publish_job_public, created_at, updated_at)
 		 VALUES (:drupal_job_id, :title, :location, :qualification, :salary_min, :salary_max, :industry, :requirement, :responsibility, :short_description, :benefit, :job_type, :job_status, NOW(), :employer_id, :publish_job_public, NOW(), NOW())";
@@ -387,7 +388,7 @@ function conext_post_job($params, $new_user = '') {
 		'short_description' => $params['short_description'],
 		'benefit' => $job_benefit,
 		'job_type' => $job_types,
-		'job_status' => WAITING_FOR_APPROVAL,
+		'job_status' => $job_status,
 		'employer_id' => (empty($new_user)) ? $user->uid : $new_user,
 		'publish_job_public' => $publish_job_public
 	));

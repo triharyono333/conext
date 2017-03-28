@@ -243,7 +243,14 @@ function job_seeker_register_submit() {
 			$cv_path = $file_temp->uri;
 		}
 		
-		conext_register_user($_POST, 'job_seeker', $cv_path);
+		$uid = conext_register_user($_POST, 'job_seeker', $cv_path);
+		
+		// login user
+		$account = user_load($uid);
+		$form_state = array();
+		$form_state['uid'] = $account->uid;      
+		user_login_submit(array(), $form_state);
+
 		drupal_goto('job_seeker/register_complete');
 
 	}

@@ -3,7 +3,15 @@
 * @file
 * Main page template.
 */
+
+global $user;
 ?>
+
+<?php if ($user->uid > 1) { ?>
+<style>
+	.vertical-tabs {display:none}
+</style>
+<?php } ?>
 
 <div id="branding" class="clearfix">
 

@@ -229,15 +229,15 @@ function employer_register_submit() {
 		if (valid_user_role(EMPLOYER_ROLE_ID)) { // existing user
 			drupal_goto($base_url.'/employer');
 		} else { // new register user
-			conext_register_user ($_POST, 'employer');
+			$uid = conext_register_user ($_POST, 'employer');
+			
+			// login user
+			$account = user_load($uid);
+			$form_state = array();
+			$form_state['uid'] = $account->uid;      
+			user_login_submit(array(), $form_state);
+	
 			drupal_goto($base_url.'/employer/registration_thanks');
-			/*if (empty($_POST['skip_job_post'])) {
-				$_SESSION['employer_register'] = $_POST;
-				drupal_goto($base_url.'/employer/post_job');
-			} else {
-				conext_register_user ($_POST, 'employer');
-				drupal_goto($base_url.'/employer/registration_thanks');
-			}*/
 		}
 	} else {
 		drupal_goto($base_url.'/employer/login');
@@ -269,6 +269,7 @@ function employer_post_job() {
 
 function employer_post_job_submit() {
 	global $user, $base_url;
+	$job_seeker_name = '';
 	
 	if ($_POST) {
 		$new_user = '';
@@ -278,9 +279,14 @@ function employer_post_job_submit() {
 		}
 		if (empty($_POST['skip_job_post'])) conext_post_job($_POST, $new_user);
 		
+		$employer = db_query("SELECT first_name, last_name FROM {conext_employer} WHERE user_id = :user_id", array('user_id' => $user->uid));
+		foreach($employer as $name) {
+			$employer_name = $name->first_name." ".$name->last_name;
+		}
+		
 		// send post job notification email
-		$email_content = $user->mail.' just posted a new job';
-		$params = array('body' => $email_content, 'subject' => $user->mail.' just posted a new job');
+		$email_content = $employer_name.' just posted a new job';
+		$params = array('body' => $email_content, 'subject' => $employer_name.' just posted a new job');
 		$key = 'post_job_notification_email';
 		$to = variable_get('conext_contact_email_to');
 		$from = variable_get('conext_email_from');
