@@ -4728,7 +4728,7 @@ ul.filter-categories > li {
   left: 0;
   top: 0;
   bottom: 0;
-  height: 450px; }
+  height: 470px; }
   .post-slider.style4 .slide-text:before {
     display: inline-block;
     content: "";
@@ -8632,7 +8632,7 @@ body.woocommerce select:not(.default-style) + .customSelect {
   min-height: 342px; }
 
 #slideshow {
-  height: 450px !important;
+  height: 470px !important;
   overflow: hidden; }
 
 .post-slider.style4 .caption {
