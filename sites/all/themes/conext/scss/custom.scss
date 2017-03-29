@@ -150,10 +150,11 @@
 }
 .image-testimony { background-image: url($image-testimony); min-height: 400px; background-position: center top; text-align: center;}
 .testimonials {
-    .owl-wrapper-outer { min-height: 400px;}
-    &.style1 .owl-wrapper-outer { padding-top: 5%; }
+    .owl-wrapper-outer { min-height: 400px; text-align: center;margin: 0 auto;}
+    &.style1 .owl-wrapper-outer { padding-top: 0;}
+    .owl-item {height: 100%; display: table;width: 90%; }
     .testimonial {
-        margin: 0 100px; text-align: left; color: #ffffff;
+        margin: 0 100px; text-align: left; color: #ffffff; padding-top: 30px; display: table-cell; vertical-align: middle; padding-bottom: 30px;
         //.testimonial-author, .testimonial-content { }
         .testimonial-author {
             padding: 0 20px; text-align: center;
@@ -165,7 +166,7 @@
         }
         .testimonial-content {
             blockquote {
-                @extend .custom-font2; font-style: italic; line-height: 1.5em; padding: 60px 70px; margin-bottom: 0; font-size: 24px;
+                @extend .custom-font2; font-style: italic; line-height: 1.5em; padding: 30px 70px; margin-bottom: 0; font-size: 24px; width: 90%; margin: 0 auto;
                 &:before, &:after { font-family: 'FontAwesome'; font-style: normal; }
                 &:before { margin-right: 15px;}
                 &:after { margin-left: 15px;content: "\f10e"; position: absolute; right: 16px; bottom: 30px;}
