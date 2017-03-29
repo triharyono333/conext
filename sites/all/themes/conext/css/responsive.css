@@ -566,7 +566,17 @@
     color: #009ce7; }
 
   .mobile-nav .sub-nav {
-    padding: 10px; } }
+    padding: 10px; }
+
+  .testimonials .owl-item {
+    width: 100%; }
+
+  .testimonials .testimonial .testimonial-content blockquote, .testimonials .testimonial .testimonial-content blockquote p {
+    font-size: 18px;
+    line-height: 1.3em; }
+
+  .testimonials .testimonial .testimonial-author span.testimonial-author-name, .testimonials .testimonial .testimonial-author span.testimonial-author-job {
+    font-size: 12px; } }
 /* 7. Styles for devices(>=768px and <= 991px) */
 /* 8. Styles for devices(<=767px ) */
 @media (max-width: 767px) {
