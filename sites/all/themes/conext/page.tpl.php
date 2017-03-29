@@ -335,7 +335,7 @@ body {
 						<div class="social-icons box size-lg style3">
 							<a target="_blank" href="<?php print $other_setting['linkedin'] ?>" class="social-icon"><i class="fa fa-linkedin has-circle" data-toggle="tooltip" data-placement="top" title="LinkedIn"></i></a>
 							<a target="_blank" href="<?php print $other_setting['facebook'] ?>" class="social-icon"><i class="fa fa-facebook has-circle" data-toggle="tooltip" data-placement="top" title="Facebook"></i></a>
-							<a target="_blank" href="<?php print $other_setting['twitter'] ?>" class="social-icon"><i class="fa fa-instagram has-circle" data-toggle="tooltip" data-placement="top" title="Twitter"></i></a>
+							<a target="_blank" href="<?php print $other_setting['instagram'] ?>" class="social-icon"><i class="fa fa-instagram has-circle" data-toggle="tooltip" data-placement="top" title="Instagram"></i></a>
 						</div>
 						<p>© 2017 Conext.id. All rights reserved</p>
 						<!--<a href="#" class="back-to-top"><span></span></a>-->
