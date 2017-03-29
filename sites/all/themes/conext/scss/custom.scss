@@ -165,11 +165,11 @@
         }
         .testimonial-content {
             blockquote {
-                @extend .custom-font2; font-style: italic; line-height: 1.5em; padding: 60px 70px; margin-bottom: 0;
+                @extend .custom-font2; font-style: italic; line-height: 1.5em; padding: 60px 70px; margin-bottom: 0; font-size: 24px;
                 &:before, &:after { font-family: 'FontAwesome'; font-style: normal; }
                 &:before { margin-right: 15px;}
                 &:after { margin-left: 15px;content: "\f10e"; position: absolute; right: 16px; bottom: 30px;}
-                p { font-size: 24px;}
+                p { font-size: inherit;}
             }
         }
     }

@@ -8788,7 +8788,8 @@ body.woocommerce select:not(.default-style) + .customSelect {
     font-style: italic;
     line-height: 1.5em;
     padding: 60px 70px;
-    margin-bottom: 0; }
+    margin-bottom: 0;
+    font-size: 24px; }
     .testimonials .testimonial .testimonial-content blockquote:before, .testimonials .testimonial .testimonial-content blockquote:after {
       font-family: 'FontAwesome';
       font-style: normal; }
@@ -8801,7 +8802,7 @@ body.woocommerce select:not(.default-style) + .customSelect {
       right: 16px;
       bottom: 30px; }
     .testimonials .testimonial .testimonial-content blockquote p {
-      font-size: 24px; }
+      font-size: inherit; }
 .testimonials.style1 .owl-controls .owl-prev, .testimonials.style1 .owl-controls .owl-next {
   margin-top: -13px;
   top: 50%; }

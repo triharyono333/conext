@@ -171,7 +171,7 @@ body {
 					<div class="caption-wrapper">
 						<div class="container">
 							<h3 class="caption caption-animated size-md" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="0">Apply Today And</h3><br>
-							<h2 class="caption caption-animated size-lg" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="1">Build Your <span class="blue">Career</span></h2><br>
+							<h2 class="caption caption-animated size-lg" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="1">Build Your Career</h2><br>
 							<div class="caption-animated" data-animation-type="fadeInLeft" data-animation-duration="2" data-animation-delay="3"><a href="<?php print $base_url ?>/job_seeker/login" class="btn style2">Apply Now <span class="arrow"></span></a></div>
 						</div>
 					</div>
