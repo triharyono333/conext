@@ -283,11 +283,11 @@ body {
 		<div class="callout-box style3">
 			<div class="container">
 				<div class="callout-content">
-                    <div class="callout-action">
-                        <a class="btn style3" href="<?php print $base_url ?>/employer/login">Employers</a>
-                    </div>
+					<div class="callout-action">
+						<a class="btn style3" href="<?php print $base_url ?>/employer/login">Employers</a>
+					</div>
 					<div class="callout-text">
-						<h2>Post Vacancies Here </h2>
+						<h2>Post Vacancies Here</h2>
 					</div>
 				</div>
 			</div>

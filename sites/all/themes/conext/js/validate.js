@@ -101,6 +101,9 @@
 
                 alert("Please fill all mandatory fields");
                 return false;
+            } else if (password.val() != "" && password.val().lenght < 6) {
+                alert('Password has to be at least 6 characters');
+                return false;
             } else if (password.val() != re_password.val()) {
                 password.addClass(class_error);
                 re_password.addClass(class_error);
@@ -140,7 +143,11 @@
                 } else if (parseInt(salary_min.val()) > parseInt(salary_max.val())) {
                     alert('Invalid minimum salary');
                 } else {
-                    $("#employer_post_job").submit();
+                    if (confirm('Are You Sure?')) {
+                        $("#employer_post_job").submit();
+                    } else {
+                        return false;
+                    }
                 }
             }
         });
@@ -159,6 +166,9 @@
                     email_address.addClass(class_error);
 
                 alert("Please fill all mandatory fields");
+                return false;
+            }  else if (password.val() != "" && password.val().lenght < 6) {
+                alert('Password has to be at least 6 characters');
                 return false;
             } else if (password.val() != re_password.val()) {
                 password.addClass(class_error);
@@ -203,6 +213,9 @@
 
                 alert("Please fill all mandatory fields");
                 return false;
+            } else if (password.val() != "" && password.val().lenght < 6) {
+                alert('Password has to be at least 6 characters');
+                return false;
             } else if (password.val() != re_password.val()) {
                 password.addClass(class_error);
                 re_password.addClass(class_error);
@@ -230,6 +243,9 @@
                 if (password.val() == "") password.addClass(class_error);
 
                 alert("Please fill all mandatory fields");
+                return false;
+            } else if (password.val() != "" && password.val().lenght < 6) {
+                alert('Password has to be at least 6 characters');
                 return false;
             } else if (password.val() != re_password.val()) {
                 password.addClass(class_error);

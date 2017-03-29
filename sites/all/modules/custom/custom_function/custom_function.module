@@ -554,7 +554,7 @@ function get_banner_and_title($arg0) {
 		case 'jobs':
 			$header_title = 'Jobs';
 			$banner_node = node_load($banner_id);
-			$banner_image = $banner_node->field_banner_work_with_us[LANGUAGE_NONE][0]['uri'];
+			$banner_image = $banner_node->field_banner_job[LANGUAGE_NONE][0]['uri'];
 			break;
 		case 'node':
 			$nid = arg(1);
@@ -570,7 +570,7 @@ function get_banner_and_title($arg0) {
 			} else if ($node->type == 'job') {
 				$header_title = 'Job';
 				$banner_node = node_load($banner_id);
-				$banner_image = $banner_node->field_banner_work_with_us[LANGUAGE_NONE][0]['uri'];
+				$banner_image = $banner_node->field_banner_job[LANGUAGE_NONE][0]['uri'];
 			}
 			break;
 		default:

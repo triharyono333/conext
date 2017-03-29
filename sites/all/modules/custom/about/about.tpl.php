@@ -38,7 +38,11 @@
 	<div class="container">
 		<div class="heading-box">
 			<h2 class="box-title">Career With Conext</h2>
+<<<<<<< HEAD
+			<p class="desc-lg"><?php print $content['about_work_with_us'] ?></p>
+=======
 <!--			<p class="desc-lg">--><?php //print $content['about_work_with_us'] ?><!--</p>-->
+>>>>>>> 17ed646c99a0994e8aab8278137b8c5fb86fcac3
 		</div>
 		<div class="same-height">
 			<?php 
@@ -67,7 +71,7 @@
 	<div class="container">
 		<div class="heading-box">
 			<h2 class="box-title">Contact Us</h2>
-<!--			<p class="desc-lg">Call us today to discuss what we can. Learn about the jobs available at our website. Find out about career paths, open positions and learning oppotunities</p>-->
+			<!--<p class="desc-lg">Call us today to discuss what we can. Learn about the jobs available at our website. Find out about career paths, open positions and learning oppotunities</p>-->
 		</div>
 		<form action="<?php print $content['action'] ?>" method="post">
 			<div class="row">

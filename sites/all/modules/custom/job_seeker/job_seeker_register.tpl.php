@@ -39,10 +39,11 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							<input type="text" class="input-text" placeholder="Zip code" id="zip_code" name="zip_code">
 						</div>
 						<div class="form-group dropdown">
-							<select class="selector full-width country" id="country" name="country">
+							<!--<select class="selector full-width country" id="country" name="country">
 								<option value="">Select a Country</option>
 								<option value="Indonesia">Indonesia</option>
-							</select>
+							</select>-->
+							<input type="text" class="input-text" placeholder="Country" id="country" name="country">
 						</div>
 						<div class="form-group dropdown">
 							<select class="selector full-width salary_max" id="expected_salary" name="expected_salary">
@@ -149,7 +150,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 								</div>
 							</div>
 							<div class="col-sm-6">
-								<input type="text" class="input-text full-width" placeholder="Mayor" id="major" name="major">
+								<input type="text" class="input-text full-width" placeholder="Major" id="major" name="major">
 							</div>
 						</div>
 						<div class="row">

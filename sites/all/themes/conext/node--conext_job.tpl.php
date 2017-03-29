@@ -61,7 +61,7 @@ $theme_path = $base_url . '/' . $theme_path;
 	<div class="container">
 		<div class="callout-content">
 			<div class="callout-text">
-				<h2>Apply Today And Build Your Resume</h2>
+				<h2>Apply Today And Build Your Career</h2>
 			</div>
 			<div class="callout-action">
 				<a class="btn style3" href="<?php print $base_url ?>/job_seeker">Get Started</a>
