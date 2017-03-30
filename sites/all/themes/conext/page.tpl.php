@@ -260,7 +260,7 @@ body {
 				</div>
 			</div>
 		</div>
-		<div class="section">
+		<div class="section clients">
 			<div class="container">
 				<div class="heading-box">
 					<h2 class="box-title">Clients</h2>
