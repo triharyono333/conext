@@ -167,7 +167,7 @@
         }
         .testimonial-content {
             blockquote {
-                @extend .custom-font2; font-style: italic; line-height: 1.5em; padding: 30px 70px; margin-bottom: 0; font-size: 24px; width: 90%; margin: 0 auto;
+                @extend .custom-font2; font-style: italic; line-height: 1.5em; padding: 30px 80px; margin-bottom: 0; font-size: 24px; width: 90%; margin: 0 auto;
                 &:before, &:after { font-family: 'FontAwesome'; font-style: normal; }
                 &:before { margin-right: 15px;}
                 &:after { margin-left: 15px;content: "\f10e"; position: absolute; right: 16px; bottom: 30px;}
