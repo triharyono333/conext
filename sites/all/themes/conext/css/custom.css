@@ -8735,6 +8735,8 @@ body.woocommerce select:not(.default-style) + .customSelect {
 .section.bookmark {
   padding: 15px;
   z-index: 99 !important; }
+.section.clients {
+  background: #ffffff; }
 
 .target-bookmark {
   height: 130px;

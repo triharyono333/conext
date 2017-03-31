@@ -184,7 +184,7 @@ body {
 		<div class="section how-to">
 			<div class="container">
 				<div class="row">
-					<?php 
+					<?php
 					$intro_delay = 0;
 					$intros = get_intro_home();
 					foreach($intros as $intro) {
@@ -192,7 +192,7 @@ body {
 						$intro_delay += 0.25;
 					?>
 					<div class="col-sm-4">
-						<div class="icon-box animated box" data-animation-delay="<?php print $intro_delay ?>">
+						<div class="icon-box animated box">
 							<div class="icon-container">
 								<img src="<?php print $intro_image ?>" border="0" align="<?php print $intro->title ?>">
 							</div>
@@ -260,7 +260,7 @@ body {
 				</div>
 			</div>
 		</div>
-		<div class="section">
+		<div class="section clients">
 			<div class="container">
 				<div class="heading-box">
 					<h2 class="box-title">Clients</h2>
