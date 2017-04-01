@@ -108,6 +108,26 @@ function custom_page() {
 	//return 'test';
 }
 
+/**
+ * Implements hook_mail()
+ * @param 
+ *   type $key to decide which email body to sent on basis of key parameter inacese of multiple email content
+ * @param 
+ *   type $message the email content to be sent.Message array contains 'subject and body ' for the email.
+ * @param 
+ *   type $params using to get the cusotm email content from a function.This can be used in my other ways aslo as per need.
+ */
+function custom_function_mail($key, &$message, $params) {
+	$language = $message['language'];
+  switch ($key) {
+    case 'register_complete':
+      $message['subject'] = $params['subject'];
+      $message['body'][] = $params['body'];
+			$message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+      break;
+  }
+}
+
 function prelaunch_login() {
 	global $base_url;
 	if ($_POST) {
@@ -206,8 +226,8 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 				$current_work_start = (empty($params['work_month_start']) && empty($params['work_year_start'])) ? '' : $params['work_year_start'].'/'.$params['work_month_start'];
 				$current_work_end = (empty($params['work_month_end']) && empty($params['work_year_end'])) ? '' : $params['work_year_end'].'/'.$params['work_month_end'];
 
-				$query = "INSERT INTO {conext_job_seeker} (user_id, first_name, last_name, phone, address_street, address_country, address_province, address_zip, address_city, address_optional, current_title, current_company, current_work_start, current_work_end, current_city, current_industry, education, graduation, major, education_city, nationality, cv, public_profile_url, expected_salary, created_at, updated_at)
-					VALUES (:user_id, :first_name, :last_name, :phone, :address_street, :address_country, :address_province, :address_zip, :address_city, :address_optional, :current_title, :current_company, :current_work_start, :current_work_end, :current_city, :current_industry, :education, :graduation, :major, :education_city, :nationality, :cv, :public_profile_url, :expected_salary, NOW(), NOW())";
+				$query = "INSERT INTO {conext_job_seeker} (user_id, first_name, last_name, phone, address_street, address_country, address_province, address_zip, address_city, current_title, current_company, current_work_start, current_work_end, current_city, current_industry, education, graduation, major, education_city, nationality, cv, public_profile_url, expected_salary, about_yourself, created_at, updated_at)
+					VALUES (:user_id, :first_name, :last_name, :phone, :address_street, :address_country, :address_province, :address_zip, :address_city, :current_title, :current_company, :current_work_start, :current_work_end, :current_city, :current_industry, :education, :graduation, :major, :education_city, :nationality, :cv, :public_profile_url, :expected_salary, :about_yourself, NOW(), NOW())";
 				db_query($query, array( 
 					'user_id' => $account->uid, 
 					'first_name' => $params['first_name'],
@@ -218,7 +238,7 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 					'address_province' => $params['province'],
 					'address_zip' => $params['zip_code'],
 					'address_city' => $params['city'],
-					'address_optional' => $params['address_optional'],
+					//'address_optional' => $params['address_optional'],
 					'current_title' => $params['current_title'],
 					'current_company' => $params['current_company'],
 					'current_work_start' => $current_work_start, 
@@ -232,7 +252,8 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 					'nationality' => $params['nationality'],
 					'cv' => $file_uri,
 					'public_profile_url' => $params['public_profile_url'],
-					'expected_salary' => $params['expected_salary']
+					'expected_salary' => $params['expected_salary'],
+					'about_yourself' => $params['about_yourself']
 				));
 				
 				if (!empty($_SESSION['linkedin']['response'])) {
@@ -245,9 +266,12 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 					));
 					unset($_SESSION['linkedin']);
 				}
+				
+				$email_content = 'Hi'.$params['first_name'].' '.$params['last_name'];
+				$email_content .= '<br />Thank you for registering at Conext as a Job Seeker';
 			} else { // employer
-				$query = "INSERT INTO {conext_employer} (user_id, salutation, first_name, last_name, phone, company, address, address_optional, city, industry, created_at, updated_at)
-					VALUES (:user_id, :salutation, :first_name, :last_name, :phone, :company, :address, :address_optional, :city, :industry, NOW(), NOW())";
+				$query = "INSERT INTO {conext_employer} (user_id, salutation, first_name, last_name, phone, company, address, city, industry, created_at, updated_at)
+					VALUES (:user_id, :salutation, :first_name, :last_name, :phone, :company, :address, :city, :industry, NOW(), NOW())";
 				db_query($query, array( 
 					'user_id' => $account->uid, 
 					'salutation' => $params['salutation'],
@@ -256,12 +280,20 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 					'phone' => $params['phone'],
 					'company' => $params['company'],
 					'address' => $params['address'],
-					'address_optional' => $params['address_optional'],
+					//'address_optional' => $params['address_optional'],
 					'city' => $params['city'],
 					'industry' => $params['industry']
 				));
+				$email_content = 'Hi'.$params['first_name'].' '.$params['last_name'];
+				$email_content .= '<br />Thank you for registering at Conext as a Employer';
 			}
 			
+			// send post job notification email
+			$params = array('body' => $email_content, 'subject' => 'Thank You for Registering at Conext');
+			$key = 'register_complete';
+			$from = variable_get('conext_email_from');
+			$mail = drupal_mail('employer', $key, $email_to, language_default(), $params, $from);
+
 			return $account->uid;
 		}
 	}
@@ -287,10 +319,10 @@ function conext_update_user ($params, $type = 'employer', $file_uri = '') {
 				
 			$query = "UPDATE {conext_job_seeker} SET
 				first_name=:first_name, last_name=:last_name, phone=:phone, address_street=:address_street, address_country=:address_country, 
-				address_province=:address_province, address_zip=:address_zip, address_city=:address_city, address_optional=:address_optional,
+				address_province=:address_province, address_zip=:address_zip, address_city=:address_city,
 				current_title=:current_title, current_company=:current_company, current_work_start=:current_work_start, current_work_end=:current_work_end,
 				current_city=:current_city, current_industry=:current_industry, education=:education, graduation=:graduation, major=:major,
-				education_city=:education_city, nationality=:nationality, expected_salary=:expected_salary ".$update_cv."
+				education_city=:education_city, nationality=:nationality, expected_salary=:expected_salary, about_yourself=:about_yourself ".$update_cv."
 				WHERE user_id=:user_id";
 			db_query($query, array( 
 				'first_name' => $params['first_name'],
@@ -301,7 +333,7 @@ function conext_update_user ($params, $type = 'employer', $file_uri = '') {
 				'address_province' => $params['province'],
 				'address_zip' => $params['zip_code'],
 				'address_city' => $params['city'],
-				'address_optional' => $params['address_optional'],
+				//'address_optional' => $params['address_optional'],
 				'current_title' => $params['current_title'],
 				'current_company' => $params['current_company'],
 				'current_work_start' => $current_work_start, 
@@ -314,10 +346,11 @@ function conext_update_user ($params, $type = 'employer', $file_uri = '') {
 				'education_city' => $education_city,
 				'nationality' => $params['nationality'],
 				'expected_salary' => $params['expected_salary'],
+				'about_yourself' => $params['about_yourself'],
 				'user_id' => $user->uid
 			));
 		} else { // employer
-			$query = "UPDATE {conext_employer} SET salutation=:salutation, first_name=:first_name, last_name=:last_name, phone=:phone, company=:company, address=:address, address_optional=:address_optional, city=:city, industry=:industry WHERE user_id=:user_id";
+			$query = "UPDATE {conext_employer} SET salutation=:salutation, first_name=:first_name, last_name=:last_name, phone=:phone, company=:company, address=:address, city=:city, industry=:industry WHERE user_id=:user_id";
 			db_query($query, array( 
 				'user_id' => $user->uid, 
 				'salutation' => $params['salutation'],
@@ -326,7 +359,7 @@ function conext_update_user ($params, $type = 'employer', $file_uri = '') {
 				'phone' => $params['phone'],
 				'company' => $params['company'],
 				'address' => $params['address'],
-				'address_optional' => $params['address_optional'],
+				//'address_optional' => $params['address_optional'],
 				'city' => $params['city'],
 				'industry' => $params['industry']
 			));
@@ -424,6 +457,21 @@ function get_salary_range() {
 	return array(
 		'salary_min' => array(1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50),
 		'salary_max' => array(2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 51)
+	);
+}
+
+function get_salary_range_v2() {
+	return array(
+		'UMR',
+		'UMR - 5jt',
+		'10 - 15jt',
+		'15 - 20jt',
+		'20 - 30jt',
+		'30 - 40jt',
+		'40 - 50jt',
+		'50 - 75jt',
+		'75 - 100jt',
+		'>100jt'
 	);
 }
 
@@ -616,4 +664,24 @@ function generate_sortable_header($order, $colum_name, $url) {
 		</th>';
 	
 	return $output;
+}
+
+function generate_myaccount_submenu() {
+	global $user;
+	$submenu = '';
+	
+	if (valid_user_role(JOB_SEEKER_ROLE_ID)) {
+		$job_seekers = db_query("SELECT first_name, last_name FROM {conext_job_seeker} WHERE user_id = :user_id", array('user_id' => $user->uid));
+		foreach($job_seekers as $job_seeker) {
+			$submenu .= "<li><a href='#'>".$job_seeker->first_name." ".$job_seeker->last_name."</a></li>";
+		}
+	} else if (valid_user_role(EMPLOYER_ROLE_ID)) {
+		$employers = db_query("SELECT first_name, last_name, company FROM {conext_employer} WHERE user_id = :user_id", array('user_id' => $user->uid));
+		foreach($employers as $employer) {
+			$submenu .= "<li><a href='#'>".$employer->first_name." ".$employer->last_name."</a></li>";
+			$submenu .= "<li><a href='#'>".$employer->company."</a></li>";
+		}
+	}
+	
+	return $submenu;
 }

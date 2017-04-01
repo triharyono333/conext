@@ -57,16 +57,16 @@ function jobs () {
 			$_GET['salary_max'] = null;
 		}
 		
-		$min_salary = (empty($_GET['salary_min'])) ? "1" : $_GET['salary_min'];
-		$max_salary = (empty($_GET['salary_max'])) ? "51" : $_GET['salary_max'];
+		//$min_salary = (empty($_GET['salary_min'])) ? "1" : $_GET['salary_min'];
+		//$max_salary = (empty($_GET['salary_max'])) ? "51" : $_GET['salary_max'];
 		
-		$filter_title = (empty($_GET['keyword'])) ? "" : " AND b.title LIKE '%".$_GET['keyword']."%'";
+		$filter_title = (empty($_GET['keyword'])) ? "" : " AND b.title LIKE '%".$_GET['keyword']."%' AND b.location LIKE '%".$_GET['keyword']."%' AND b.job_type LIKE '%".$_GET['keyword']."%' AND b.requirement LIKE '%".$_GET['keyword']."%' AND b.responsibility LIKE '%".$_GET['keyword']."%' AND b.short_description LIKE '%".$_GET['keyword']."%' AND b.benefit LIKE '%".$_GET['keyword']."%'";
 		$filter_industry = (empty($_GET['industry'])) ? "" : " AND industry = ".$_GET['industry'];
 		$filter_city = (empty($_GET['location'])) ? "" : " AND location = '".$_GET['location']."'";
 		$filter_qualification = (empty($_GET['qualification'])) ? "" : " AND qualification = ".$_GET['qualification'];
-		//$filter_salary_min = (empty($_GET['salary_min'])) ? "" : " AND salary_min >= ".$_GET['salary_min'];
-		//$filter_salary_max = (empty($_GET['salary_max'])) ? "" : " AND salary_max <= ".$_GET['salary_max'];
-		$filter_salary = " AND ( (salary_min BETWEEN ".$min_salary." AND ".$max_salary.") OR (salary_max BETWEEN ".$min_salary." AND ".$max_salary.") )";
+		//$filter_salary = " AND ( (salary_min BETWEEN ".$min_salary." AND ".$max_salary.") OR (salary_max BETWEEN ".$min_salary." AND ".$max_salary.") )";
+		$filter_salary = (empty($_GET['salary_range'])) ? "" : " AND salary_range = '".$_GET['salary_range']."'";
+		
 		if (!empty($_GET['job_type'])) {
 			$job_types = explode(",", $_GET['job_type']);
 			$filter_job_type .= " AND (";
@@ -99,7 +99,7 @@ function jobs () {
 		$cities = db_query("SELECT id, nama_kota FROM conext_kota");
 		$months = conext_get_month();
 		$years = conext_get_year();
-		$salary = get_salary_range();
+		$salary = get_salary_range_v2();
 
 		$content = array(
 			'industries' => $industries,
@@ -108,8 +108,9 @@ function jobs () {
 			'user' => $user,
 			'months' => $months,
 			'years' => $years,
-			'salary_min' => $salary['salary_min'],
-			'salary_max' => $salary['salary_max'],
+			//'salary_min' => $salary['salary_min'],
+			//'salary_max' => $salary['salary_max'],
+			'salary_range' => $salary,
 			'jobs' => $jobs,
 			'pages' => $pages,
 			'total' => $total

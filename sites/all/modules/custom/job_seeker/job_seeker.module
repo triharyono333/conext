@@ -125,7 +125,7 @@ function job_seeker_account() {
 		$education_cities = db_query("SELECT id, nama_kota FROM conext_kota");
 		$months = conext_get_month();
 		$years = conext_get_year();
-		$salary_range = get_salary_range();
+		$salary_range = get_salary_range_v2();
 		$account = db_query("SELECT * FROM users a INNER JOIN conext_job_seeker b ON a.uid = b.user_id WHERE user_id = :user_id", array('user_id' => $user->uid));
 
 		$query_job_applieds = "SELECT title, location, drupal_job_id, b.created_at FROM conext_job a 
@@ -151,7 +151,7 @@ function job_seeker_account() {
 			'years' => $years,
 			'jobs' => $jobs,
 			'account' => $account,
-			'expected_salary' => $salary_range['salary_max']
+			'expected_salary' => $salary_range
 		);
 
 		return theme('job_seeker_account', array('content' => $content));
@@ -209,7 +209,7 @@ function job_seeker_register() {
 	$education_cities = db_query("SELECT id, nama_kota FROM conext_kota");
 	$months = conext_get_month();
 	$years = conext_get_year();
-	$salary_range = get_salary_range();
+	$salary_range = get_salary_range_v2();
 	
 	$content = array(
 		'industries' => $industries,
@@ -222,7 +222,7 @@ function job_seeker_register() {
 		'last_name' => (empty($last_name)) ? '' : $last_name,
 		'public_profile_url' => (empty($public_profile_url)) ? '' : $public_profile_url,
 		'email_address' => (empty($email_address)) ? '' : $email_address,
-		'expected_salary' => $salary_range['salary_max']
+		'expected_salary' => $salary_range
 	);
 	//drupal_set_message("<pre>".print_r($content, true)."</pre>");
 	

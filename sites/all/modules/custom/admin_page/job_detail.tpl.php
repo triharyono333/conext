@@ -31,12 +31,8 @@ $job = $content['job'];
 						<td><?php print $job['qualification'] ?></td>
 					</tr>
 					<tr>
-						<td><strong>Salary Min:</strong></td>
-						<td><?php print $job['salary_min'] ?></td>
-					</tr>
-					<tr>
-						<td><strong>Salary Max:</strong></td>
-						<td><?php print $job['salary_max'] ?></td>
+						<td><strong>Salary Range:</strong></td>
+						<td><?php print $job['salary_range'] ?></td>
 					</tr>
 					<tr>
 						<td><strong>Industry:</strong></td>

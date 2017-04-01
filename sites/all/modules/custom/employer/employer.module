@@ -251,10 +251,12 @@ function employer_post_job() {
 		$industries = get_term_list ('company_industry');
 		$qualifications = get_term_list ('qualification');
 		$cities = db_query("SELECT id, nama_kota FROM conext_kota");
+		$salary = get_salary_range_v2();
 
 		$content = array(
-			'salary_min' => array(1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50),
-			'salary_max' => array(2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 51),
+			//'salary_min' => array(1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50),
+			//'salary_max' => array(2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 51),
+			'salary_range' => $salary,
 			'qualifications' => $qualifications,
 			'cities' => $cities,
 			'user' => $user,

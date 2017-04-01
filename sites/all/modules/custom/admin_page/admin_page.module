@@ -360,8 +360,7 @@ function admin_job_detail(){
 			'title' => $job->title,
 			'location' => $job->location,
 			'qualification' => $qualification_name,
-			'salary_min' => format_salary($job->salary_min),
-			'salary_max' => format_salary($job->salary_max),
+			'salary_range' => $job->salary_range,
 			'industry' => $industry_name,
 			'requirement' => $job->requirement,
 			'responsibility' => $job->responsibility,
@@ -526,7 +525,8 @@ function admin_job_seeker_export() {
 			$experience_year = floor($day_diff->days / 365).' years';
 		}
 		// salary expectation
-		$expected_salary = (empty($job_seeker->expected_salary)) ? '-' : format_salary($job_seeker->expected_salary);
+		//$expected_salary = (empty($job_seeker->expected_salary)) ? '-' : format_salary($job_seeker->expected_salary);
+		$expected_salary = (empty($job_seeker->expected_salary)) ? '-' : $job_seeker->expected_salary;
 		
 		$objPHPExcel->getActiveSheet()->SetCellValue('A'.$rowCount, $job_seeker->created_at);
 		$objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount, $rowCount-2);

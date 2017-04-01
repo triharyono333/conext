@@ -50,25 +50,17 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 								<?php } ?>
 							</select>
 						</div>
-						<h4>Salary Range</h4>
-						<div class="form-inline">
+						<!--<h4>Salary Range</h4>
+						<div class="form-inline">-->
 							<div class="form-group dropdown">
-								<select class="selector full-width salary_min" id="salary_min" name="salary_min">
-									<option value="">Min</option>
-									<?php foreach($content['salary_min'] as $value) { ?>
-										<option value="<?php print $value ?>"><?php print format_salary($value) ?></option>
+								<select class="selector full-width salary_range" id="salary_range" name="salary_range">
+									<option value="">Salary Range</option>
+									<?php foreach($content['salary_range'] as $value) { ?>
+										<option value="<?php print $value ?>"><?php print $value ?></option>
 									<?php } ?>
 								</select>
 							</div>
-							<div class="form-group dropdown">
-								<select class="selector full-width salary_max" id="salary_max" name="salary_max">
-									<option value="">Max</option>
-									<?php foreach($content['salary_max'] as $value) { ?>
-										<option value="<?php print $value ?>"><?php print format_salary(($value > 50) ? '> 50' : $value) ?></option>
-									<?php } ?>
-								</select>
-							</div>
-						</div>
+						<!--</div>-->
 						<div class="form-group">
 							<textarea class="input-text full-width" placeholder="Short Description" rows="4" id="short_description" name="short_description">Short Description</textarea>
 						</div>
@@ -171,7 +163,6 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 	</div>
 </div>
 
-<script type="text/javascript" src="<?php print $path_to_theme ?>js/validate.js"></script>
 <script>
 	CKEDITOR.replace( 'short_description' );
 	CKEDITOR.replace( 'requirement' );

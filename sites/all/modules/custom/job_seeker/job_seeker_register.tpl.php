@@ -28,9 +28,9 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 						<div class="form-group">
 							<input type="text" class="input-text full-width" placeholder="Address" id="address" name="address">
 						</div>
-						<div class="form-group">
+						<!--<div class="form-group">
 							<input type="text" class="input-text full-width" placeholder="Apartment, unit, etc. (optional)" id="address_optional" name="address_optional">
-						</div>
+						</div>-->
 						<div class="form-group">
 							<input type="text" class="input-text full-width" placeholder="Town / City" id="city" name="city">
 						</div>
@@ -43,14 +43,13 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 								<option value="">Select a Country</option>
 								<option value="Indonesia">Indonesia</option>
 							</select>-->
-							<input type="text" class="input-text" placeholder="Country" id="country" name="country">
+							<input type="text" class="input-text full-width" placeholder="Country" id="country" name="country">
 						</div>
 						<div class="form-group dropdown">
 							<select class="selector full-width salary_max" id="expected_salary" name="expected_salary">
 								<option value="">Expected Salary</option>
-								<option value="1">Rp. 1.000.000</option>
 								<?php foreach($content['expected_salary'] as $value) { ?>
-									<option value="<?php print $value ?>"><?php print format_salary(($value > 50) ? '> 50' : $value) ?></option>
+									<option value="<?php print $value ?>"><?php print $value ?></option>
 								<?php } ?>
 							</select>
 						</div>
@@ -171,6 +170,12 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							</div>
 						</div>
 					</div>
+				</div>
+			</div>
+			<div class="box">
+				<h4>About Yourself</h4>
+				<div class="form-group">
+					<textarea id="about_yourself" name="about_yourself" class="input-text full-width" rows="10"></textarea>
 				</div>
 			</div>
 			<div class="box">

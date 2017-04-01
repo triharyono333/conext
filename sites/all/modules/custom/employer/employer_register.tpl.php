@@ -48,9 +48,9 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 						<div class="form-group">
 							<input type="text" class="input-text full-width" placeholder="Address" id="address" name="address">
 						</div>
-						<div class="form-group">
+						<!--<div class="form-group">
 							<input type="text" class="input-text full-width" placeholder="Appartment, unit, etc. (optional)" id="address_optional" name="address_optional">
-						</div>
+						</div>-->
 						<div class="form-group dropdown">
 							<select class="selector full-width" id="city" name="city">
 								<option value="">Town / City</option>

@@ -117,6 +117,7 @@ body {
 						<li class="menu-item-has-children my-account">
 							<a href="#"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
 							<ul class="sub-nav">
+								<?php print generate_myaccount_submenu() ?>
 								<li><a href="<?php print $href ?>">My Account</a></li>
 								<li><a href="<?php print $base_url ?>/user/logout">Logout</a></li>
 							</ul>
