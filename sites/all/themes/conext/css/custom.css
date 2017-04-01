@@ -8799,7 +8799,7 @@ body.woocommerce select:not(.default-style) + .customSelect {
   .testimonials .testimonial .testimonial-content blockquote {
     font-style: italic;
     line-height: 1.5em;
-    padding: 30px 70px;
+    padding: 30px 80px;
     margin-bottom: 0;
     font-size: 24px;
     width: 90%;
