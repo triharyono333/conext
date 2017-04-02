@@ -26,7 +26,7 @@ function admin_page_menu() {
 	);
 	
 	$items['admin/job_seeker'] = array(
-		'title' => t('Admin Jpb Seeker'),
+		'title' => t('Admin Job Seeker'),
 		'description' => 'Admin Job Seeker',
 		'page callback' => 'admin_job_seeker',
 		'access arguments' => array('access admin job seeker'),
@@ -251,7 +251,7 @@ function admin_job_seeker(){
 		$order = " ORDER BY ".$_GET['order']." ".$_GET['sort'];
 	}
 		
-	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE mail LIKE '%".$_GET['keyword']."%' OR name LIKE '%".$_GET['keyword']."%' OR first_name LIKE '%".$_GET['keyword']."%' OR last_name LIKE '%".$_GET['keyword']."%' ";
+	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE mail LIKE '%".$_GET['keyword']."%' OR name LIKE '%".$_GET['keyword']."%' OR first_name LIKE '%".$_GET['keyword']."%' OR last_name LIKE '%".$_GET['keyword']."%' OR phone LIKE '%".$_GET['keyword']."%' OR address_street LIKE '%".$_GET['keyword']."%' OR address_country LIKE '%".$_GET['keyword']."%' OR address_province LIKE '%".$_GET['keyword']."%' OR address_zip LIKE '%".$_GET['keyword']."%' OR address_city LIKE '%".$_GET['keyword']."%' OR current_title LIKE '%".$_GET['keyword']."%' OR current_company LIKE '%".$_GET['keyword']."%' OR current_city LIKE '%".$_GET['keyword']."%' OR current_industry LIKE '%".$_GET['keyword']."%' OR education LIKE '%".$_GET['keyword']."%' OR graduation LIKE '%".$_GET['keyword']."%' OR major LIKE '%".$_GET['keyword']."%' OR education_city LIKE '%".$_GET['keyword']."%' OR nationality LIKE '%".$_GET['keyword']."%' OR about_yourself LIKE '%".$_GET['keyword']."%' ";
 	
 	$query_job_seekers_total = "SELECT COUNT(uid) FROM users a 
 		INNER JOIN conext_job_seeker b ON a.uid = b.user_id".$keyword;
@@ -605,11 +605,11 @@ function other_setting_form($form, &$form_state) {
 			'#type' => 'text_format',
 			'#default_value' => variable_get('about_work_with_us'),
 	);
-	$form['twitter'] = array(
+	/*$form['twitter'] = array(
 			'#type' => 'textfield', 
 			'#title' => 'Twitter',
 			'#default_value' => variable_get('twitter'),
-	);
+	);*/
 	$form['facebook'] = array(
 			'#type' => 'textfield', 
 			'#title' => 'Facebook',
@@ -642,7 +642,7 @@ function other_setting_form_submit($form, &$form_state) {
 	$about_who_we_are = variable_set('about_who_we_are', $form['about_who_we_are']['value']['#value']);
 	$about_what_we_do = variable_set('about_what_we_do', $form['about_what_we_do']['value']['#value']);
 	$about_what_we_do = variable_set('about_work_with_us', $form['about_work_with_us']['value']['#value']);
-	$twitter = variable_set('twitter', $form['twitter']['#value']);
+	//$twitter = variable_set('twitter', $form['twitter']['#value']);
 	$facebook = variable_set('facebook', $form['facebook']['#value']);
 	$linkedin = variable_set('linkedin', $form['linkedin']['#value']);
 	$instagram = variable_set('instagram', $form['instagram']['#value']);

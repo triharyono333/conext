@@ -50,7 +50,7 @@ $path_to_admin_theme = $base_url . "/sites/all/themes/adminimal_theme/";
 						<td class="views-field views-field-title"><?php print (empty($job_seeker->address_city)) ? '-' : $job_seeker->address_city ?></td>
 						<td class="views-field views-field-title"><?php print (empty($job_seeker->current_title)) ? '-' : $job_seeker->current_title ?></td>
 						<td class="views-field views-field-title"><?php print (empty($job_seeker->experience_year)) ? '-' : $job_seeker->experience_year ?> years</td>
-						<td class="views-field views-field-title"><?php print (empty($job_seeker->expected_salary)) ? '-' : ($job_seeker->expected_salary > 50) ? "> 50.000.000" : format_salary($job_seeker->expected_salary) ?></td>
+						<td class="views-field views-field-title"><?php print (empty($job_seeker->expected_salary)) ? '-' : $job_seeker->expected_salary ?></td>
 						<td class="views-field views-field-edit-node">
 							<a href="<?php print $base_url ?>/admin/job_seeker/detail/<?php print $job_seeker->uid ?>">View</a></td>
 					</tr>

@@ -13,6 +13,10 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 					<td width="80%"><?php print $job_seeker->uid ?></td>
 				</tr>
 				<tr>
+					<td width="20%"><strong>Email:</strong></td>
+					<td width="80%"><?php print $job_seeker->mail ?></td>
+				</tr>
+				<tr>
 					<td><strong>First Name:</strong></td>
 					<td><?php print $job_seeker->first_name ?></td>
 				</tr>
@@ -95,6 +99,10 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 				<tr>
 					<td><strong>Linkedin Profile:</strong></td>
 					<td><?php print $job_seeker->public_profile_url ?></td>
+				</tr>
+				<tr>
+					<td><strong>About Your Self:</strong></td>
+					<td><?php print $job_seeker->about_yourself ?></td>
 				</tr>
 				<tr>
 					<?php $cv = str_replace('public://cv/', '', $job_seeker->cv); ?>

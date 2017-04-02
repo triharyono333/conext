@@ -62,7 +62,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							</div>
 						<!--</div>-->
 						<div class="form-group">
-							<textarea class="input-text full-width" placeholder="Short Description" rows="4" id="short_description" name="short_description">Short Description</textarea>
+							<textarea class="input-text full-width" placeholder="Short Description" rows="4" id="short_description" name="short_description">Company Background</textarea>
 						</div>
 					</div>
 				</div>

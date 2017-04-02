@@ -116,7 +116,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<input type="text" class="input-text full-width" placeholder="Other" id="current_city_other" name="current_city_other">
+									<input type="text" class="input-text full-width" placeholder="Other City" id="current_city_other" name="current_city_other">
 								</div>
 							</div>
 							<div class="col-sm-12">

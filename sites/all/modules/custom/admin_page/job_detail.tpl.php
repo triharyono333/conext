@@ -89,10 +89,10 @@ $job = $content['job'];
 					<tr>
 						<td><strong>Job Status:</strong></td>
 						<td>
-							<select name="job_status">
-								<option <?php print ($job['job_status'] == WAITING_FOR_APPROVAL) ? 'selected' : '' ?> value="<?php print WAITING_FOR_APPROVAL ?>"><?php print WAITING_FOR_APPROVAL ?><option>
-								<option <?php print ($job['job_status'] == PUBLISHED) ? 'selected' : '' ?> value="<?php print PUBLISHED ?>"><?php print PUBLISHED ?><option>
-								<option <?php print ($job['job_status'] == SUBMITTED) ? 'selected' : '' ?> value="<?php print SUBMITTED ?>"><?php print SUBMITTED ?><option>
+							<select name="job_status" class="form-select">
+								<option <?php print ($job['job_status'] == WAITING_FOR_APPROVAL) ? 'selected' : '' ?> value="<?php print WAITING_FOR_APPROVAL ?>"><?php print WAITING_FOR_APPROVAL ?></option>
+								<option <?php print ($job['job_status'] == PUBLISHED) ? 'selected' : '' ?> value="<?php print PUBLISHED ?>"><?php print PUBLISHED ?></option>
+								<option <?php print ($job['job_status'] == SUBMITTED) ? 'selected' : '' ?> value="<?php print SUBMITTED ?>"><?php print SUBMITTED ?></option>
 							</select>&nbsp;
 							<input class="form-submit" type="submit" value="Update Status">
 						</td>

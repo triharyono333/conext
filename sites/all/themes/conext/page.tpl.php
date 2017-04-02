@@ -193,7 +193,7 @@ body {
 						$intro_delay += 0.25;
 					?>
 					<div class="col-sm-4">
-						<div class="icon-box animated box">
+						<div class="icon-box box">
 							<div class="icon-container">
 								<img src="<?php print $intro_image ?>" border="0" align="<?php print $intro->title ?>">
 							</div>

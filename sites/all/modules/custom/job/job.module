@@ -60,7 +60,7 @@ function jobs () {
 		//$min_salary = (empty($_GET['salary_min'])) ? "1" : $_GET['salary_min'];
 		//$max_salary = (empty($_GET['salary_max'])) ? "51" : $_GET['salary_max'];
 		
-		$filter_title = (empty($_GET['keyword'])) ? "" : " AND b.title LIKE '%".$_GET['keyword']."%' AND b.location LIKE '%".$_GET['keyword']."%' AND b.job_type LIKE '%".$_GET['keyword']."%' AND b.requirement LIKE '%".$_GET['keyword']."%' AND b.responsibility LIKE '%".$_GET['keyword']."%' AND b.short_description LIKE '%".$_GET['keyword']."%' AND b.benefit LIKE '%".$_GET['keyword']."%'";
+		$filter_title = (empty($_GET['keyword'])) ? "" : " AND (b.title LIKE '%".$_GET['keyword']."%' OR b.location LIKE '%".$_GET['keyword']."%' OR b.job_type LIKE '%".$_GET['keyword']."%' OR b.requirement LIKE '%".$_GET['keyword']."%' OR b.responsibility LIKE '%".$_GET['keyword']."%' OR b.short_description LIKE '%".$_GET['keyword']."%' OR b.benefit LIKE '%".$_GET['keyword']."%')";
 		$filter_industry = (empty($_GET['industry'])) ? "" : " AND industry = ".$_GET['industry'];
 		$filter_city = (empty($_GET['location'])) ? "" : " AND location = '".$_GET['location']."'";
 		$filter_qualification = (empty($_GET['qualification'])) ? "" : " AND qualification = ".$_GET['qualification'];

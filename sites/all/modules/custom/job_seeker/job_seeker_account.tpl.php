@@ -21,7 +21,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 					<p class="desc-md text-center">“You have not applied any job yet”</p>
 				</div>
 				<div class="button-wrapper">
-					<a href="<?php print $base_url ?>/jobs" class="btn style2 full-width">SEARCH JOB NOW</a>
+					<a href="<?php print $base_url ?>/jobs" class="btn style2">SEARCH JOB NOW</a>
 				</div>
 				<?php } else { ?>		
 				<table class="table table-striped">
@@ -160,7 +160,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 									</div>
 									<div class="col-sm-6">
 										<div class="form-group">
-											<input type="text" class="input-text full-width" placeholder="Other" id="current_city_other" name="current_city_other" value="<?php print (is_city_exist($account->current_city)) ? '' : $account->current_city ?>">
+											<input type="text" class="input-text full-width" placeholder="Other City" id="current_city_other" name="current_city_other" value="<?php print (is_city_exist($account->current_city)) ? '' : $account->current_city ?>">
 										</div>
 									</div>
 									<div class="col-sm-12">

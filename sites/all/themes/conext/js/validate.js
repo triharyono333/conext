@@ -4,33 +4,6 @@
         if (arg0 == '' || arg0 == null || arg0 == 'home') $("#home").addClass('active');
         else $("#"+arg0).addClass('active');
         
-        CKEDITOR.instances['short_description'].on('contentDom', function() {
-            this.document.on('click', function(event){
-                var content = CKEDITOR.instances.short_description.document.getBody().getText();
-                if (content == 'Short Description') {
-                    CKEDITOR.instances.short_description.setData('');
-                }
-             });
-        });
-        
-        CKEDITOR.instances['requirement'].on('contentDom', function() {
-            this.document.on('click', function(event){
-                var content = CKEDITOR.instances.requirement.document.getBody().getText();
-                if (content == 'Requirement') {
-                    CKEDITOR.instances.requirement.setData('');
-                }
-             });
-        });
-        
-        CKEDITOR.instances['responsibility'].on('contentDom', function() {
-            this.document.on('click', function(event){
-                var content = CKEDITOR.instances.responsibility.document.getBody().getText();
-                if (content == 'Responsibility') {
-                    CKEDITOR.instances.responsibility.setData('');
-                }
-             });
-        });
-        
         $("#about_submit").click(function () {
             var class_error = "error_input";
             var contact_name = $("#contact_name");
@@ -128,7 +101,7 @@
 
                 alert("Please fill all mandatory fields");
                 return false;
-            } else if (password.val() != "" && password.val().lenght < 6) {
+            } else if (password.val() != "" && parseInt(password.val().length) < 6) {
                 alert('Password has to be at least 6 characters');
                 return false;
             } else if (password.val() != re_password.val()) {
@@ -170,10 +143,8 @@
                 } else if (parseInt(salary_min.val()) > parseInt(salary_max.val())) {
                     alert('Invalid minimum salary');
                 } else {
-                    if (confirm('Are You Sure?')) {
-                        alert('ok');
-                        return false;
-                        //$("#employer_post_job").submit();
+                    if (confirm('You are going to post 1 job')) {
+                        $("#employer_post_job").submit();
                     } else {
                         return false;
                     }
@@ -196,7 +167,7 @@
 
                 alert("Please fill all mandatory fields");
                 return false;
-            }  else if (password.val() != "" && password.val().lenght < 6) {
+            } else if (password.val() != "" && parseInt(password.val().length) < 6) {
                 alert('Password has to be at least 6 characters');
                 return false;
             } else if (password.val() != re_password.val()) {
@@ -242,7 +213,7 @@
 
                 alert("Please fill all mandatory fields");
                 return false;
-            } else if (password.val() != "" && password.val().lenght < 6) {
+            } else if (password.val() != "" && parseInt(password.val().length) < 6) {
                 alert('Password has to be at least 6 characters');
                 return false;
             } else if (password.val() != re_password.val()) {
@@ -273,7 +244,7 @@
 
                 alert("Please fill all mandatory fields");
                 return false;
-            } else if (password.val() != "" && password.val().lenght < 6) {
+            } else if (password.val() != "" && parseInt(password.val().length) < 6) {
                 alert('Password has to be at least 6 characters');
                 return false;
             } else if (password.val() != re_password.val()) {
@@ -307,6 +278,32 @@
             }
         });
         
+        CKEDITOR.instances['short_description'].on('contentDom', function() {
+            this.document.on('click', function(event){
+                var content = CKEDITOR.instances.short_description.document.getBody().getText();
+                if (content == 'Company Background') {
+                    CKEDITOR.instances.short_description.setData('');
+                }
+             });
+        });
+        
+        CKEDITOR.instances['requirement'].on('contentDom', function() {
+            this.document.on('click', function(event){
+                var content = CKEDITOR.instances.requirement.document.getBody().getText();
+                if (content == 'Requirement') {
+                    CKEDITOR.instances.requirement.setData('');
+                }
+             });
+        });
+        
+        CKEDITOR.instances['responsibility'].on('contentDom', function() {
+            this.document.on('click', function(event){
+                var content = CKEDITOR.instances.responsibility.document.getBody().getText();
+                if (content == 'Responsibility') {
+                    CKEDITOR.instances.responsibility.setData('');
+                }
+             });
+        });
     })
 
     function is_valid_email_address(email_address) {

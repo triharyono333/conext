@@ -56,7 +56,8 @@ $theme_path = $base_url . '/' . $theme_path;
 					</li>
 					<li class="range-salary">
 						<span class="title">Salary:</span>
-						<span><?php print format_salary($job->salary_min) ?> - <?php print format_salary($job->salary_max) ?></span>
+						<span><?php print $job->salary_range ?></span>
+						<!--<span><?php print format_salary($job->salary_min) ?> - <?php print format_salary($job->salary_max) ?></span>-->
 					</li>
 					<li class="benefit">
 						<span class="title">Benefit:</span>
