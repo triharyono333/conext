@@ -596,6 +596,11 @@ function get_banner_and_title($arg0) {
 			$banner_node = node_load($banner_id);
 			$banner_image = $banner_node->field_banner_about[LANGUAGE_NONE][0]['uri'];
 			break;
+		case 'about2':
+			$header_title = 'About Us';
+			$banner_node = node_load($banner_id);
+			$banner_image = $banner_node->field_banner_about_2[LANGUAGE_NONE][0]['uri'];
+			break;
 		case 'content':
 			$header_title = 'Work With Conext';
 			$banner_node = node_load($banner_id);

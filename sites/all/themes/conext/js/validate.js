@@ -286,6 +286,15 @@
                 }
              });
         });
+        var editor = CKEDITOR.instances['short_description'];
+        if (editor) {
+            editor.on('blur', function(event) {
+                var content = CKEDITOR.instances.short_description.document.getBody().getText();
+                if (content.length < 2) {
+                    CKEDITOR.instances.short_description.setData('Company Background');
+                }
+            });
+        } 
         
         CKEDITOR.instances['requirement'].on('contentDom', function() {
             this.document.on('click', function(event){
@@ -295,6 +304,15 @@
                 }
              });
         });
+        var editor = CKEDITOR.instances['requirement'];
+        if (editor) {
+            editor.on('blur', function(event) {
+                var content = CKEDITOR.instances.requirement.document.getBody().getText();
+                if (content.length < 2) {
+                    CKEDITOR.instances.requirement.setData('Requirement');
+                }
+            });
+        } 
         
         CKEDITOR.instances['responsibility'].on('contentDom', function() {
             this.document.on('click', function(event){
@@ -304,6 +322,15 @@
                 }
              });
         });
+        var editor = CKEDITOR.instances['responsibility'];
+        if (editor) {
+            editor.on('blur', function(event) {
+                var content = CKEDITOR.instances.responsibility.document.getBody().getText();
+                if (content.length < 2) {
+                    CKEDITOR.instances.responsibility.setData('Responsibility');
+                }
+            });
+        } 
     })
 
     function is_valid_email_address(email_address) {

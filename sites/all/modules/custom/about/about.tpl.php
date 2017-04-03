@@ -22,7 +22,11 @@
 		</div>
 	</div>
 </div>
-<div class="parallax image-whoweare" data-stellar-background-ratio="0.5">
+<?php 
+$banner = get_banner_and_title('about2');
+$banner_image = $banner['banner_image'];
+?>
+<div class="parallax" style="background-image: url('<?php print $banner_image ?>'); background-size: cover" data-stellar-background-ratio="0.5">
 	<div id="whatwedo" class="target-bookmark"></div>
 	<div class="section text-center">
 		<div class="container">
