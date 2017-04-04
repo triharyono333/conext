@@ -278,7 +278,7 @@
             }
         });
         
-        CKEDITOR.instances['short_description'].on('contentDom', function() {
+        /*CKEDITOR.instances['short_description'].on('contentDom', function() {
             this.document.on('click', function(event){
                 var content = CKEDITOR.instances.short_description.document.getBody().getText();
                 if (content == 'Company Background') {
@@ -330,7 +330,7 @@
                     CKEDITOR.instances.responsibility.setData('Responsibility');
                 }
             });
-        } 
+        } */
     })
 
     function is_valid_email_address(email_address) {

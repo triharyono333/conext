@@ -62,17 +62,20 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							</div>
 						<!--</div>-->
 						<div class="form-group">
-							<textarea class="input-text full-width" placeholder="Short Description" rows="4" id="short_description" name="short_description">Company Background</textarea>
+							<label>Company Background</label>
+							<textarea class="input-text full-width" placeholder="Short Description" rows="4" id="short_description" name="short_description"></textarea>
 						</div>
 					</div>
 				</div>
 				<div class="col-sm-6">
 					<div class="box">
 						<div class="form-group">
-							<textarea class="input-text full-width" placeholder="Job Requirement" rows="4" id="requirement" name="requirement">Requirement</textarea>
+						<label>Job Requirement</label>
+							<textarea class="input-text full-width" placeholder="Job Requirement" rows="4" id="requirement" name="requirement"></textarea>
 						</div>
 						<div class="form-group">
-							<textarea class="input-text full-width" placeholder="Job Responsibilities" rows="4" id="responsibility" name="responsibility">Responsibility</textarea>
+						<label>Job Responsibilities</label>
+							<textarea class="input-text full-width" placeholder="Job Responsibilities" rows="4" id="responsibility" name="responsibility"></textarea>
 						</div>
 					</div>
 				</div>
