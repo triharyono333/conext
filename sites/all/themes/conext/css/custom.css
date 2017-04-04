@@ -388,7 +388,7 @@ a {
   color: inherit; }
 
 a:hover, a:focus {
-  text-decoration: none;
+  text-decoration: underline;
   color: #009ce7; }
 
 a:focus {
@@ -4734,8 +4734,6 @@ ul.filter-categories > li {
     content: "";
     height: 100%;
     vertical-align: middle; }
-  .post-slider.style4 .slide-text .caption-wrapper h3, .post-slider.style4 .slide-text .caption-wrapper h2 {
-    background: none; }
 .post-slider.style5 .owl-pagination {
   text-align: right;
   bottom: 25px;
@@ -8881,7 +8879,8 @@ body.woocommerce select:not(.default-style) + .customSelect {
     padding-left: 24px;
     margin-left: 5px; }
 .blog-posts .post-full .post-content {
-  background: none; }
+  background: none;
+  text-align: justify; }
 .blog-posts .post-full h3.post-title {
   font-weight: 600;
   color: #000; }
@@ -8921,8 +8920,12 @@ ul.listing {
 
 .post .post-image {
   margin-bottom: 15px; }
+.post .post-content a {
+  color: #009ce7; }
 .post .post-content .post-meta {
   margin-bottom: 5px; }
+  .post .post-content .post-meta a {
+    color: #333333; }
 
 .single-post .post .post-content {
   padding-top: 0; }
@@ -9217,6 +9220,3 @@ body.admin-menu .sticky-wrapper.is-sticky .section.bookmark {
   margin-top: 29px; }
 
 /*# sourceMappingURL=custom.css.map */
-
-/* tri */
-.account-submenu { padding: 10px; display: block; }

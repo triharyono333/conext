@@ -224,7 +224,7 @@
         .range-salary { background: url("../images/icon_salary.svg") no-repeat left center; background-size: 22px auto; padding-left: 24px; margin-left: 5px;}
     }
     .post-full {
-        .post-content { background: none;}
+        .post-content { background: none; text-align: justify;}
         h3 {
             &.post-title { font-weight: 600; color: #000;}
         }
@@ -250,7 +250,11 @@ ul.listing {
 .post {
     .post-image { margin-bottom: 15px;}
     .post-content {
-        .post-meta { margin-bottom: 5px;}
+        a { color: $theme-skin-color;}
+        .post-meta {
+            margin-bottom: 5px;
+            a { color: #333333;}
+        }
     }
 }
 .single-post  {

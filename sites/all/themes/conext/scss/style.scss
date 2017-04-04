@@ -2141,9 +2141,9 @@ ul.filter-categories {
     .slide-text {
       position: absolute; width: 100%; left: 0; top: 0; bottom: 0; height: 470px;
       &:before { display: inline-block; content: ""; height: 100%; vertical-align: middle; }
-      .caption-wrapper {
-        h3, h2 { background: rgba(0, 0, 0, 0.35);}
-      }
+      //.caption-wrapper {
+      //  h3, h2 { background: rgba(0, 0, 0, 0.35);}
+      //}
     }
   }
 

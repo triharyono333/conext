@@ -35,7 +35,7 @@ iframe, img { border:0; }
 img { border-style: none; height: auto; max-width: 100%; vertical-align: top; }
 
 a { text-decoration: none; color: inherit; }
-a:hover, a:focus { text-decoration: none; color: $theme-skin-color; }
+a:hover, a:focus { text-decoration: underline; color: $theme-skin-color; }
 a:focus { outline: none; }
 
 p { font-size: 14px; line-height: 1.8; margin-bottom: 15px; }

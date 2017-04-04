@@ -283,7 +283,7 @@ a {
   color: inherit; }
 
 a:hover, a:focus {
-  text-decoration: none;
+  text-decoration: underline;
   color: #009ce7; }
 
 a:focus {
@@ -4629,8 +4629,6 @@ ul.filter-categories > li {
     content: "";
     height: 100%;
     vertical-align: middle; }
-  .post-slider.style4 .slide-text .caption-wrapper h3, .post-slider.style4 .slide-text .caption-wrapper h2 {
-    background: rgba(0, 0, 0, 0.35); }
 .post-slider.style5 .owl-pagination {
   text-align: right;
   bottom: 25px;
