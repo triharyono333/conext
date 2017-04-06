@@ -43,15 +43,13 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							</select>
 						</div>
 						<div class="form-group dropdown">
-							<select class="selector full-width qualification" id="qualification" name="qualification">
-								<option value="">Qualification</option>
-								<?php foreach($content['qualifications'] as $qualification) { ?>
-									<option value="<?php print $qualification['tid'] ?>"><?php print $qualification['name'] ?> </option>
-								<?php } ?>
-							</select>
+							<label>Qualification</label>
+							<?php foreach($content['qualifications'] as $qualification) { ?>
+							<div class="checkbox">
+								<label><input type="checkbox" name="qualification[]" value="<?php print $qualification['name'] ?>"><?php print $qualification['name'] ?></label>
+							</div>
+							<?php } ?>
 						</div>
-						<!--<h4>Salary Range</h4>
-						<div class="form-inline">-->
 							<div class="form-group dropdown">
 								<select class="selector full-width salary_range" id="salary_range" name="salary_range">
 									<option value="">Salary Range</option>
@@ -60,7 +58,6 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 									<?php } ?>
 								</select>
 							</div>
-						<!--</div>-->
 						<div class="form-group">
 							<label>Company Background</label>
 							<textarea class="input-text full-width" placeholder="Short Description" rows="4" id="short_description" name="short_description"></textarea>
@@ -82,21 +79,24 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 			</div>
 			<div class="box">
 				<h4>Job Type</h4>
-				<div class="row">
-					<div class="col-sm-4">
-						<div class="checkbox">
-							<label><input type="checkbox" name="job_types[]" value="Permanent">Permanent</label>
-						</div>
+				<div class="form-group">
+					<div class="radio">
+						<label>
+							<input type="radio" name="job_types" id="optionsRadios1" value="Permanent">
+							Permanent
+						</label>
 					</div>
-					<div class="col-sm-4">
-						<div class="checkbox">
-							<label><input type="checkbox" name="job_types[]" value="Contract">Contract</label>
-						</div>
+					<div class="radio">
+						<label>
+							<input type="radio" name="job_types" id="optionsRadios1" value="Contract">
+							Contract
+						</label>
 					</div>
-					<div class="col-sm-4">
-						<div class="checkbox">
-							<label><input type="checkbox" name="job_types[]" value="Temporary">Temporary</label>
-						</div>
+					<div class="radio">
+						<label>
+							<input type="radio" name="job_types" id="optionsRadios1" value="Temporary">
+							Temporary
+						</label>
 					</div>
 				</div>
 			</div>

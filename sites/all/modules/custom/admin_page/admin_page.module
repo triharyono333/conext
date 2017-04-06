@@ -33,6 +33,23 @@ function admin_page_menu() {
 		'type' =>  MENU_CALLBACK,
 	);
 	
+	$items['admin/job_seeker/%/edit'] = array(
+		'title' => t('Admin Job Seeker'),
+		'description' => 'admin job seeker edit',
+		'page callback' => 'admin_job_seeker_edit',
+		'page arguments' => array(2),
+		'access arguments' => array('access admin job seeker'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/job_seeker/add'] = array(
+		'title' => t('Admin Job Seeker'),
+		'description' => 'admin job seeker add',
+		'page callback' => 'admin_job_seeker_add',
+		'access arguments' => array('access admin job seeker'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
 	$items['admin/job_seeker/detail'] = array(
 		'title' => t('Admin Job Seeker Detail'),
 		'description' => 'Admin Job Seeker Detail',
@@ -292,6 +309,364 @@ function admin_job_seeker_detail(){
 	return theme('job_seeker_detail', array('content' => $content));
 }
 
+function admin_job_seeker_add(){
+	$output = drupal_get_form('admin_job_seeker_form');
+	
+	return $output;
+}
+
+function admin_job_seeker_edit($uid){
+	$output = drupal_get_form('admin_job_seeker_form');
+	
+	return $output;
+}
+
+function admin_job_seeker_form($form, &$form_state) {
+	$uid = arg(2);
+	
+	if (!empty($uid)) {
+		$query_job_seeker = "SELECT * FROM users a 
+				INNER JOIN conext_job_seeker b ON a.uid = b.user_id WHERE uid = :uid";
+		$job_seeker = db_query($query_job_seeker, array('uid' => $uid));
+		foreach($job_seeker as $data) {
+			$current_work_start = explode('/', $data->current_work_start);
+			$current_work_end = explode('/', $data->current_work_end);
+			
+			$email = $data->mail;
+			$first_name = $data->first_name;
+			$last_name = $data->last_name;
+			$phone = $data->phone;
+			$nationality = $data->nationality;
+			$public_profile_url = $data->public_profile_url;
+			$expected_salary = $data->expected_salary;
+			$about_yourself = $data->about_yourself;
+			$address_street = $data->address_street;
+			$address_country = $data->address_country;
+			$address_province = $data->address_province;
+			$address_zip = $data->address_zip;
+			$address_city = $data->address_city;
+			$address_other_city = is_city_exist($data->current_city)) ? '' : $data->current_city
+			$current_title = $data->current_title;
+			$current_company = $data->current_company;
+			$current_city = $data->current_city;
+			$current_industry = $data->current_industry;
+			$education = $data->education;
+			$graduation = $data->graduation;
+			$major = $data->major;
+			$education_city = $data->education_city;
+			$status = $data->status;
+			$target_position = $data->target_position;
+			$assessment = $data->assessment;
+			$assessment_note = $data->assessment_note;
+			$client_name = $data->client_name;
+			$client_assessment = $data->client_assessment;
+			$client_assessment_note = $data->client_assessment_note;
+			$other_notes = $data->other_notes;
+			$get_profile_from = $data->get_profile_from;
+		}
+		
+	}
+	//drupal_set_message("<pre>".print_r($current_work_start, true)."</pre>");
+	
+	// generate dropdown options
+	$months = conext_get_month();
+	foreach($months as $month) {
+		$month_options[$month] = $month;
+	}
+	$years = conext_get_year();
+	foreach($years as $year) {
+		$year_options[$year] = $year;
+	}
+	$expected_salaries = get_salary_range_v2();
+	foreach($expected_salaries as $salary) {
+		$expected_salary_options[$salary] = $salary;
+	}
+	$industries = get_term_list ('company_industry');
+	foreach($industries as $industry) {
+		$industry_options[$industry['name']] = $industry['name'];
+	}
+	$cities = db_query("SELECT id, nama_kota FROM conext_kota");
+	foreach($cities as $city) {
+		$city_options[$city->nama_kota] = $city->nama_kota;
+	}
+	$assessment_options = array('Passed', 'Not Passed');
+	$status_options = array('Not Approached', 'Not Operated', 'Processed', 'Hired', 'Failed');
+	$get_profile_from_options = array('Email Recruitment', 'Old Master Data', 'Linkedin', 'Virda', 'Ferina', 'Esiana', 'Janis', 'Conext Site', 'Others');
+	
+	
+	$form['uid'] = array(
+		'#type' => 'hidden', 
+		'#title' => 'UID',
+		'#default_value' => (empty($uid)) ? '' : $uid
+	);
+	// PERSONAL INFO
+	$form['personal_info'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Personal Info'),
+    '#collapsible' => TRUE, // Added
+    '#collapsed' => FALSE,  // Added
+  );
+	$form['personal_info']['email'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Email Address',
+		'#required' => true,
+		'#default_value' => (empty($email)) ? '' : $email
+	);
+	$form['personal_info']['first_name'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'First Name',
+		'#required' => true,
+		'#default_value' => (empty($first_name)) ? '' : $first_name
+	);
+	$form['personal_info']['last_name'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Last Name',
+		'#default_value' => (empty($last_name)) ? '' : $last_name
+	);
+	$form['personal_info']['phone'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Phone',
+		'#default_value' => (empty($phone)) ? '' : $phone
+	);
+	$form['personal_info']['nationality'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Nationality',
+		'#default_value' => (empty($nationality)) ? '' : $nationality
+	);
+	$form['personal_info']['public_profile_url'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Linkedin Profile',
+		'#default_value' => (empty($public_profile_url)) ? '' : $public_profile_url
+	);
+	$form['personal_info']['expected_salary'] = array(
+		'#type' => 'select', 
+		'#title' => 'Expected Salary',
+		'#options' => $expected_salary_options,
+		'#default_value' => (empty($expected_salary)) ? '' : $expected_salary
+	);
+	$form['personal_info']['about_yourself'] = array(
+		'#type' => 'textarea', 
+		'#title' => 'About Yourself',
+		'#default_value' => (empty($about_yourself)) ? '' : $about_yourself
+	);
+	
+	// ADDRESS
+	$form['address'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Address'),
+    '#collapsible' => TRUE, // Added
+    '#collapsed' => FALSE,  // Added
+  );
+	$form['address']['address_street'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Street',
+		'#default_value' => (empty($address_street)) ? '' : $address_street
+	);
+	$form['address']['address_country'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Country',
+		'#default_value' => (empty($address_country)) ? '' : $address_country
+	);
+	$form['address']['address_province'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Province',
+		'#default_value' => (empty($address_province)) ? '' : $address_province
+	);
+	$form['address']['address_zip'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Zip Code',
+		'#default_value' => (empty($address_zip)) ? '' : $address_zip
+	);
+	$form['address']['address_city'] = array(
+		'#type' => 'select', 
+		'#title' => 'City',
+		'#options' => $city_options,
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($address_city)) ? '' : $address_city
+	);
+	$form['address']['address_other_city'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Other City',
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($address_other_city)) ? '' : $address_other_city
+	);
+	
+	// CURRENT WORK
+	$form['current_work'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Current Work'),
+    '#collapsible' => TRUE, // Added
+    '#collapsed' => FALSE,  // Added
+  );
+	$form['current_work']['title'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Title',
+		'#default_value' => (empty($current_title)) ? '' : $current_title
+	);
+	$form['current_work']['company'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Company',
+		'#default_value' => (empty($current_company)) ? '' : $current_company
+	);
+	$form['current_work']['city'] = array(
+		'#type' => 'select', 
+		'#title' => 'City',
+		'#options' => $city_options,
+		'#default_value' => (empty($current_city)) ? '' : $current_city
+	);
+	$form['current_work']['industry'] = array(
+		'#type' => 'select', 
+		'#title' => 'Industry',
+		'#options' => $industry_options,
+		'#default_value' => (empty($current_industry)) ? '' : $current_industry
+	);
+	$form['current_work']['start'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Work Start'),
+    '#collapsible' => TRUE, // Added
+    '#collapsed' => FALSE,  // Added
+  );
+	$form['current_work']['start']['month'] = array(
+		'#type' => 'select', 
+		'#title' => 'Month',
+		'#options' => $month_options,
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($current_work_start)) ? '' : $current_work_start[1]
+	);
+	$form['current_work']['start']['year'] = array(
+		'#type' => 'select', 
+		'#title' => 'Year',
+		'#options' => $year_options,
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($current_work_start)) ? '' : $current_work_start[0]
+	);
+	$form['current_work']['end'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Work End'),
+    '#collapsible' => TRUE, // Added
+    '#collapsed' => FALSE,  // Added
+  );
+	$form['current_work']['end']['month'] = array(
+		'#type' => 'select', 
+		'#title' => 'Month',
+		'#options' => $month_options,
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($current_work_end)) ? '' : $current_work_end[1]
+	);
+	$form['current_work']['end']['year'] = array(
+		'#type' => 'select', 
+		'#title' => 'Year',
+		'#options' => $year_options,
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($current_work_end)) ? '' : $current_work_end[0]
+	);
+	
+	// Education
+	$form['education'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Education'),
+    '#collapsible' => TRUE, // Added
+    '#collapsed' => FALSE,  // Added
+  );
+	$form['education']['education'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Institute',
+		'#default_value' => (empty($education)) ? '' : $education
+	);
+	$form['education']['graduation'] = array(
+		'#type' => 'select', 
+		'#title' => 'Graduation',
+		'#options' => $year_options,
+		'#default_value' => (empty($graduation)) ? '' : $graduation
+	);
+	$form['education']['major'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Major',
+		'#default_value' => (empty($major)) ? '' : $major
+	);
+	$form['education']['city'] = array(
+		'#type' => 'select', 
+		'#title' => 'City',
+		'#options' => $city_options,
+		'#default_value' => (empty($education_city)) ? '' : $education_city
+	);
+	
+	// Conext Internal
+	$form['conext'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Conext Internal'),
+    '#collapsible' => TRUE, // Added
+    '#collapsed' => FALSE,  // Added
+  );
+	$form['conext']['status'] = array(
+		'#type' => 'select', 
+		'#title' => 'Status',
+		'#options' => $status_options,
+		'#default_value' => (empty($status)) ? '' : $status
+	);
+	$form['conext']['target_position'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Target Position',
+		'#default_value' => (empty($target_position)) ? '' : $target_position
+	);
+	$form['conext']['assessment'] = array(
+		'#type' => 'select', 
+		'#title' => 'Assessment',
+		'#options' => $assessment_options,
+		'#default_value' => (empty($assessment)) ? '' : $assessment
+	);
+	$form['conext']['assessment_note'] = array(
+		'#type' => 'textarea', 
+		'#title' => 'Assessment Note',
+		'#default_value' => (empty($assessment_note)) ? '' : $assessment_note
+	);
+	$form['conext']['client_name'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'client Name',
+		'#default_value' => (empty($client_name)) ? '' : $client_name
+	);
+	$form['conext']['client_assessment'] = array(
+		'#type' => 'select', 
+		'#title' => 'Client Assessment',
+		'#options' => $assessment_options,
+		'#default_value' => (empty($client_assessment)) ? '' : $client_assessment
+	);
+	$form['conext']['client_assessment_note'] = array(
+		'#type' => 'textarea', 
+		'#title' => 'Client Assessment Note',
+		'#default_value' => (empty($client_assessment_note)) ? '' : $client_assessment_note
+	);
+	$form['conext']['other_notes'] = array(
+		'#type' => 'textarea', 
+		'#title' => 'Other Note',
+		'#default_value' => (empty($other_notes)) ? '' : $other_notes
+	);
+	$form['conext']['get_profile_from'] = array(
+		'#type' => 'select', 
+		'#title' => 'Get Profile From',
+		'#options' => $get_profile_from_options,
+		'#default_value' => (empty($get_profile_from)) ? '' : $get_profile_from
+	);
+	
+	$form['submit'] = array(
+		'#type' => 'submit', 
+		'#title' => 'Submit',
+		'#value' => 'Submit'
+	);
+
+	return $form;    
+}
+
+function admin_job_seeker_form_submit($form, &$form_state) {
+	drupal_set_message($form['personal_info']['email']['#value']." Save Successfully", "notice");
+}
+
 function admin_job(){
 	if (empty($_GET['order'])) {
 		$order = " ORDER BY a.created DESC ";
@@ -345,8 +720,8 @@ function admin_job_detail(){
  	$jobs = db_query($query_job, array('nid' => $nid));
 	
 	foreach($jobs as $job) {
-		$qualification = taxonomy_term_load($job->qualification);
-		$qualification_name = $qualification->name;
+		//$qualification = taxonomy_term_load($job->qualification);
+		//$qualification_name = $qualification->name;
 		
 		$industry = taxonomy_term_load($job->industry);
 		$industry_name = $industry->name;
@@ -359,7 +734,8 @@ function admin_job_detail(){
 			'employer' => $employer,
 			'title' => $job->title,
 			'location' => $job->location,
-			'qualification' => $qualification_name,
+			//'qualification' => $qualification_name,
+			'qualification' => $job->qualification,
 			'salary_range' => $job->salary_range,
 			'industry' => $industry_name,
 			'requirement' => $job->requirement,
@@ -516,6 +892,7 @@ function admin_job_seeker_export() {
 	foreach($job_seekers as $job_seeker) {
 		// get experince years
 		$experience_year = '-';
+		$experience_month = ' ';
 		if (!empty($job_seeker->current_work_start) && !empty($job_seeker->current_work_end)) {
 			$current_work_start = explode('/', $job_seeker->current_work_start);
 			$current_work_end = explode('/', $job_seeker->current_work_end);
@@ -523,6 +900,7 @@ function admin_job_seeker_export() {
 			$work_end = new DateTime($current_work_end[0].'-'.$current_work_end[1].'-28');
 			$day_diff = $work_start->diff($work_end);
 			$experience_year = floor($day_diff->days / 365).' years';
+			$experience_month .= floor(($day_diff->days - ($experience_year * 365)) / 30).' months';
 		}
 		// salary expectation
 		//$expected_salary = (empty($job_seeker->expected_salary)) ? '-' : format_salary($job_seeker->expected_salary);
@@ -543,7 +921,7 @@ function admin_job_seeker_export() {
 		$objPHPExcel->getActiveSheet()->SetCellValue('M'.$rowCount, $job_seeker->current_work_start.' - '.$job_seeker->current_work_end);
 		$objPHPExcel->getActiveSheet()->SetCellValue('N'.$rowCount, $job_seeker->current_city);
 		$objPHPExcel->getActiveSheet()->SetCellValue('O'.$rowCount, $job_seeker->current_industry);
-		$objPHPExcel->getActiveSheet()->SetCellValue('P'.$rowCount, $experience_year);
+		$objPHPExcel->getActiveSheet()->SetCellValue('P'.$rowCount, $experience_year.$experience_month);
 		$objPHPExcel->getActiveSheet()->SetCellValue('Q'.$rowCount, $expected_salary);
 		$objPHPExcel->getActiveSheet()->SetCellValue('R'.$rowCount, $job_seeker->education);
 		$objPHPExcel->getActiveSheet()->SetCellValue('S'.$rowCount, $job_seeker->graduation);
@@ -574,6 +952,18 @@ function other_setting_form($form, &$form_state) {
 			'#title' => 'Conext Contact Email To',
 			'#required' => true,
 			'#default_value' => variable_get('conext_contact_email_to'),
+	);
+	$form['conext_applied_job_email_to'] = array(
+			'#type' => 'textfield', 
+			'#title' => 'Conext Applied Job Email To',
+			'#required' => true,
+			'#default_value' => variable_get('conext_applied_job_email_to'),
+	);
+	$form['conext_employer_posted_job_to'] = array(
+			'#type' => 'textfield', 
+			'#title' => 'Conext Employer Posted Job Email To',
+			'#required' => true,
+			'#default_value' => variable_get('conext_employer_posted_job_to'),
 	);
 	$form['about_conext'] = array(
 			'#type' => 'textfield', 
@@ -637,6 +1027,8 @@ function other_setting_form($form, &$form_state) {
 function other_setting_form_submit($form, &$form_state) {
 	$conext_email_from = variable_set('conext_email_from', $form['conext_email_from']['#value']);
 	$conext_contact_email_to = variable_set('conext_contact_email_to', $form['conext_contact_email_to']['#value']);
+	$conext_applied_job_email_to = variable_set('conext_applied_job_email_to', $form['conext_applied_job_email_to']['#value']);
+	$conext_employer_posted_job_to = variable_set('conext_employer_posted_job_to', $form['conext_employer_posted_job_to']['#value']);
 	$about_conext = variable_set('about_conext', $form['about_conext']['value']['#value']);
 	$office_address = variable_set('office_address', $form['office_address']['value']['#value']);
 	$about_who_we_are = variable_set('about_who_we_are', $form['about_who_we_are']['value']['#value']);

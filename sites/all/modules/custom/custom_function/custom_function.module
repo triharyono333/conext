@@ -4,11 +4,14 @@
 global $base_url;
 define("PATH_TO_FILE", $base_url."/sites/default/files/");
 define("JOB_PER_PAGE", 5);
+define("AUTHENTICATED_ROLE_ID", 2);
 define("EMPLOYER_ROLE_ID", 5);
 define("JOB_SEEKER_ROLE_ID", 6);
 define("WAITING_FOR_APPROVAL", "Waiting for Approval");
 define("PUBLISHED", "Published");
 define("SUBMITTED", "Submitted");
+define("CANCEL", "Cancel");
+define("CLOSE", "Close");
 define("RECAPTCHA_SECRET", "6LcEMxkUAAAAAGISYmbiB6EeNWKsVBG7C5j2KeEv");
 
 function custom_function_menu() {
@@ -226,8 +229,8 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 				$current_work_start = (empty($params['work_month_start']) && empty($params['work_year_start'])) ? '' : $params['work_year_start'].'/'.$params['work_month_start'];
 				$current_work_end = (empty($params['work_month_end']) && empty($params['work_year_end'])) ? '' : $params['work_year_end'].'/'.$params['work_month_end'];
 
-				$query = "INSERT INTO {conext_job_seeker} (user_id, first_name, last_name, phone, address_street, address_country, address_province, address_zip, address_city, current_title, current_company, current_work_start, current_work_end, current_city, current_industry, education, graduation, major, education_city, nationality, cv, public_profile_url, expected_salary, about_yourself, created_at, updated_at)
-					VALUES (:user_id, :first_name, :last_name, :phone, :address_street, :address_country, :address_province, :address_zip, :address_city, :current_title, :current_company, :current_work_start, :current_work_end, :current_city, :current_industry, :education, :graduation, :major, :education_city, :nationality, :cv, :public_profile_url, :expected_salary, :about_yourself, NOW(), NOW())";
+				$query = "INSERT INTO {conext_job_seeker} (user_id, first_name, last_name, phone, address_street, address_country, address_province, address_zip, address_city, current_title, current_company, current_work_start, current_work_end, current_city, current_industry, education, graduation, major, education_city, nationality, cv, public_profile_url, expected_salary, about_yourself, email, created_at, updated_at)
+					VALUES (:user_id, :first_name, :last_name, :phone, :address_street, :address_country, :address_province, :address_zip, :address_city, :current_title, :current_company, :current_work_start, :current_work_end, :current_city, :current_industry, :education, :graduation, :major, :education_city, :nationality, :cv, :public_profile_url, :expected_salary, :about_yourself, :email, NOW(), NOW())";
 				db_query($query, array( 
 					'user_id' => $account->uid, 
 					'first_name' => $params['first_name'],
@@ -253,7 +256,8 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 					'cv' => $file_uri,
 					'public_profile_url' => $params['public_profile_url'],
 					'expected_salary' => $params['expected_salary'],
-					'about_yourself' => $params['about_yourself']
+					'about_yourself' => $params['about_yourself'],
+					'email' => $params['email_address']
 				));
 				
 				if (!empty($_SESSION['linkedin']['response'])) {
@@ -322,7 +326,7 @@ function conext_update_user ($params, $type = 'employer', $file_uri = '') {
 				address_province=:address_province, address_zip=:address_zip, address_city=:address_city,
 				current_title=:current_title, current_company=:current_company, current_work_start=:current_work_start, current_work_end=:current_work_end,
 				current_city=:current_city, current_industry=:current_industry, education=:education, graduation=:graduation, major=:major,
-				education_city=:education_city, nationality=:nationality, expected_salary=:expected_salary, about_yourself=:about_yourself ".$update_cv."
+				education_city=:education_city, nationality=:nationality, expected_salary=:expected_salary, about_yourself=:about_yourself, updated_by=:updated_by, email=:email, updated_at=NOW() ".$update_cv."
 				WHERE user_id=:user_id";
 			db_query($query, array( 
 				'first_name' => $params['first_name'],
@@ -347,10 +351,12 @@ function conext_update_user ($params, $type = 'employer', $file_uri = '') {
 				'nationality' => $params['nationality'],
 				'expected_salary' => $params['expected_salary'],
 				'about_yourself' => $params['about_yourself'],
+				'updated_by' => $params['email_address'],
+				'email' => $params['email_address'],
 				'user_id' => $user->uid
 			));
 		} else { // employer
-			$query = "UPDATE {conext_employer} SET salutation=:salutation, first_name=:first_name, last_name=:last_name, phone=:phone, company=:company, address=:address, city=:city, industry=:industry WHERE user_id=:user_id";
+			$query = "UPDATE {conext_employer} SET salutation=:salutation, first_name=:first_name, last_name=:last_name, phone=:phone, company=:company, address=:address, city=:city, industry=:industry, updated_at=NOW() WHERE user_id=:user_id";
 			db_query($query, array( 
 				'user_id' => $user->uid, 
 				'salutation' => $params['salutation'],
@@ -374,6 +380,7 @@ function conext_post_job($params, $new_user = '') {
 	$publish_job_public = '';
 	$job_benefit = '';
 	$job_types = '';
+	$qualifications = '';
 	
 	// create conext job applied node
 	$node = new stdClass();
@@ -397,10 +404,17 @@ function conext_post_job($params, $new_user = '') {
 		}
 	}
 	// job types
-	if (!empty($params['job_types'])) {
+	/*if (!empty($params['job_types'])) {
 		foreach($params['job_types'] as $key=>$job_type) {
 			if ($key > 0) $job_types .= '||'.$job_type;
 			else $job_types .= $job_type;
+		}
+	}*/
+	// qualification
+	if (!empty($params['qualification'])) {
+		foreach($params['qualification'] as $key=>$qualification) {
+			if ($key > 0) $qualifications .= '||'.$qualification;
+			else $qualifications .= $qualification;
 		}
 	}
 	$publish_job_public = ($params['publish_job_public'] == 'publish_job') ? 1 : 0;
@@ -412,7 +426,7 @@ function conext_post_job($params, $new_user = '') {
 		'drupal_job_id' => $node->nid,
 		'title' => $params['title'],
 		'location' => $params['location'],
-		'qualification' => $params['qualification'],
+		'qualification' => $qualifications,
 		//'salary_min' => $params['salary_min'],
 		//'salary_max' => $params['salary_max'],
 		'salary_range' => $params['salary_range'],
@@ -421,7 +435,7 @@ function conext_post_job($params, $new_user = '') {
 		'responsibility' => $params['responsibility'],
 		'short_description' => $params['short_description'],
 		'benefit' => $job_benefit,
-		'job_type' => $job_types,
+		'job_type' => $params['job_types'],
 		'job_status' => $job_status,
 		'employer_id' => (empty($new_user)) ? $user->uid : $new_user,
 		'publish_job_public' => $publish_job_public
@@ -437,7 +451,7 @@ function conext_get_month() {
 function conext_get_year() {
 	$year = array();
 	$current_year = date("Y");
-	for ($x = $current_year-30; $x <= $current_year; $x++) {
+	for ($x = $current_year; $x >= $current_year-30; $x--) {
     $year[] = $x;
 	}
 	
