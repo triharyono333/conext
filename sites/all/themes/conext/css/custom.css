@@ -29,6 +29,7 @@
 /* 9) DESATURATE */
 /* 10) RETINA */
 /* 11) GRADIENT IMAGE */
+/* 12) TRANSLATE POSITION */
 /*
  * Title:   Conext | Connecting Your Future - SCSS Variables for style customization
  * Author:  http://themeforest.net/user/soaptheme
@@ -257,6 +258,7 @@ $theme-skin-light-fontcolor: #eee9cb;*/
 /* 9) DESATURATE */
 /* 10) RETINA */
 /* 11) GRADIENT IMAGE */
+/* 12) TRANSLATE POSITION */
 /* 1. Base Styles ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* 1.1. Reset ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /*
@@ -4721,7 +4723,16 @@ ul.filter-categories > li {
 .post-slider.style4 .owl-buttons {
   display: none; }
 .post-slider.style4 .owl-item {
-  position: relative; }
+  position: relative;
+  height: 470px;
+  overflow: hidden; }
+  .post-slider.style4 .owl-item img {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    -o-transform: translate(0, -50%);
+    transform: translate(0, -50%); }
 .post-slider.style4 .slide-text {
   position: absolute;
   width: 100%;
@@ -8922,6 +8933,8 @@ ul.listing {
   margin-bottom: 15px; }
 .post .post-content a {
   color: #009ce7; }
+  .post .post-content a.btn.style2 {
+    color: #ffffff; }
 .post .post-content .post-meta {
   margin-bottom: 5px; }
   .post .post-content .post-meta a {

@@ -50,6 +50,7 @@
 /* 9) DESATURATE */
 /* 10) RETINA */
 /* 11) GRADIENT IMAGE */
+/* 12) TRANSLATE POSITION */
 /* 1. New Grid System */
 .col-sms-1, .col-sms-2, .col-sms-3, .col-sms-4, .col-sms-5, .col-sms-6, .col-sms-7, .col-sms-8, .col-sms-9, .col-sms-10, .col-sms-11, .col-sms-12 {
   position: relative;
@@ -344,7 +345,10 @@
     padding-right: 0; }
 
   #slideshow {
-    max-height: 400px !important; } }
+    max-height: 390px !important; }
+
+  .post-slider.style4 .owl-item {
+    height: 390px; } }
 /* 5. Styles for devices(<=1199px) */
 @media (max-width: 1199px) {
   [class^="col-lg-"].pull-left, [class^="col-lg-"].pull-right {
@@ -582,6 +586,12 @@
     padding-left: 70px;
     padding-right: 70px; } }
 /* 7. Styles for devices(>=768px and <= 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  #slideshow {
+    height: 380px !important; }
+
+  .post-slider.style4 .owl-item {
+    height: 380px; } }
 /* 8. Styles for devices(<=767px ) */
 @media (max-width: 767px) {
   #footer .back-to-top {
@@ -861,7 +871,10 @@
     max-width: 70%; }
 
   #slideshow {
-    height: 325px !important; } }
+    height: 325px !important; }
+
+  .post-slider.style4 .owl-item {
+    height: 325px; } }
 /* 10. Styles for devices(<=480px ) */
 @media (max-width: 480px) {
   .coming-soon-page .clock {
@@ -930,6 +943,9 @@
 
   #slideshow {
     height: 350px !important; }
+
+  .post-slider.style4 .owl-item {
+    height: 350px; }
 
   .testimonials .testimonial {
     margin: 0; }

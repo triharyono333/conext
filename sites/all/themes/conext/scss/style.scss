@@ -2137,7 +2137,10 @@ ul.filter-categories {
 
   &.style4 {
     .owl-buttons { display: none; }
-    .owl-item { position: relative; }
+    .owl-item {
+      position: relative; height: 470px; overflow: hidden;
+      img { @include align_center($horizontal: false, $vertical: true);}
+    }
     .slide-text {
       position: absolute; width: 100%; left: 0; top: 0; bottom: 0; height: 470px;
       &:before { display: inline-block; content: ""; height: 100%; vertical-align: middle; }

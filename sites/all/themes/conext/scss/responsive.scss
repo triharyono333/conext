@@ -296,7 +296,8 @@
 /* 4. Styles for devices(>=992px and <=1199px) */
 @media (min-width: 992px) and (max-width: 1199px) {
   .container { padding-left: 0; padding-right: 0; }
-  #slideshow { max-height: 400px !important;}
+  #slideshow { max-height: 390px !important;}
+  .post-slider.style4 .owl-item { height: 390px;}
 }
 
 
@@ -486,6 +487,8 @@
 
 /* 7. Styles for devices(>=768px and <= 991px) */
 @media (min-width: 768px) and (max-width: 991px) {
+  #slideshow { height: 380px !important;}
+  .post-slider.style4 .owl-item { height: 380px;}
 }
 
 /* 8. Styles for devices(<=767px ) */
@@ -729,6 +732,7 @@
 @media (min-width: 481px) and (max-width: 767px) {
   .colors-section .logo-icon { max-width: 70%; }
   #slideshow { height: 325px !important;}
+  .post-slider.style4 .owl-item { height: 325px;}
 }
 
 /* 10. Styles for devices(<=480px ) */
@@ -794,6 +798,7 @@
     }
   }
   #slideshow { height: 350px !important;}
+  .post-slider.style4 .owl-item { height: 350px;}
   .testimonials .testimonial { margin: 0;}
   .post-slider.style4 .caption.size-lg, .parallax .caption.size-lg { font-size: 2.5em;}
   .post .post-content .entry-title {

@@ -250,7 +250,12 @@ ul.listing {
 .post {
     .post-image { margin-bottom: 15px;}
     .post-content {
-        a { color: $theme-skin-color;}
+        a {
+            color: $theme-skin-color;
+            &.btn {
+                &.style2 { color: #ffffff; }
+            }
+        }
         .post-meta {
             margin-bottom: 5px;
             a { color: #333333;}

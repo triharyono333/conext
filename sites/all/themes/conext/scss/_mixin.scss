@@ -188,3 +188,48 @@
     background-image:      -o-linear-gradient(top, $from-color 50%, $to-color 100%);
     //-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='$from-color', EndColorStr='$to-color')";
 }
+
+/* 12) TRANSLATE POSITION */
+@mixin translate($x,$y) {
+    -webkit-transform: translate($x, $y);
+    -ms-transform: translate($x, $y);
+    -o-transform: translate($x, $y);
+    transform: translate($x, $y);
+}
+
+@mixin translateX($x) {
+    -webkit-transform: translateX($x);
+    -ms-transform: translateX($x);
+    -o-transform: translateX($x);
+    transform: translateX($x);
+}
+
+@mixin translateY($y) {
+    -webkit-transform: translateY($y);
+    -ms-transform: translateY($y);
+    -o-transform: translateY($y);
+    transform: translateY($y);
+}
+
+@mixin display_flex() {
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+}
+
+@mixin align_center($horizontal: true, $vertical: true) {
+    position: absolute;
+    @if ($horizontal and $vertical) {
+        top: 50%;
+        left: 50%;
+        @include translate(-50%, -50%);
+    }
+    @else if ($horizontal) {
+        left: 50%;
+        @include translate(-50%, 0);
+    }
+    @else if ($vertical) {
+        top: 50%;
+        @include translate(0, -50%);
+    }
+}
