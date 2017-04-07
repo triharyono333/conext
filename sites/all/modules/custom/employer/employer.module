@@ -290,7 +290,7 @@ function employer_post_job_submit() {
 		$email_content = $employer_name.' just posted a new job';
 		$params = array('body' => $email_content, 'subject' => $employer_name.' just posted a new job');
 		$key = 'post_job_notification_email';
-		$to = variable_get('conext_contact_email_to');
+		$to = variable_get('conext_employer_posted_job_to');
 		$from = variable_get('conext_email_from');
 		$mail = drupal_mail('employer', $key, $to, language_default(), $params, $from);
 		

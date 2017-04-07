@@ -28,7 +28,12 @@ $job = $content['job'];
 					</tr>
 					<tr>
 						<td><strong>Qualification:</strong></td>
-						<td><?php print $job['qualification'] ?></td>
+						<?php $qualifications = explode("||", $job['qualification']) ?>
+						<td>
+							<?php foreach($qualifications as $qualification) { ?>
+							 - <?php print $qualification ?> <br />
+							<?php } ?>
+						</td>
 					</tr>
 					<tr>
 						<td><strong>Salary Range:</strong></td>
@@ -62,11 +67,7 @@ $job = $content['job'];
 					<tr>
 						<td><strong>Job Type:</strong></td>
 						<?php $job_types = explode("||", $job['job_types']) ?>
-						<td>
-							<?php foreach($job_types as $job_type) { ?>
-							 - <?php print $job_type ?> <br />
-							<?php } ?>
-						</td>
+						<td><?php print $job['job_types'] ?></td>
 					</tr>
 					<tr>
 						<td><strong>Publish Job:</strong></td>
@@ -93,6 +94,8 @@ $job = $content['job'];
 								<option <?php print ($job['job_status'] == WAITING_FOR_APPROVAL) ? 'selected' : '' ?> value="<?php print WAITING_FOR_APPROVAL ?>"><?php print WAITING_FOR_APPROVAL ?></option>
 								<option <?php print ($job['job_status'] == PUBLISHED) ? 'selected' : '' ?> value="<?php print PUBLISHED ?>"><?php print PUBLISHED ?></option>
 								<option <?php print ($job['job_status'] == SUBMITTED) ? 'selected' : '' ?> value="<?php print SUBMITTED ?>"><?php print SUBMITTED ?></option>
+								<option <?php print ($job['job_status'] == CANCEL) ? 'selected' : '' ?> value="<?php print CANCEL ?>"><?php print CANCEL ?></option>
+								<option <?php print ($job['job_status'] == CLOSE) ? 'selected' : '' ?> value="<?php print CLOSE ?>"><?php print CLOSE ?></option>
 							</select>&nbsp;
 							<input class="form-submit" type="submit" value="Update Status">
 						</td>

@@ -131,12 +131,22 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 			</div>
 			<div class="box">
 				<h4>Education</h4>
-				<select class="selector full-width" id="qualification" name="qualification">
-					<option value="">All Education</option>
-					<?php foreach($content['qualifications'] as $qualification) { ?>
-						<option <?php print (!empty($_GET['qualification']) && ($qualification['tid'] == $_GET['qualification'])) ? 'selected' : '' ?> value="<?php print $qualification['tid'] ?>"><?php print $qualification['name'] ?></option>
+				<div id="qualification_option" class="form-group">
+					<?php 
+					$qualifications = $content['qualifications'];
+					foreach($qualifications as $qualification) {
+						$qualification_checked = '';
+						$param_qualifications = explode(',', $_GET['qualification']);
+						foreach($param_qualifications as $param_qualification) {
+							if ($param_qualification == $qualification['name']) $qualification_checked = 'checked';
+						}
+					?>
+					<div class="checkbox">
+						<label><input class="qualification" <?php print $qualification_checked ?> type="checkbox" value="<?php print $qualification['name'] ?>"><?php print $qualification['name'] ?></label>
+					</div>
 					<?php } ?>
-				</select>
+					<input type="hidden" name="qualification" id="qualification">
+				</div>
 			</div>
 			<div class="box">
 				<button id="job_submit_2" type="submit" class="btn style2">Submit</button>

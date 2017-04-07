@@ -258,11 +258,19 @@
         });
 
         $("#job_submit_1, #job_submit_2").click(function (e) {
-            var selecteditems = [];
+            var jobselecteditems = [];
             $("#job_type_option").find("input:checked").each(function (i, ob) { 
-                selecteditems.push($(ob).val());
+                jobselecteditems.push($(ob).val());
             });  
-            $("#job_type").val(selecteditems);
+            $("#job_type").val(jobselecteditems);
+            
+            var qualificationselecteditems = [];
+            $("#qualification_option").find("input:checked").each(function (i, ob) { 
+                qualificationselecteditems.push($(ob).val());
+            });  
+            $("#qualification").val(qualificationselecteditems);
+            
+            
             if ($(e.target).attr('id') == "job_submit_1") $("#main_search").val('1');
         });
         

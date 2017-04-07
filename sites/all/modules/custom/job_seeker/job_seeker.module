@@ -188,7 +188,7 @@ function job_seeker_login () {
 
 function job_seeker_login_submit() {
 	if ($_POST) {
-		conext_login_user ($_POST['username'], $_POST['password'], 'job_seeker/account', 'job_seeker/login', JOB_SEEKER_ROLE_ID);
+		conext_login_user ($_POST['username'], $_POST['password'], 'job_seeker/jobs', 'job_seeker/login', JOB_SEEKER_ROLE_ID);
 	} else {
 		return theme('employer_login');
 	}	

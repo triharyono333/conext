@@ -7,9 +7,8 @@ $theme_path = $base_url . '/' . $theme_path;
 <div class="container">
 	<?php foreach($content['job'] as $job) { ?>
 	<?php 
-		$qualification = taxonomy_term_load($job->qualification);
-		$qualification_name = $qualification->name;
-
+		//$qualification = taxonomy_term_load($job->qualification);
+		//$qualification_name = $qualification->name;
 		$industry = taxonomy_term_load($job->industry);
 		$industry_name = $industry->name;
 	?>
@@ -48,7 +47,12 @@ $theme_path = $base_url . '/' . $theme_path;
 					</li>
 					<li class="qualification">
 						<span class="title">Qualification:</span>
-						<span><?php print $qualification_name ?></span>
+						<ul class="listing">
+							<?php $qualifications = explode("||", $job->qualification) ?>
+							<?php foreach($qualifications as $qualification) { ?>
+							<li><?php print $qualification ?></li>
+							<?php } ?>
+						</ul>
 					</li>
 					<li class="location">
 						<span class="title">Location:</span>

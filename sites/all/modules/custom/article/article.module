@@ -42,14 +42,18 @@ function articles() {
 	$filter_category = (empty($category_nid)) ? '' : ' INNER JOIN field_data_field_article_category ac ON n.nid=ac.entity_id AND field_article_category_target_id = '.$category_nid;
 	
 // for paging
-	$total = db_query("SELECT COUNT(nid) FROM node n ".$filter_category." WHERE type = 'article'")->fetchField();
+	$total = db_query("SELECT COUNT(nid) FROM node n 
+		LEFT JOIN {draggableviews_structure} draggableviews_structure ON n.nid = draggableviews_structure.entity_id AND draggableviews_structure.view_name = 'admin_article' AND draggableviews_structure.view_display = 'page'"
+		.$filter_category." WHERE type = 'article'")->fetchField();
 	$limit = JOB_PER_PAGE;
 	$pages = ceil($total / $limit);
 	$page = empty($_GET['page']) ? 1 : $_GET['page'];
 	$offset = ($page - 1)  * $limit;
 
 	// article list 
-	$articles = db_query("SELECT nid, title FROM node n ".$filter_category." WHERE type = 'article' ORDER BY n.created DESC LIMIT ".$limit." OFFSET ".$offset);
+	$articles = db_query("SELECT nid, title, COALESCE(draggableviews_structure.weight, 2147483647) AS draggableviews_structure_weight_coalesce FROM node n 
+		LEFT JOIN {draggableviews_structure} draggableviews_structure ON n.nid = draggableviews_structure.entity_id AND draggableviews_structure.view_name = 'admin_article' AND draggableviews_structure.view_display = 'page'"
+		.$filter_category." WHERE type = 'article' ORDER BY draggableviews_structure_weight_coalesce ASC, n.created DESC LIMIT ".$limit." OFFSET ".$offset);
 	foreach($articles as $article) {
 		$node_article = node_load($article->nid);
 		$image_path = file_create_url($node_article->field_article_image[LANGUAGE_NONE][0]['uri']);
@@ -143,14 +147,14 @@ function article_node_insert($node) {
 				
 				if (!empty($role_array)) {
 					$roles = implode(',', $role_array);
-					$role_filter = " AND rid IN (".$roles.")";
-				}
+					$role_filter = " AND rid IN (".$roles.")";	
 				
-				$users = db_query("SELECT u.uid, mail FROM users u INNER JOIN users_roles ur ON u.uid = ur.uid WHERE status = 1".$role_filter);
-				foreach($users as $user) {
-					$to = $user->mail;
-					$mail = drupal_mail('article', $key, $to, language_default(), $params, $from);
-					drupal_set_message('<pre>'.print_r($mail, true).'</pre>', 'notice');
+					$users = db_query("SELECT u.uid, mail FROM users u INNER JOIN users_roles ur ON u.uid = ur.uid WHERE status = 1".$role_filter);
+					foreach($users as $user) {
+						$to = $user->mail;
+						$mail = drupal_mail('article', $key, $to, language_default(), $params, $from);
+						//drupal_set_message('<pre>'.print_r($mail, true).'</pre>', 'notice');
+					}
 				}
 			}
       break;
