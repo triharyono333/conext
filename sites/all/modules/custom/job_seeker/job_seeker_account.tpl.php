@@ -113,7 +113,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 								<div class="form-group">
 									<input type="text" class="input-text full-width" placeholder="Company Name" id="current_company" name="current_company" value="<?php print $account->current_company ?>">
 								</div>
-								<h4>Duration of Work</h4>
+								<h4>Duration of Current Work</h4>
 								<div class="form-inline">
 									<div class="form-group dropdown">
 										<?php $current_work_start = explode('/', $account->current_work_start) ?>
@@ -132,7 +132,14 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 									</div>
 									<div class="form-group">To</div>
 									<div class="form-group dropdown">
-										<?php $current_work_end = explode('/', $account->current_work_end) ?>
+										<?php 
+										if ($account->current_work_end == 'present') {
+											$current_work_end = date('Y/m');
+											$current_work_end = explode('/', $current_work_end);
+										} else {
+											$current_work_end = explode('/', $account->current_work_end);
+										}
+										?>
 										<select class="selector" style="width: 100px;" id="work_month_end" name="work_month_end">
 											<option value="">MM</option>
 											<?php foreach($content['months'] as $month) { ?>
@@ -145,6 +152,9 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 												<option <?php if (!empty($current_work_end[0]) && ($current_work_end[0] == $year)) print 'selected' ?> value="<?php print $year ?>"><?php print $year ?></option>
 											<?php } ?>
 										</select>
+									</div>
+									<div class="checkbox" style="margin-top: -20px">
+										<label><input <?php print ($account->current_work_end == 'present') ? 'checked' : '' ?> type="checkbox" name="current_work_present" value="present" id="current_work_present">&nbsp;Present</label>
 									</div>
 								</div>
 								<div class="row">
@@ -172,6 +182,50 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 												<?php } ?>
 											</select>
 										</div>
+									</div>
+								</div>
+								<h4>Industry Experience</h4>
+								<div class="form-inline">
+									<div class="form-group dropdown">
+										<?php $industry_start = explode('/', $account->industry_start) ?>
+										<select class="selector" style="width: 100px;" id="industry_month_start" name="industry_month_start">
+											<option value="">MM</option>
+											<?php foreach($content['months'] as $month) { ?>
+												<option <?php if (!empty($industry_start[1]) && $industry_start[1] == $month) print 'selected' ?> value="<?php print $month ?>"><?php print $month ?></option>
+											<?php } ?>
+										</select>
+										<select class="selector" style="width: 100px;" id="work_year_start" name="industry_year_start">
+											<option value="">YYYY</option>
+											<?php foreach($content['years'] as $year) { ?>
+												<option <?php if (!empty($industry_start[0]) && ($industry_start[0] == $year)) print 'selected' ?> value="<?php print $year ?>"><?php print $year ?></option>
+											<?php } ?>
+										</select>
+									</div>
+									<div class="form-group">To</div>
+									<div class="form-group dropdown">
+										<?php 
+										if ($account->industry_end == 'present') {
+											$industry_end = date('Y/m');
+											$industry_end = explode('/', $industry_end);
+										} else {
+											$industry_end = explode('/', $account->industry_end);
+										}
+										?>
+										<select class="selector" style="width: 100px;" id="industry_month_end" name="industry_month_end">
+											<option value="">MM</option>
+											<?php foreach($content['months'] as $month) { ?>
+												<option <?php if (!empty($industry_end[1]) && $industry_end[1] == $month) print 'selected' ?> value="<?php print $month ?>"><?php print $month ?></option>
+											<?php } ?>
+										</select>
+										<select class="selector" style="width: 100px;" id="industry_year_end" name="industry_year_end">
+											<option value="">YYYY</option>
+											<?php foreach($content['years'] as $year) { ?>
+												<option <?php if (!empty($industry_end[0]) && ($industry_end[0] == $year)) print 'selected' ?> value="<?php print $year ?>"><?php print $year ?></option>
+											<?php } ?>
+										</select>
+									</div>
+									<div class="checkbox" style="margin-top: -20px">
+										<label><input <?php print ($account->industry_end == 'present') ? 'checked' : '' ?> type="checkbox" name="industry_present" value="present" id="industry_present">&nbsp;Present</label>
 									</div>
 								</div>
 							</div>

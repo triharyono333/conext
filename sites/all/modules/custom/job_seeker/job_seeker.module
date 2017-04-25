@@ -188,7 +188,7 @@ function job_seeker_login () {
 
 function job_seeker_login_submit() {
 	if ($_POST) {
-		conext_login_user ($_POST['username'], $_POST['password'], 'job_seeker/jobs', 'job_seeker/login', JOB_SEEKER_ROLE_ID);
+		conext_login_user ($_POST['username'], $_POST['password'], 'jobs', 'job_seeker/login', JOB_SEEKER_ROLE_ID);
 	} else {
 		return theme('employer_login');
 	}	
@@ -202,6 +202,31 @@ function job_seeker_register() {
 		$last_name = $_SESSION['linkedin']['response']['person']['last-name'];
 		$public_profile_url = $_SESSION['linkedin']['response']['person']['public-profile-url'];
 		$email_address = $_SESSION['linkedin']['response']['person']['email-address'];
+		$about_yourself = $_SESSION['linkedin']['response']['person']['summary'];
+		if (!empty($_SESSION['linkedin']['response']['person']['positions']['position'])) {
+			$position = $_SESSION['linkedin']['response']['person']['positions']['position'];
+			$current_title = $position['title'];
+			$current_start_month = $position['start-date']['month'];
+			$current_start_year = $position['start-date']['year'];
+			if ($position['is-current'] == 'true') {
+				$current_end_month = date('m');
+				$current_end_year = date('Y');
+				$current_present = 1;
+			} else {
+				$current_end_month = $position['end-date']['month'];
+				$current_end_year = $position['end-date']['year'];
+				$current_present = 0;
+			}
+			$company = $position['company']['name'];
+			if (!empty($_SESSION['linkedin']['response']['person']['location'])) {
+				$location = $_SESSION['linkedin']['response']['person']['location'];
+				$js_location = explode(',', $location['name']);
+				$location_length = count($js_location);
+				$city = $js_location[0];
+				if ($location_length == 3) $province = $js_location[1];
+				$country = end($js_location);
+			}
+		}
 	}
 	
 	$industries = get_term_list ('company_industry');
@@ -222,9 +247,20 @@ function job_seeker_register() {
 		'last_name' => (empty($last_name)) ? '' : $last_name,
 		'public_profile_url' => (empty($public_profile_url)) ? '' : $public_profile_url,
 		'email_address' => (empty($email_address)) ? '' : $email_address,
+		'about_yourself' => (empty($about_yourself)) ? '' : $about_yourself,
+		'current_title' => (empty($current_title)) ? '' : $current_title,
+		'current_start_month' => (empty($current_start_month)) ? '' : $current_start_month,
+		'current_start_year' => (empty($current_start_year)) ? '' : $current_start_year,
+		'current_end_month' => (empty($current_end_month)) ? '' : $current_end_month,
+		'current_end_year' => (empty($current_end_year)) ? '' : $current_end_year,
+		'current_present' => (empty($current_present)) ? '' : $current_present,
+		'company' => (empty($company)) ? '' : $company,
+		'city' => (empty($city)) ? '' : $city,
+		'country' => (empty($country)) ? '' : $country,
+		'province' => (empty($province)) ? '' : $province,
 		'expected_salary' => $salary_range
 	);
-	//drupal_set_message("<pre>".print_r($content, true)."</pre>");
+	//drupal_set_message("<pre>".print_r($_SESSION['linkedin'], true)."</pre>");
 	
 	return theme('job_seeker_register', array('content' => $content));
 }

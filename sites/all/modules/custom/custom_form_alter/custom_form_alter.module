@@ -5,7 +5,18 @@ function custom_form_alter_form_alter(&$form, &$form_state, $form_id) {
 	//print "<pre>".print_r($form, true)."</pre>";
 	//print $form_id;
 	global $user;
-
+	//print $form_id;
+	//print '<br />';
+	//print $user->uid;
+	
+	if($form_id == "views_form_admin_views_user_system_1" && $user->uid != 1) {
+    $keys = array('name', 'status', 'roles', 'member_for', 'last_access', 'operations');
+    foreach($keys as $key) {
+      unset($form[$key][1]);
+    }
+    unset($form['accounts']['#options'][1]);
+  }
+	
 	if($form_id == 'article_node_form') {
 		$form['actions']['submit']['#submit'][] = 'article_node_form_submit_handler';
 	}

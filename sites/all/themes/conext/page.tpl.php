@@ -6,6 +6,7 @@ $arg1 = arg(1);
 $section_class = get_section_class($arg0, $arg1);
 ?>
 
+<!--
 <style>
 body {
     margin: 0;
@@ -74,9 +75,10 @@ body {
   </div>
 </div>
 <?php } ?>
+-->
 
 <div id="page-wrapper">
-	<?php if (!empty($_SESSION['prelaunch_login'])) { ?>
+	<?php //if (!empty($_SESSION['prelaunch_login'])) { ?>
 	<header id="header" class="header-color-white <?php print (drupal_is_front_page()) ? '' : 'white-box' ?>">
 		<input type="hidden" id="arg0" value="<?php print (drupal_is_front_page()) ? 'home' : $arg0 ?>" >
 		<div class="container">
@@ -103,7 +105,7 @@ body {
 							<a href="<?php print $base_url ?>/about">About Us</a>
 						</li>
 						<li class="menu-item-has-children" id="job_seeker">
-							<a href="<?php print $base_url ?>/job_seeker" class="rounded">Job Seeker</a>
+							<a href="<?php print $base_url ?>/jobs" class="rounded">Job Seeker</a>
 						</li>
 						<li class="menu-item-has-children" id="employer">
 							<a href="<?php print $base_url ?>/employer" class="rounded">Employer</a>
@@ -111,14 +113,21 @@ body {
 						<?php if ($user->uid > 0) { ?>
 						<?php
 							$href = '';
-							if ( valid_user_role(JOB_SEEKER_ROLE_ID) ) $href = $base_url.'/job_seeker';
-							if ( valid_user_role(EMPLOYER_ROLE_ID) ) $href = $base_url.'/employer';
+							$my_account = '';
+							if ( valid_user_role(JOB_SEEKER_ROLE_ID) ) {
+								$href = $base_url.'/job_seeker';
+								$my_account = 'My Job Activity';
+							}
+							if ( valid_user_role(EMPLOYER_ROLE_ID) ) {
+								$href = $base_url.'/employer';
+								$my_account = 'My Account';
+							}
 						?>
 						<li class="menu-item-has-children my-account">
 							<a href="#"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
 							<ul class="sub-nav">
 								<?php print generate_myaccount_submenu() ?>
-								<li><a href="<?php print $href ?>">My Account</a></li>
+								<li><a href="<?php print $href ?>"><?php print $my_account ?></a></li>
 								<li><a href="<?php print $base_url ?>/user/logout">Logout</a></li>
 							</ul>
 						</li>
@@ -139,7 +148,7 @@ body {
 					<a href="<?php print $base_url ?>/about">About Us</a>
 				</li>
 				<li class="menu-item-has-children" id="job_seeker">
-					<a href="<?php print $base_url ?>/job_seeker">Job Seeker</a>
+					<a href="<?php print $base_url ?>/jobs">Job Seeker</a>
 				</li>
 				<li class="menu-item-has-children" id="employer">
 					<a href="<?php print $base_url ?>/employer">Employer</a>
@@ -151,16 +160,18 @@ body {
 				?>
 				<li class="menu-item-has-children">
 						<span class="open-subnav"></span>
-						<li><a href="<?php print $href ?>">My Account</a></li>
+						<a href="<?php $href ?>">My Account</a>
 						<ul class="sub-nav">
-								<li><a href="<?php print $base_url ?>/user/logout">Logout</a></li>
+							<?php print generate_myaccount_submenu() ?>
+							<li><a href="<?php print $href ?>"><?php print $my_account ?></a></li>
+							<li><a href="<?php print $base_url ?>/user/logout">Logout</a></li>
 						</ul>
 				</li>
 				<?php } ?>
 			</ul>
 		</div>
 	</header>
-	<?php } ?>
+	<?php //} ?>
 
 	<?php if (drupal_is_front_page()) { ?>
 	<div id="slideshow">
@@ -295,7 +306,11 @@ body {
 		</div>
 	</section>
 	<?php } else { ?>
-	<?php if ($tabs): ?><div class="tabs"><?php print render($tabs); ?></div><?php endif; ?>
+	<?php if ($tabs): ?>
+		<div class="tabs">
+			<?php print render($tabs); ?>
+		</div>
+	<?php endif; ?>
 	<?php if ($arg0 == 'employer' || $arg0 == 'job_seeker' || $arg0 == 'user') { ?>
 		<div class="head-spacer"><img src="<?php print $path_to_theme ?>images/spacer.gif" style="height: 92px;"></div>
 		<?php //if ($arg1 == 'register' || $arg1 == 'post_job') $register_class = 'register' ?>

@@ -34,6 +34,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 						<?php print generate_sortable_header('created_at', 'Date Posted', $content['job_url']) ?>
 						<?php print generate_sortable_header('industry', 'Industry', $content['job_url']) ?>
 						<?php print generate_sortable_header('total_applied', 'Applied', $content['job_url']) ?>
+						<?php print generate_sortable_header('job_status', 'Status', $content['job_url']) ?>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -45,6 +46,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 						<td class="views-field views-field-title"><?php print $job->created_at ?></td>
 						<td class="views-field views-field-title"><?php print $job->industry ?></td>
 						<td class="views-field views-field-title"><?php print (empty($job->total_applied)) ? '-' : $job->total_applied ?></td>
+						<td class="views-field views-field-title"><?php print $job->job_status ?></td>
 						<td class="views-field views-field-edit-node">
 							<a href="<?php print $base_url ?>/admin/job/detail/<?php print $job->nid ?>">View</a></td>
 					</tr>

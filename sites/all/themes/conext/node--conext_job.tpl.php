@@ -43,8 +43,16 @@ $theme_path = $base_url . '/' . $theme_path;
 					<div class="form-group">
 						<textarea rows="8" class="input-text full-width" placeholder="Cover Letter" id="cover_letter" name="cover_letter"></textarea>
 					</div>
-					<div class="form-group">
+					<!--<div class="form-group">
 						<div class="g-recaptcha" data-sitekey="6LcEMxkUAAAAAL7gviCCnxLnZ943bUenHnFjofnw"></div>
+					</div>-->
+					<div class="row">
+						<div class="form-group">
+							<img style="padding-left: 14px;" src="<?php print $base_url ?>/job_opening_captcha">
+						</div>
+						<div class="col-sm-6 form-group">
+							<input type="text" class="input-text full-width" placeholder="Input Captcha" name="captcha" id="captcha">
+						</div>
 					</div>
 					<div class="form-group">
 						<input type="hidden" name="job_applied" id="job_applied" value="<?php print $title ?>" >

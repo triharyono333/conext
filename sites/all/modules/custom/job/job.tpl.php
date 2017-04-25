@@ -105,9 +105,11 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 					$job_types = get_job_type();
 					foreach($job_types as $job_type) {
 						$job_type_checked = '';
-						$param_job_types = explode(',', $_GET['job_type']);
-						foreach($param_job_types as $param_job_type) {
-							if ($param_job_type == $job_type) $job_type_checked = 'checked';
+						if (!empty($_GET['job_type'])) {
+							$param_job_types = explode(',', $_GET['job_type']);
+							foreach($param_job_types as $param_job_type) {
+								if ($param_job_type == $job_type) $job_type_checked = 'checked';
+							}
 						}
 					?>
 					<div class="checkbox">
@@ -136,9 +138,11 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 					$qualifications = $content['qualifications'];
 					foreach($qualifications as $qualification) {
 						$qualification_checked = '';
-						$param_qualifications = explode(',', $_GET['qualification']);
-						foreach($param_qualifications as $param_qualification) {
-							if ($param_qualification == $qualification['name']) $qualification_checked = 'checked';
+						if (!empty($_GET['qualification'])) {
+							$param_qualifications = explode(',', $_GET['qualification']);
+							foreach($param_qualifications as $param_qualification) {
+								if ($param_qualification == $qualification['name']) $qualification_checked = 'checked';
+							}
 						}
 					?>
 					<div class="checkbox">

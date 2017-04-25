@@ -14,7 +14,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 				<div class="col-sm-6">
 					<div class="box">
 						<h4>Your Detail</h4>
-						<div class="form-group dropdown">
+						<div class="form-group dropdown" id="city_dropdown">
 							<select class="selector full-width" id="salutation" name="salutation">
 								<option value="">Salutation</option>
 								<?php foreach($content['salutations'] as $salutation) { ?>
@@ -51,7 +51,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 						<!--<div class="form-group">
 							<input type="text" class="input-text full-width" placeholder="Appartment, unit, etc. (optional)" id="address_optional" name="address_optional">
 						</div>-->
-						<div class="form-group dropdown">
+						<div class="form-group dropdown" id="city_dropdown">
 							<select class="selector full-width" id="city" name="city">
 								<option value="">Town / City</option>
 								<?php foreach($content['cities'] as $city) { ?>
@@ -59,7 +59,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 								<?php } ?>
 							</select>
 						</div>
-						<div class="form-group dropdown">
+						<div class="form-group dropdown" id="industry_dropdown">
 							<select class="selector full-width" id="industry" name="industry">
 								<option value="">Company Industry</option>
 								<?php foreach($content['industries'] as $industry) { ?>

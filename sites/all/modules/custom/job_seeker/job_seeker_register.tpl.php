@@ -32,10 +32,10 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							<input type="text" class="input-text full-width" placeholder="Apartment, unit, etc. (optional)" id="address_optional" name="address_optional">
 						</div>-->
 						<div class="form-group">
-							<input type="text" class="input-text full-width" placeholder="Town / City" id="city" name="city">
+							<input type="text" class="input-text full-width" placeholder="Town / City" id="city" name="city" value="<?php print $content['city'] ?>">
 						</div>
 						<div class="form-group column-2 no-margin">
-							<input type="text" class="input-text" placeholder="State / County / Province" id="province" name="province">
+							<input type="text" class="input-text" placeholder="State / County / Province" id="province" name="province" value="<?php print $content['province'] ?>">
 							<input type="text" class="input-text" placeholder="Zip code" id="zip_code" name="zip_code">
 						</div>
 						<div class="form-group dropdown">
@@ -43,10 +43,10 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 								<option value="">Select a Country</option>
 								<option value="Indonesia">Indonesia</option>
 							</select>-->
-							<input type="text" class="input-text full-width" placeholder="Country" id="country" name="country">
+							<input type="text" class="input-text full-width" placeholder="Country" id="country" name="country" value="<?php print $content['country'] ?>">
 						</div>
 						<div class="form-group dropdown">
-							<select class="selector full-width salary_max" id="expected_salary" name="expected_salary">
+							<select class="selector full-width expected_salary" id="expected_salary" name="expected_salary">
 								<option value="">Expected Salary</option>
 								<?php foreach($content['expected_salary'] as $value) { ?>
 									<option value="<?php print $value ?>"><?php print $value ?></option>
@@ -66,47 +66,50 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 					<div class="box">
 						<h4>Current Position</h4>
 						<div class="form-group">
-							<input type="text" class="input-text full-width" placeholder="Title, eg; Marketing Manager, Graphic Designer, Etc" id="current_title" name="current_title">
+							<input type="text" class="input-text full-width" placeholder="Title, eg; Marketing Manager, Graphic Designer, Etc" id="current_title" name="current_title" value="<?php print $content['current_title'] ?>">
 						</div>
 						<div class="form-group">
-							<input type="text" class="input-text full-width" placeholder="Company Name" id="current_company" name="current_company">
+							<input type="text" class="input-text full-width" placeholder="Company Name" id="current_company" name="current_company" value="<?php print $content['company'] ?>">
 						</div>
-						<h4>Duration of Work</h4>
+						<h4>Duration of Current Work</h4>
 						<div class="form-inline">
 							<div class="form-group dropdown">
-								<select class="selector" style="width: 100px;" id="work_month_start" name="work_month_start">
+								<select class="selector work_month_start" style="width: 100px;" id="work_month_start" name="work_month_start">
 									<option value="">MM</option>
 									<?php foreach($content['months'] as $month) { ?>
-										<option value="<?php print $month ?>"><?php print $month ?></option>
+										<option <?php print ($content['current_start_month'] == $month) ? 'selected' : '' ?> value="<?php print $month ?>"><?php print $month ?></option>
 									<?php } ?>
 								</select>
-								<select class="selector" style="width: 100px;" id="work_year_start" name="work_year_start">
+								<select class="selector work_year_start" style="width: 100px;" id="work_year_start" name="work_year_start">
 									<option value="">YYYY</option>
 									<?php foreach($content['years'] as $year) { ?>
-										<option value="<?php print $year ?>"><?php print $year ?></option>
+										<option <?php print ($content['current_start_year'] == $year) ? 'selected' : '' ?> value="<?php print $year ?>"><?php print $year ?></option>
 									<?php } ?>
 								</select>
 							</div>
 							<div class="form-group">To</div>
 							<div class="form-group dropdown">
-								<select class="selector" style="width: 100px;" id="work_month_end" name="work_month_end">
+								<select class="selector work_month_end" style="width: 100px;" id="work_month_end" name="work_month_end">
 									<option value="">MM</option>
 									<?php foreach($content['months'] as $month) { ?>
-										<option value="<?php print $month ?>"><?php print $month ?></option>
+										<option <?php print ($content['current_end_month'] == $month) ? 'selected' : '' ?> value="<?php print $month ?>"><?php print $month ?></option>
 									<?php } ?>
 								</select>
-								<select class="selector" style="width: 100px;" id="work_year_end" name="work_year_end">
+								<select class="selector work_year_end" style="width: 100px;" id="work_year_end" name="work_year_end">
 									<option value="">YYYY</option>
 									<?php foreach($content['years'] as $year) { ?>
-										<option value="<?php print $year ?>"><?php print $year ?></option>
+										<option <?php print ($content['current_end_year'] == $year) ? 'selected' : '' ?> value="<?php print $year ?>"><?php print $year ?></option>
 									<?php } ?>
 								</select>
+							</div>
+							<div class="checkbox" style="margin-top: -20px">
+								<label><input <?php print ($content['current_present'] == 1) ? 'checked' : '' ?> type="checkbox" name="current_work_present" value="present" id="current_work_present">&nbsp;Present</label>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="form-group dropdown">
-									<select class="selector full-width" id="current_city" name="current_city">
+									<select class="selector full-width current_city" id="current_city" name="current_city">
 										<option value="">City</option>
 										<?php foreach($content['cities'] as $city) { ?>
 											<option value="<?php print $city->nama_kota ?>"><?php print $city->nama_kota ?></option>
@@ -121,13 +124,49 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group dropdown">
-									<select class="selector full-width" id="current_industry" name="current_industry">
+									<select class="selector full-width current_industry" id="current_industry" name="current_industry">
 										<option value="">Industry</option>
 										<?php foreach($content['industries'] as $industry) { ?>
 											<option value="<?php print $industry['name'] ?>"><?php print $industry['name'] ?></option>
 										<?php } ?>
 									</select>
 								</div>
+							</div>
+						</div>
+						
+							<h4>Industry Experience</h4>
+							<div class="form-inline">
+							<div class="form-group dropdown">
+								<select class="selector industry_month_start" style="width: 100px;" id="industry_month_start" name="industry_month_start">
+									<option value="">MM</option>
+									<?php foreach($content['months'] as $month) { ?>
+										<option value="<?php print $month ?>"><?php print $month ?></option>
+									<?php } ?>
+								</select>
+								<select class="selector industry_year_start" style="width: 100px;" id="industry_year_start" name="industry_year_start">
+									<option value="">YYYY</option>
+									<?php foreach($content['years'] as $year) { ?>
+										<option value="<?php print $year ?>"><?php print $year ?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="form-group">To</div>
+							<div class="form-group dropdown">
+								<select class="selector industry_month_end" style="width: 100px;" id="industry_month_end" name="industry_month_end">
+									<option value="">MM</option>
+									<?php foreach($content['months'] as $month) { ?>
+										<option value="<?php print $month ?>"><?php print $month ?></option>
+									<?php } ?>
+								</select>
+								<select class="selector industry_year_end" style="width: 100px;" id="industry_year_end" name="industry_year_end">
+									<option value="">YYYY</option>
+									<?php foreach($content['years'] as $year) { ?>
+										<option value="<?php print $year ?>"><?php print $year ?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="checkbox" style="margin-top: -20px">
+								<label><input type="checkbox" name="industry_present" value="present" id="industry_present">&nbsp;Present</label>
 							</div>
 						</div>
 					</div>
@@ -140,7 +179,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="form-group dropdown">
-									<select class="selector full-width" id="graduation_year" name="graduation_year">
+									<select class="selector full-width graduation_year" id="graduation_year" name="graduation_year">
 										<option value="">YYYY</option>
 										<?php foreach($content['years'] as $year) { ?>
 											<option value="<?php print $year ?>"><?php print $year ?></option>
@@ -155,7 +194,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="form-group dropdown">
-									<select class="selector full-width" id="education_city" name="education_city">
+									<select class="selector full-width education_city" id="education_city" name="education_city">
 										<option value="">City</option>
 										<?php foreach($content['education_cities'] as $city) { ?>
 											<option value="<?php print $city->nama_kota ?>"><?php print $city->nama_kota ?></option>
@@ -175,7 +214,7 @@ $path_to_theme = $base_url . "/sites/all/themes/conext/";
 			<div class="box">
 				<h4>About Yourself</h4>
 				<div class="form-group">
-					<textarea id="about_yourself" name="about_yourself" class="input-text full-width" rows="10"></textarea>
+					<textarea id="about_yourself" name="about_yourself" class="input-text full-width" rows="10"><?php print $content['about_yourself'] ?></textarea>
 				</div>
 			</div>
 			<div class="box">
