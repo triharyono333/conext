@@ -3606,7 +3606,7 @@ ul.filter-categories > li {
 
 /* 3.5. Mobile Menu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 .mobile-nav-wrapper {
-  background: rgba(255, 255, 255, 0.8); }
+  background: #ffffff; }
 
 .mobile-nav {
   padding: 15px 20px 40px;
