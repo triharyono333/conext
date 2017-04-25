@@ -6,6 +6,9 @@ $path_to_admin_theme = $base_url . "/sites/all/themes/adminimal_theme/";
 <div class="content">
 	<div>
 		<div class="view-header">
+			<?php if (valid_user_role(CONEXT_ADMIN_ROLE_ID) || valid_user_role(CONEXT_SUPER_ADMIN_ROLE_ID) || valid_user_role(0) || valid_user_role(3)) { ?>
+			<a href="<?php print $base_url ?>/admin/job_seeker/add">+ add new job seeker</a>
+			<?php } ?>
 		<div class="view-filters">
       <form action="<?php print $base_url ?>/admin/job_seeker" method="get" accept-charset="UTF-8">
 				<div>
@@ -27,32 +30,44 @@ $path_to_admin_theme = $base_url . "/sites/all/themes/adminimal_theme/";
 		</div>
 
 		<form method='post' action='<?php print $base_url ?>/admin/job_seeker/export'>
-		<input type='submit' class='form-submit' value='Export Excel'>
+		<?php if (valid_user_role(CONEXT_SUPER_ADMIN_ROLE_ID) || valid_user_role(0) || valid_user_role(3)) { ?>
+			<input type='submit' class='form-submit' value='Export Excel'>
+		<?php } ?>
 		<!--<a class="form-submit" href="<?php print $base_url ?>/admin/job_seeker/export?keyword=<?php print (empty($content['keyword'])) ? '' : $content['keyword'] ?>">Export Excel</a>-->
 		<div class="view-content">
       <table class="views-table cols-3">
 				<thead>
 					<tr>
-						<th></th>
+						<th><input type="checkbox" id="job_seeker_check_all"></th>
 						<?php print generate_sortable_header('first_name', 'Name', $content['job_seeker_url']) ?>
 						<?php print generate_sortable_header('address_city', 'City', $content['job_seeker_url']) ?>
 						<?php print generate_sortable_header('current_title', 'Title', $content['job_seeker_url']) ?>
 						<?php print generate_sortable_header('experience_year', 'Years of Experience', $content['job_seeker_url']) ?>
+						<?php print generate_sortable_header('current_industry', 'Industry', $content['job_seeker_url']) ?>
+						<?php print generate_sortable_header('industry_experience', 'Industry Experience', $content['job_seeker_url']) ?>
 						<?php print generate_sortable_header('expected_salary', 'Salary', $content['job_seeker_url']) ?>
+						<?php print generate_sortable_header('status', 'Status', $content['job_seeker_url']) ?>
+						<?php print generate_sortable_header('get_profile_from', 'Profile From', $content['job_seeker_url']) ?>
+						<?php print generate_sortable_header('updated_by', 'Last Updated By', $content['job_seeker_url']) ?>
 						<th scope="col"></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach($content['job_seekers'] as $job_seeker) { ?>
           <tr class="odd views-row-first">
-						<td><input type="checkbox" name="job_seeker_ids[]" value="<?php print $job_seeker->user_id ?>"></td>
+						<td><input type="checkbox" name="job_seeker_ids[]" class="job_seeker_ids" value="<?php print $job_seeker->user_id ?>"></td>
 						<td class="views-field views-field-title"><?php print $job_seeker->first_name ?> <?php print $job_seeker->last_name ?></td>
 						<td class="views-field views-field-title"><?php print (empty($job_seeker->address_city)) ? '-' : $job_seeker->address_city ?></td>
 						<td class="views-field views-field-title"><?php print (empty($job_seeker->current_title)) ? '-' : $job_seeker->current_title ?></td>
-						<td class="views-field views-field-title"><?php print (empty($job_seeker->experience_year)) ? '-' : $job_seeker->experience_year ?> years</td>
+						<td class="views-field views-field-title"><?php print (empty($job_seeker->experience_year)) ? '0' : $job_seeker->experience_year ?> years</td>
+						<td class="views-field views-field-title"><?php print (empty($job_seeker->current_industry)) ? '-' : $job_seeker->current_industry ?></td>
+						<td class="views-field views-field-title"><?php print (empty($job_seeker->industry_experience)) ? '-' : $job_seeker->industry_experience ?></td>
 						<td class="views-field views-field-title"><?php print (empty($job_seeker->expected_salary)) ? '-' : $job_seeker->expected_salary ?></td>
+						<td class="views-field views-field-title"><?php print (empty($job_seeker->status)) ? '-' : $job_seeker->status ?></td>
+						<td class="views-field views-field-title"><?php print (empty($job_seeker->get_profile_from)) ? '-' : $job_seeker->get_profile_from ?></td>
+						<td class="views-field views-field-title"><?php print (empty($job_seeker->updated_by)) ? '-' : $job_seeker->updated_by ?></td>
 						<td class="views-field views-field-edit-node">
-							<a href="<?php print $base_url ?>/admin/job_seeker/detail/<?php print $job_seeker->uid ?>">View</a></td>
+							<a href="<?php print $base_url ?>/admin/job_seeker/<?php print $job_seeker->uid ?>/edit">Edit</a></td>
 					</tr>
 					<?php } ?>
 				</tbody>
@@ -79,3 +94,13 @@ $path_to_admin_theme = $base_url . "/sites/all/themes/adminimal_theme/";
 		</div>
 	</div>  
 </div>
+	
+<script>
+	(function ($) {
+		//$(document).ready(function () {
+			$('#job_seeker_check_all').click(function() {
+				$('.job_seeker_ids').prop('checked', this.checked);
+			});
+		//})
+	}(jQuery));
+</script>

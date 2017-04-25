@@ -4,6 +4,10 @@
         if (arg0 == '' || arg0 == null || arg0 == 'home') $("#home").addClass('active');
         else $("#"+arg0).addClass('active');
         
+        $('html').bind('keypress', function(e) {
+            if(e.keyCode === 10 || e.keyCode == 13) return false;
+         });
+        
         $("#about_submit").click(function () {
             var class_error = "error_input";
             var contact_name = $("#contact_name");
@@ -56,15 +60,16 @@
                 alert("Please fill all mandatory fields");
                 return false;
             } else {
-                captcha_response = grecaptcha.getResponse();
-                if (captcha_response == null || captcha_response == '') {
+                var captcha = $("#captcha").val();
+                if (captcha == null || captcha == '') {
                     alert('Invalid Captcha');
                     return false;
-                } else {
+                } 
+                /*else {
                     $.ajax({
-                        type: "POST",
+                        type: "GET",
                         url: $("#verify_url").val(),
-                        data: "g-recaptcha-response=" + grecaptcha.getResponse()
+                        data: "captcha=" + captcha
                     }).done(function(status) {
                         alert(status);
                         if (status == "ok") {
@@ -74,7 +79,7 @@
                             return false;
                         }
                     });
-                }
+                }*/
             }
         });
 
@@ -85,11 +90,20 @@
             var email_address = $("#email_address");
             var password = $("#password");
             var re_password = $("#re_password");
+            var last_name = $("#last_name");
+            var phone = $("#phone");
+            var company = $("#company");
+            var address = $("#address");
+            var city = $("#city");
+            var industry = $("#industry");
+            var salutation = $("#salutation");
 
+            $("."+class_error).removeClass(class_error);
             if (first_name.val() == ""
                     || email_address.val() == "" || !is_valid_email_address(email_address.val())
-                    || password.val() == ""
-                    || re_password.val() == "") {
+                    || password.val() == "" || re_password.val() == "" || last_name.val() == ""
+                    || phone.val() == "" || company.val() == "" || address.val() == ""
+                    || city.val() == "" || industry.val() == "" || salutation.val() == "") {
                 if (first_name.val() == "")
                     first_name.addClass(class_error);
                 if (email_address.val() == "" || !is_valid_email_address(email_address.val()))
@@ -98,6 +112,20 @@
                     password.addClass(class_error);
                 if (re_password.val() == "")
                     re_password.addClass(class_error);
+                if (last_name.val() == "")
+                    last_name.addClass(class_error);
+                if (phone.val() == "")
+                    phone.addClass(class_error);
+                if (company.val() == "")
+                    company.addClass(class_error);
+                if (address.val() == "")
+                    address.addClass(class_error);
+                if (city.val() == "")
+                    $('#city_dropdown .customSelect').addClass(class_error);
+                if (industry.val() == "")
+                    $('#industry_dropdown .customSelect').addClass(class_error);
+                if (salutation.val() == "")
+                    $('#salutation_dropdown .customSelect').addClass(class_error);
 
                 alert("Please fill all mandatory fields");
                 return false;
@@ -233,14 +261,84 @@
             var country = $("#country");
             var password = $("#password");
             var re_password = $("#re_password");
+            var last_name = $("#last_name");
+            var phone = $("#phone");
+            var nationality = $("#nationality");
+            var address = $("#address");
+            var city = $("#city");
+            var zip_code = $("#zip_code");
+            var province = $("#province");
+            var country = $("#country");
+            var expected_salary = $("#expected_salary");
+            var current_title = $("#current_title");
+            var current_company = $("#current_company");
+            var work_month_start = $("#work_month_start");
+            var work_year_start = $("#work_year_start");
+            var work_month_end = $("#work_month_end");
+            var work_year_end = $("#work_year_end");
+            var current_city = $("#current_city");
+            var current_industry = $("#current_industry");
+            var industry_month_start = $("#industry_month_start");
+            var industry_year_start = $("#industry_year_start");
+            var industry_month_end = $("#industry_month_end");
+            var industry_year_end = $("#industry_year_end");
+            var education = $("#education");
+            var graduation_year = $("#graduation_year");
+            var major = $("#major");
+            var education_city = $("#education_city");
+            var current_work_present = $("#current_work_present");
+            var industry_present = $("#industry_present");
+            var education_other_city = $('#education_other_city');
+            var current_city_other = $('#current_city_other');
 
-            if (country.val() == "" || first_name.val() == "" || email_address.val() == "" || !is_valid_email_address(email_address.val()) || password.val() == "") {
-                if (first_name.val() == "")
-                    first_name.addClass(class_error);
-                if (email_address.val() == "" || !is_valid_email_address(email_address.val()))
-                    email_address.addClass(class_error);
-                if (country.val() == "") $(".country").addClass(class_error);
+            $("."+class_error).removeClass(class_error);
+            
+            if (first_name.val() == "" || email_address.val() == "" || !is_valid_email_address(email_address.val())
+                    || password.val() == "" || re_password.val() == ""
+                    || last_name.val() == "" || phone.val() == "" || nationality.val() == "" || address.val() == ""
+                    || city.val() == "" || province.val() == "" || country.val() == "" || expected_salary.val() == ""
+                    || current_title.val() == "" || current_company.val() == "" || work_month_start.val() == "" || work_year_start.val() == ""
+                    || (current_work_present.is(':checked') == false && (work_month_end.val() == "" || work_year_end.val() == "")) 
+                    || (current_city_other.val() == "" && current_city.val() == "") || current_industry.val() == ""
+                    || industry_month_start.val() == "" || industry_year_start.val() == "" || (industry_present.is(':checked') == false && (industry_month_end.val() == "" || industry_year_end.val() == ""))
+                    || education.val() == "" || graduation_year.val() == "" || major.val() == "" 
+                    || (education_other_city.val() == "" && education_city.val() == "") || zip_code.val() == "" ) {
+                if (first_name.val() == "") first_name.addClass(class_error);
+                if (email_address.val() == "" || !is_valid_email_address(email_address.val())) email_address.addClass(class_error);
                 if (password.val() == "") password.addClass(class_error);
+                if (re_password.val() == "") re_password.addClass(class_error);
+                if (first_name.val() == "") first_name.addClass(class_error);
+                if (last_name.val() == "") last_name.addClass(class_error);
+                if (phone.val() == "") phone.addClass(class_error);
+                if (nationality.val() == "") nationality.addClass(class_error);
+                if (address.val() == "") address.addClass(class_error);
+                if (city.val() == "") city.addClass(class_error);
+                if (zip_code.val() == "") zip_code.addClass(class_error);
+                if (province.val() == "") province.addClass(class_error);
+                if (country.val() == "") country.addClass(class_error);
+                if (expected_salary.val() == "") $('.expected_salary').addClass(class_error);
+                if (current_title.val() == "") current_title.addClass(class_error);
+                if (current_company.val() == "") current_company.addClass(class_error);
+                if (work_month_start.val() == "") $('.work_month_start').addClass(class_error);
+                if (work_year_start.val() == "") $('.work_year_start').addClass(class_error);
+                if (current_work_present.is(':checked') == false && work_month_end.val() == "") $('.work_month_end').addClass(class_error);
+                if (current_work_present.is(':checked') == false && work_year_end.val() == "") $('.work_year_end').addClass(class_error);
+                if (current_city.val() == "" && current_city_other.val() == "") {
+                    if (current_city.val() == "") $('.current_city').addClass(class_error);
+                    if (current_city_other.val() == "") current_city_other.addClass(class_error);
+                }
+                if (current_industry.val() == "") $('.current_industry').addClass(class_error);
+                if (industry_month_start.val() == "") $('.industry_month_start').addClass(class_error);
+                if (industry_year_start.val() == "") $('.industry_year_start').addClass(class_error);
+                if (industry_present.is(':checked') == false && industry_month_end.val() == "") $('.industry_month_end').addClass(class_error);
+                if (industry_present.is(':checked') == false && industry_year_end.val() == "") $('.industry_year_end').addClass(class_error);
+                if (education.val() == "") education.addClass(class_error);
+                if (graduation_year.val() == "") $('.graduation_year').addClass(class_error);
+                if (major.val() == "") major.addClass(class_error);
+                if (education_city.val() == "" && education_other_city.val() == "") {
+                    if (education_city.val() == "") $('.education_city').addClass(class_error);
+                    if (education_other_city.val() == "") education_other_city.addClass(class_error);
+                }
 
                 alert("Please fill all mandatory fields");
                 return false;

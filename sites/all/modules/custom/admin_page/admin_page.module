@@ -38,7 +38,7 @@ function admin_page_menu() {
 		'description' => 'admin job seeker edit',
 		'page callback' => 'admin_job_seeker_edit',
 		'page arguments' => array(2),
-		'access arguments' => array('access admin job seeker'),
+		'access arguments' => array('access admin job seeker edit'),
 		'type' =>  MENU_CALLBACK,
 	);
 	
@@ -46,7 +46,7 @@ function admin_page_menu() {
 		'title' => t('Admin Job Seeker'),
 		'description' => 'admin job seeker add',
 		'page callback' => 'admin_job_seeker_add',
-		'access arguments' => array('access admin job seeker'),
+		'access arguments' => array('access admin job seeker add'),
 		'type' =>  MENU_CALLBACK,
 	);
 	
@@ -62,6 +62,14 @@ function admin_page_menu() {
 		'title' => t('Admin Job Seeker Export'),
 		'description' => 'Admin Job Seeker Export',
 		'page callback' => 'admin_job_seeker_export',
+		'access arguments' => array('access admin job seeker export'),
+		'type' =>  MENU_CALLBACK,
+	);
+	
+	$items['admin/job_seeker/import'] = array(
+		'title' => t('Admin Job Seeker Import'),
+		'description' => 'Admin Job Seeker Import',
+		'page callback' => 'admin_job_seeker_import',
 		'access arguments' => array('access admin job seeker'),
 		'type' =>  MENU_CALLBACK,
 	);
@@ -143,6 +151,15 @@ function admin_page_permission() {
     ), 
 		'access admin job seeker' => array(
       'title' => t('Access admin Job Seeker'),
+    ),  
+		'access admin job seeker add' => array(
+      'title' => t('Access admin Job Seeker Add'),
+    ),  
+		'access admin job seeker edit' => array(
+      'title' => t('Access admin Job Seeker Edit'),
+    ),  
+		'access admin job seeker export' => array(
+      'title' => t('Access admin Job Seeker Export'),
     ), 
 		'access admin applied job' => array(
       'title' => t('Access admin applied job'),
@@ -262,13 +279,15 @@ function admin_employer_detail(){
 function admin_job_seeker(){
 	global $base_url;
 	
+	$current_time = date('Y/m');
+	//print $current_time; exit;
 	if (empty($_GET['order'])) {
 		$order = " ORDER BY a.created DESC ";
 	} else {
 		$order = " ORDER BY ".$_GET['order']." ".$_GET['sort'];
 	}
 		
-	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE mail LIKE '%".$_GET['keyword']."%' OR name LIKE '%".$_GET['keyword']."%' OR first_name LIKE '%".$_GET['keyword']."%' OR last_name LIKE '%".$_GET['keyword']."%' OR phone LIKE '%".$_GET['keyword']."%' OR address_street LIKE '%".$_GET['keyword']."%' OR address_country LIKE '%".$_GET['keyword']."%' OR address_province LIKE '%".$_GET['keyword']."%' OR address_zip LIKE '%".$_GET['keyword']."%' OR address_city LIKE '%".$_GET['keyword']."%' OR current_title LIKE '%".$_GET['keyword']."%' OR current_company LIKE '%".$_GET['keyword']."%' OR current_city LIKE '%".$_GET['keyword']."%' OR current_industry LIKE '%".$_GET['keyword']."%' OR education LIKE '%".$_GET['keyword']."%' OR graduation LIKE '%".$_GET['keyword']."%' OR major LIKE '%".$_GET['keyword']."%' OR education_city LIKE '%".$_GET['keyword']."%' OR nationality LIKE '%".$_GET['keyword']."%' OR about_yourself LIKE '%".$_GET['keyword']."%' ";
+	$keyword = (empty($_GET['keyword'])) ? '' : " WHERE mail LIKE '%".$_GET['keyword']."%' OR name LIKE '%".$_GET['keyword']."%' OR first_name LIKE '%".$_GET['keyword']."%' OR last_name LIKE '%".$_GET['keyword']."%' OR phone LIKE '%".$_GET['keyword']."%' OR address_street LIKE '%".$_GET['keyword']."%' OR address_country LIKE '%".$_GET['keyword']."%' OR address_province LIKE '%".$_GET['keyword']."%' OR address_zip LIKE '%".$_GET['keyword']."%' OR address_city LIKE '%".$_GET['keyword']."%' OR current_title LIKE '%".$_GET['keyword']."%' OR current_company LIKE '%".$_GET['keyword']."%' OR current_city LIKE '%".$_GET['keyword']."%' OR current_industry LIKE '%".$_GET['keyword']."%' OR education LIKE '%".$_GET['keyword']."%' OR graduation LIKE '%".$_GET['keyword']."%' OR major LIKE '%".$_GET['keyword']."%' OR education_city LIKE '%".$_GET['keyword']."%' OR nationality LIKE '%".$_GET['keyword']."%' OR about_yourself LIKE '%".$_GET['keyword']."%' OR industry_experience LIKE '%".$_GET['keyword']."%' ";
 	
 	$query_job_seekers_total = "SELECT COUNT(uid) FROM users a 
 		INNER JOIN conext_job_seeker b ON a.uid = b.user_id".$keyword;
@@ -280,7 +299,8 @@ function admin_job_seeker(){
 	$page = empty($_GET['page']) ? 1 : $_GET['page'];
 	$offset = ($page - 1)  * $limit;
 	
-	$query_job_seekers = "SELECT *, floor(DATEDIFF(concat(current_work_end, '/28'), concat(current_work_start, '/28')) / 365) AS experience_year FROM users a 
+	$query_job_seekers = "SELECT *,
+		floor(DATEDIFF(concat(IF(current_work_end = 'present', '".$current_time."', current_work_end), '/28'), concat(current_work_start, '/28')) / 365) AS experience_year FROM users a 
 		INNER JOIN conext_job_seeker b ON a.uid = b.user_id". $keyword . $order ." LIMIT ".$limit." OFFSET ".$offset;
  	$job_seekers = db_query($query_job_seekers);
 	
@@ -322,15 +342,37 @@ function admin_job_seeker_edit($uid){
 }
 
 function admin_job_seeker_form($form, &$form_state) {
+	global $base_url;
 	$uid = arg(2);
+	$arg3 = arg(3);
 	
 	if (!empty($uid)) {
 		$query_job_seeker = "SELECT * FROM users a 
 				INNER JOIN conext_job_seeker b ON a.uid = b.user_id WHERE uid = :uid";
 		$job_seeker = db_query($query_job_seeker, array('uid' => $uid));
 		foreach($job_seeker as $data) {
+			$current_time = date('Y/m');
 			$current_work_start = explode('/', $data->current_work_start);
-			$current_work_end = explode('/', $data->current_work_end);
+			if ($data->current_work_end == 'present') {
+				$current_work_end =  explode('/', $current_time);
+				$current_work_present = 1;
+			} else {
+				$current_work_end =  explode('/', $data->current_work_end);
+			}
+			$industry_start = explode('/', $data->industry_start);
+			if ($data->industry_end == 'present') {
+				$industry_end =  explode('/', $current_time);
+				$industry_present = 1;
+			} else {
+				$industry_end =  explode('/', $data->industry_end);
+			}
+			
+			$current_city_exist = db_query("SELECT nama_kota FROM conext_kota WHERE nama_kota = '".$data->current_city."' LIMIT 1")->fetchField();
+			$industries = get_term_list ('company_industry');
+			$current_industry_exist = false;
+			foreach($industries as $industry) {
+				if ($industry['name'] == $data->current_industry) $current_industry_exist = true;
+			}
 			
 			$email = $data->mail;
 			$first_name = $data->first_name;
@@ -345,15 +387,19 @@ function admin_job_seeker_form($form, &$form_state) {
 			$address_province = $data->address_province;
 			$address_zip = $data->address_zip;
 			$address_city = $data->address_city;
-			$address_other_city = is_city_exist($data->current_city)) ? '' : $data->current_city
+			$address_other_city = (is_city_exist($data->current_city)) ? '' : $data->current_city;
 			$current_title = $data->current_title;
 			$current_company = $data->current_company;
 			$current_city = $data->current_city;
+			$current_other_city = (empty($current_city_exist)) ? $current_city : '';
 			$current_industry = $data->current_industry;
+			$current_other_industry = ($current_industry_exist) ? '00' : $data->current_industry;
+			$industry_experience = $data->industry_experience;
 			$education = $data->education;
 			$graduation = $data->graduation;
 			$major = $data->major;
 			$education_city = $data->education_city;
+			$education_other_city = (is_city_exist($data->education_city)) ? '' : $data->education_city;
 			$status = $data->status;
 			$target_position = $data->target_position;
 			$assessment = $data->assessment;
@@ -362,7 +408,22 @@ function admin_job_seeker_form($form, &$form_state) {
 			$client_assessment = $data->client_assessment;
 			$client_assessment_note = $data->client_assessment_note;
 			$other_notes = $data->other_notes;
-			$get_profile_from = $data->get_profile_from;
+			$get_profile_from_other = $data->get_profile_from_other;
+			$get_profile_from = (empty($get_profile_from_other)) ? $data->get_profile_from : 'Others';
+			$cv = $data->cv;
+			
+			$expected_salary = explode('-', $expected_salary);
+			if (empty($expected_salary[1])) {
+				$expected_salary = $expected_salary[0];
+			} else {
+				$expected_salary = trim($expected_salary[0]).' - '.trim($expected_salary[1]);
+			}
+			
+			if (!empty($industry_experience)) {
+				$industry_experience = explode(' ', $industry_experience);
+				$industry_experience_year = $industry_experience[0];
+				$industry_experience_month = $industry_experience[2];
+			}
 		}
 		
 	}
@@ -370,34 +431,56 @@ function admin_job_seeker_form($form, &$form_state) {
 	
 	// generate dropdown options
 	$months = conext_get_month();
+	$month_options[''] = 'Please Select';
 	foreach($months as $month) {
 		$month_options[$month] = $month;
 	}
 	$years = conext_get_year();
+	$year_options[''] = 'Please Select';
 	foreach($years as $year) {
 		$year_options[$year] = $year;
 	}
 	$expected_salaries = get_salary_range_v2();
+	$expected_salary_options[''] = 'Please Select';
 	foreach($expected_salaries as $salary) {
 		$expected_salary_options[$salary] = $salary;
 	}
 	$industries = get_term_list ('company_industry');
+	$industry_options[''] = 'Please Select';
 	foreach($industries as $industry) {
 		$industry_options[$industry['name']] = $industry['name'];
 	}
 	$cities = db_query("SELECT id, nama_kota FROM conext_kota");
+	$city_options[''] = 'Please Select';
 	foreach($cities as $city) {
 		$city_options[$city->nama_kota] = $city->nama_kota;
 	}
-	$assessment_options = array('Passed', 'Not Passed');
-	$status_options = array('Not Approached', 'Not Operated', 'Processed', 'Hired', 'Failed');
-	$get_profile_from_options = array('Email Recruitment', 'Old Master Data', 'Linkedin', 'Virda', 'Ferina', 'Esiana', 'Janis', 'Conext Site', 'Others');
-	
+	$assessment_options = array('' => 'Not Set', 'Passed' => 'Passed', 'Not Passed' => 'Not Passed');
+	$status_options = array(
+		'' => 'Not Set',
+		'Not Approached' => 'Not Approached', 
+		'Not Operated' => 'Not Operated', 
+		'Processed' => 'Processed', 
+		'Hired' => 'Hired', 
+		'Failed' => 'Failed'
+		);
+	$get_profile_from_options = array(
+		'Email Recruitment' => 'Email Recruitment', 
+		'Old Master Data' => 'Old Master Data', 
+		'Linkedin' => 'Linkedin', 
+		'Virda' => 'Virda', 
+		'Ferina' => 'Ferina', 
+		'Esiana' => 'Esiana', 
+		'Janis' => 'Janis', 
+		'Conext Site' => 'Conext Site', 
+		'Others' => 'Others',
+		'Master 2016' => 'Master 2016'
+	);
 	
 	$form['uid'] = array(
 		'#type' => 'hidden', 
 		'#title' => 'UID',
-		'#default_value' => (empty($uid)) ? '' : $uid
+		'#default_value' => ($uid == 'add') ? '' : $uid
 	);
 	// PERSONAL INFO
 	$form['personal_info'] = array(
@@ -449,6 +532,18 @@ function admin_job_seeker_form($form, &$form_state) {
 		'#title' => 'About Yourself',
 		'#default_value' => (empty($about_yourself)) ? '' : $about_yourself
 	);
+	$form['personal_info']['cv_file'] = array(
+		'#type' => 'file',
+		'#title' => t('CV'),
+		'#size' => 5,
+		'#suffix' => (empty($cv)) ? '' : '<div><a target="_blank" href="'.file_create_url($cv).'">Latest CV ['.str_replace("public://cv/", "", $cv).']</a></div>',
+		'#description' => t('Upload a file, allowed extensions: doc, pdf, docx'),
+	);
+	$form['cv_file_default'] = array(
+		'#type' => 'hidden', 
+		'#title' => 'CV file default',
+		'#default_value' => (empty($cv)) ? '' : $cv
+	);
 	
 	// ADDRESS
 	$form['address'] = array(
@@ -478,20 +573,17 @@ function admin_job_seeker_form($form, &$form_state) {
 		'#default_value' => (empty($address_zip)) ? '' : $address_zip
 	);
 	$form['address']['address_city'] = array(
-		'#type' => 'select', 
+		'#type' => 'textfield', 
 		'#title' => 'City',
-		'#options' => $city_options,
-		'#prefix' => '<div style="float: left">',
-		'#suffix' => '</div>',
 		'#default_value' => (empty($address_city)) ? '' : $address_city
 	);
-	$form['address']['address_other_city'] = array(
+	/*$form['address']['address_other_city'] = array(
 		'#type' => 'textfield', 
 		'#title' => 'Other City',
 		'#prefix' => '<div style="float: left">',
 		'#suffix' => '</div>',
 		'#default_value' => (empty($address_other_city)) ? '' : $address_other_city
-	);
+	);*/
 	
 	// CURRENT WORK
 	$form['current_work'] = array(
@@ -510,33 +602,51 @@ function admin_job_seeker_form($form, &$form_state) {
 		'#title' => 'Company',
 		'#default_value' => (empty($current_company)) ? '' : $current_company
 	);
-	$form['current_work']['city'] = array(
-		'#type' => 'select', 
-		'#title' => 'City',
-		'#options' => $city_options,
-		'#default_value' => (empty($current_city)) ? '' : $current_city
-	);
 	$form['current_work']['industry'] = array(
 		'#type' => 'select', 
 		'#title' => 'Industry',
 		'#options' => $industry_options,
 		'#default_value' => (empty($current_industry)) ? '' : $current_industry
 	);
-	$form['current_work']['start'] = array(
+	$form['current_work']['current_other_industry'] = array(
+		'#type' => 'textarea', 
+		'#title' => 'Other Industry',
+		'#default_value' => (empty($current_other_industry)) ? '' : $current_other_industry
+	);
+	$form['current_work']['current_city'] = array(
+		'#type' => 'select', 
+		'#title' => 'City',
+		'#options' => $city_options,
+		//'#prefix' => '<div style="float: left">',
+		//'#suffix' => '</div>',
+		'#default_value' => (empty($current_city)) ? '' : $current_city
+	);
+	$form['current_work']['current_other_city'] = array(
+		'#type' => 'textarea', 
+		'#title' => 'Other City',
+		'#default_value' => (empty($current_other_city)) ? '' : $current_other_city
+	);
+	$form['current_work']['current_work'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Current Work Experience'),
+    '#collapsible' => TRUE, // Added
+    '#collapsed' => FALSE,  // Added
+  );
+	$form['current_work']['current_work']['start'] = array(
     '#type' => 'fieldset',
     '#title' => t('Work Start'),
     '#collapsible' => TRUE, // Added
     '#collapsed' => FALSE,  // Added
   );
-	$form['current_work']['start']['month'] = array(
+	$form['current_work']['current_work']['start']['start_month'] = array(
 		'#type' => 'select', 
 		'#title' => 'Month',
 		'#options' => $month_options,
 		'#prefix' => '<div style="float: left">',
 		'#suffix' => '</div>',
-		'#default_value' => (empty($current_work_start)) ? '' : $current_work_start[1]
+		'#default_value' => (empty($current_work_start)) ? '' : str_replace('0', '', $current_work_start[1])
 	);
-	$form['current_work']['start']['year'] = array(
+	$form['current_work']['current_work']['start']['start_year'] = array(
 		'#type' => 'select', 
 		'#title' => 'Year',
 		'#options' => $year_options,
@@ -544,21 +654,21 @@ function admin_job_seeker_form($form, &$form_state) {
 		'#suffix' => '</div>',
 		'#default_value' => (empty($current_work_start)) ? '' : $current_work_start[0]
 	);
-	$form['current_work']['end'] = array(
+	$form['current_work']['current_work']['end'] = array(
     '#type' => 'fieldset',
     '#title' => t('Work End'),
     '#collapsible' => TRUE, // Added
     '#collapsed' => FALSE,  // Added
   );
-	$form['current_work']['end']['month'] = array(
+	$form['current_work']['current_work']['end']['end_month'] = array(
 		'#type' => 'select', 
 		'#title' => 'Month',
 		'#options' => $month_options,
 		'#prefix' => '<div style="float: left">',
 		'#suffix' => '</div>',
-		'#default_value' => (empty($current_work_end)) ? '' : $current_work_end[1]
+		'#default_value' => (empty($current_work_end)) ? '' : str_replace('0', '', $current_work_end[1])
 	);
-	$form['current_work']['end']['year'] = array(
+	$form['current_work']['current_work']['end']['end_year'] = array(
 		'#type' => 'select', 
 		'#title' => 'Year',
 		'#options' => $year_options,
@@ -566,6 +676,89 @@ function admin_job_seeker_form($form, &$form_state) {
 		'#suffix' => '</div>',
 		'#default_value' => (empty($current_work_end)) ? '' : $current_work_end[0]
 	);
+	$form['current_work']['current_work']['end']['current_work_present'] = array(
+		'#type' => 'checkbox', 
+		'#title' => 'Present',
+		'#prefix' => '<div style="float: left; margin-top: 34px">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($current_work_present)) ? '' : $current_work_present
+	);
+	$form['current_work']['industry_experience_year'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Industry Experience',
+		'#prefix' => '<div style="float: left;">',
+		'#suffix' => 'Years</div>',
+		'#size' => 30,
+		'#default_value' => (empty($industry_experience_year)) ? '0' : $industry_experience_year
+	);
+	$form['current_work']['industry_experience_month'] = array(
+		'#type' => 'textfield', 
+		'#title' => '',
+		'#prefix' => '<div style="float: left; margin-top: 32px">',
+		'#suffix' => 'Months</div>',
+		'#size' => 30,
+		'#default_value' => (empty($industry_experience_month)) ? '0' : $industry_experience_month
+	);
+	/*
+	$form['current_work']['industry'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Industry Experience'),
+    '#collapsible' => TRUE, // Added
+    '#collapsed' => FALSE,  // Added
+		'#weight' => 10
+  );
+	$form['current_work']['industry']['start'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Start'),
+    '#collapsible' => TRUE, // Added
+    '#collapsed' => FALSE,  // Added
+  );
+	$form['current_work']['industry']['start']['industry_start_month'] = array(
+		'#type' => 'select', 
+		'#title' => 'Month',
+		'#options' => $month_options,
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($industry_start)) ? '' : $industry_start[1]
+	);
+	$form['current_work']['industry']['start']['industry_start_year'] = array(
+		'#type' => 'select', 
+		'#title' => 'Year',
+		'#options' => $year_options,
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($industry_start)) ? '' : $industry_start[0]
+	);
+	$form['current_work']['industry']['end'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('End'),
+    '#collapsible' => TRUE, // Added
+    '#collapsed' => FALSE,  // Added
+  );
+	$form['current_work']['industry']['end']['industry_end_month'] = array(
+		'#type' => 'select', 
+		'#title' => 'Month',
+		'#options' => $month_options,
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($industry_end)) ? '' : $industry_end[1]
+	);
+	$form['current_work']['industry']['end']['industry_end_year'] = array(
+		'#type' => 'select', 
+		'#title' => 'Year',
+		'#options' => $year_options,
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($industry_end)) ? '' : $industry_end[0]
+	);
+	$form['current_work']['industry']['end']['industry_present'] = array(
+		'#type' => 'checkbox', 
+		'#title' => 'Present',
+		'#prefix' => '<div style="float: left; margin-top: 34px">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($industry_present)) ? '' : $industry_present
+	);
+	*/
 	
 	// Education
 	$form['education'] = array(
@@ -590,11 +783,20 @@ function admin_job_seeker_form($form, &$form_state) {
 		'#title' => 'Major',
 		'#default_value' => (empty($major)) ? '' : $major
 	);
-	$form['education']['city'] = array(
+	$form['education']['education_city'] = array(
 		'#type' => 'select', 
 		'#title' => 'City',
 		'#options' => $city_options,
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
 		'#default_value' => (empty($education_city)) ? '' : $education_city
+	);
+	$form['education']['education_other_city'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Other City',
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
+		'#default_value' => (empty($education_other_city)) ? '' : $education_other_city
 	);
 	
 	// Conext Internal
@@ -651,20 +853,283 @@ function admin_job_seeker_form($form, &$form_state) {
 		'#type' => 'select', 
 		'#title' => 'Get Profile From',
 		'#options' => $get_profile_from_options,
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
 		'#default_value' => (empty($get_profile_from)) ? '' : $get_profile_from
 	);
+	$form['conext']['get_profile_from_other'] = array(
+		'#type' => 'textfield', 
+		'#title' => 'Other',
+		'#default_value' => (empty($get_profile_from_other)) ? '' : $get_profile_from_other
+	);
 	
-	$form['submit'] = array(
+	/*$form['submit'] = array(
 		'#type' => 'submit', 
 		'#title' => 'Submit',
-		'#value' => 'Submit'
+		'#value' => 'Submit',
+		'#prefix' => '<div style="float: left">',
+		'#suffix' => '</div>',
 	);
+	$form['cancel'] = array(
+		'#type' => 'button',
+		'#value' => t('Cancel'),
+		'#prefix' => '<a href="'.$base_url.'/admin/job_seeker">',
+		'#suffix' => '</div>',
+	);*/
+	if (valid_user_role(CONEXT_ADMIN_ROLE_ID) || valid_user_role(CONEXT_SUPER_ADMIN_ROLE_ID) || valid_user_role(0) || valid_user_role(3)) {
+		return confirm_form($form, '', 'admin/job_seeker', '', t('Save'), t('Cancel'));
+	} else {
+		return $form; 
+	}   
+}
 
-	return $form;    
+function admin_job_seeker_form_validate($form, &$form_state) {
+  $file = file_save_upload('cv_file', array(
+  	'file_validate_extensions' => array('doc docx pdf'),
+  ));
+  if ($file) {
+    if ($file = file_move($file, 'public://cv')) {
+      $form_state['values']['file'] =  $file;
+    }
+    else {
+      form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+    }
+  }
 }
 
 function admin_job_seeker_form_submit($form, &$form_state) {
-	drupal_set_message($form['personal_info']['email']['#value']." Save Successfully", "notice");
+	$params = array(
+		'uid' => $form['uid']['#value'],
+		'email_address' => $form['personal_info']['email']['#value'],
+		'first_name' => $form['personal_info']['first_name']['#value'],
+		'last_name' => $form['personal_info']['last_name']['#value'],
+		'phone' => $form['personal_info']['phone']['#value'],
+		'nationality' => $form['personal_info']['nationality']['#value'],
+		'expected_salary' => $form['personal_info']['expected_salary']['#value'],
+		'about_yourself' => $form['personal_info']['about_yourself']['#value'],
+		'address_street' => $form['address']['address_street']['#value'],
+		'address_country' => $form['address']['address_country']['#value'],
+		'address_province' => $form['address']['address_province']['#value'],
+		'address_zip' => $form['address']['address_zip']['#value'],
+		'address_city' => $form['address']['address_city']['#value'],
+		//'address_other_city' => $form['address']['address_other_city']['#value'],
+		'current_title' => $form['current_work']['title']['#value'],
+		'current_company' => $form['current_work']['company']['#value'],
+		'work_month_start' => $form['current_work']['current_work']['start']['start_month']['#value'], 
+		'work_year_start' => $form['current_work']['current_work']['start']['start_year']['#value'],
+		'work_month_end' => $form['current_work']['current_work']['end']['end_month']['#value'], 
+		'work_year_end' => $form['current_work']['current_work']['end']['end_year']['#value'],
+		'current_work_present' => $form['current_work']['current_work']['end']['current_work_present']['#value'],
+		'industry_work_month_start' => (empty($form['current_work']['industry']['start'])) ? '' : $form['current_work']['industry']['start']['industry_start_month']['#value'], 
+		'industry_work_year_start' => (empty($form['current_work']['industry']['start'])) ? '' : $form['current_work']['industry']['start']['industry_start_year']['#value'],
+		'industry_work_month_end' => (empty($form['current_work']['industry']['end'])) ? '' : $form['current_work']['industry']['end']['industry_end_month']['#value'], 
+		'industry_work_year_end' => (empty($form['current_work']['industry']['end'])) ? '' : $form['current_work']['industry']['end']['industry_end_year']['#value'],
+		'industry_present' => (empty($form['current_work']['industry']['end'])) ? '' : $form['current_work']['industry']['end']['industry_present']['#value'],
+		'current_city' => $form['current_work']['current_city']['#value'],
+		'current_other_city' => $form['current_work']['current_other_city']['#value'],
+		'current_industry' => $form['current_work']['industry']['#value'],
+		'industry_experience_year' => $form['current_work']['industry_experience_year']['#value'],
+		'industry_experience_month' => $form['current_work']['industry_experience_month']['#value'],
+		'education' => $form['education']['education']['#value'],
+		'graduation' => $form['education']['graduation']['#value'],
+		'major' => $form['education']['major']['#value'],
+		'education_city' => $form['education']['education_city']['#value'],
+		'education_other_city' => $form['education']['education_other_city']['#value'],
+		'email' => $form['personal_info']['email']['#value'],
+		'public_profile_url' => $form['personal_info']['public_profile_url']['#value'],
+		'status' => $form['conext']['status']['#value'],
+		'target_position' => $form['conext']['target_position']['#value'],
+		'assessment' => $form['conext']['assessment']['#value'],
+		'assessment_note' => $form['conext']['assessment_note']['#value'],
+		'client_name' => $form['conext']['client_name']['#value'],
+		'client_assessment' => $form['conext']['client_assessment']['#value'],
+		'client_assessment_note' => $form['conext']['client_assessment_note']['#value'],
+		'other_notes' => $form['conext']['other_notes']['#value'],
+		'get_profile_from' => $form['conext']['get_profile_from']['#value'],
+		'get_profile_from_other' => $form['conext']['get_profile_from_other']['#value'],
+		'cv' => (empty($form_state['values']['file']->uri)) ? $form_state['values']['cv_file_default'] : $form_state['values']['file']->uri
+	);
+	
+	//drupal_set_message("<pre>".print_r($params, true)."</pre>");
+	
+	if (empty($form['uid']['#value'])) { // insert
+		admin_insert_job_seeker($params);
+	} else { // update
+		admin_edit_job_seeker($params);
+	}
+}
+
+function admin_insert_job_seeker($params) {
+	global $user;
+	if (user_load_by_mail($params['email_address'])) { // email exist
+		drupal_set_message('Email '.$params['email_address'].' Exists', 'error');
+	} else {
+		// create user node
+		$new_user = array(
+			'name' => $params['email_address'],
+			'pass' => '123456',
+			'mail' => $params['email_address'],
+			'status' => 1,
+			'init' => 'Email',
+			'roles' => array(DRUPAL_AUTHENTICATED_RID => 'authenticated user')
+		);
+		$account = user_save(NULL, $new_user);
+
+		$education_city = (empty($params['education_other_city'])) ? $params['education_city'] : $params['education_other_city'];
+		$last_work_city = (empty($params['current_other_city'])) ? $params['current_city'] : $params['current_other_city'];
+		
+		$current_work_start = (empty($params['work_month_start']) && empty($params['work_year_start'])) ? '' : $params['work_year_start'].'/'.$params['work_month_start'];
+		if (empty($params['current_work_present']))
+			$current_work_end = (empty($params['work_month_end']) && empty($params['work_year_end'])) ? '' : $params['work_year_end'].'/'.$params['work_month_end'];
+		else
+			$current_work_end = 'present';
+		
+		$industry_start = (empty($params['industry_work_month_start']) && empty($params['industry_work_year_start'])) ? '' : $params['industry_work_year_start'].'/'.$params['industry_work_month_start'];
+		if ($params['current_work_present'] == 0)
+			$industry_end = (empty($params['industry_work_month_end']) && empty($params['industry_work_year_end'])) ? '' : $params['industry_work_year_end'].'/'.$params['industry_work_month_end'];
+		else
+			$industry_end = 'present';
+		
+		if (empty($params['industry_experience']))
+			$industry_experience = $params['industry_experience_year'].' years '.$params['industry_experience_month'].' months';
+		else
+			$industry_experience = $params['industry_experience'];
+
+		$query = "INSERT INTO {conext_job_seeker} (user_id, first_name, last_name, phone, address_street, address_country, 
+				address_province, address_zip, address_city, current_title, current_company, current_work_start, current_work_end, 
+				industry_start, industry_end, current_city, current_industry, education, graduation, major, education_city, nationality, 
+				public_profile_url, expected_salary, about_yourself, email, status, target_position, assessment, assessment_note, client_name, 
+				client_assessment, client_assessment_note, other_notes, get_profile_from, get_profile_from_other, cv, industry_experience, updated_by, created_at, updated_at)
+			VALUES (:user_id, :first_name, :last_name, :phone, :address_street, :address_country, :address_province, 
+				:address_zip, :address_city, :current_title, :current_company, :current_work_start, :current_work_end, :industry_start, 
+				:industry_end, :current_city, :current_industry, :education, :graduation, :major, :education_city, :nationality, 
+				:public_profile_url, :expected_salary, :about_yourself, :email, :status, :target_position, :assessment, 
+				:assessment_note, :client_name, :client_assessment, :client_assessment_note, :other_notes, :get_profile_from, 
+				:get_profile_from_other, :cv, :industry_experience, :updated_by, NOW(), NOW())";
+		db_query($query, array( 
+			'user_id' => $account->uid,
+			'first_name' => $params['first_name'],
+			'last_name' => $params['last_name'],
+			'phone' => $params['phone'],
+			'address_street' => $params['address_street'],
+			'address_country' => $params['address_country'],
+			'address_province' => $params['address_province'],
+			'address_zip' => $params['address_zip'],
+			'address_city' => $params['address_city'],
+			'current_title' => $params['current_title'],
+			'current_company' => $params['current_company'],
+			'current_work_start' => $current_work_start, 
+			'current_work_end' => $current_work_end,
+			'industry_start' => $industry_start, 
+			'industry_end' => $industry_end,
+			'current_city' => $last_work_city,
+			'current_industry' => $params['current_industry'],
+			'education' => $params['education'],
+			'graduation' => $params['graduation'],
+			'major' => $params['major'],
+			'education_city' => $education_city,
+			'nationality' => $params['nationality'],
+			'expected_salary' => $params['expected_salary'],
+			'about_yourself' => $params['about_yourself'],
+			'email' => $params['email_address'],
+			'public_profile_url' => $params['public_profile_url'],
+			'status' => $params['status'],
+			'target_position' => $params['target_position'],
+			'assessment' => $params['assessment'],
+			'assessment_note' => $params['assessment_note'],
+			'client_name' => $params['client_name'],
+			'client_assessment' => $params['client_assessment'],
+			'client_assessment_note' => $params['client_assessment_note'],
+			'other_notes' => $params['other_notes'],
+			'get_profile_from' => (empty($params['get_profile_from_other'])) ? $params['get_profile_from'] : 'Others',
+			'get_profile_from_other' => $params['get_profile_from_other'],
+			'cv' => $params['cv'],
+			'industry_experience' => $industry_experience,
+			'updated_by' => (!empty($params['updated_by'])) ? $params['updated_by'] : $user->name
+		));
+		drupal_set_message("Job Seeker Insert Successfully", "notice");
+	}
+}
+
+function admin_edit_job_seeker($params) {
+	global $user;
+
+	$existing_user = user_load($params['uid']);
+	$edit = array(
+		'name' => $params['email_address'],
+		'mail' => $params['email_address'],
+	);
+	user_save($existing_user, $edit);
+
+	$education_city = (empty($params['education_other_city'])) ? $params['education_city'] : $params['education_other_city'];
+	$last_work_city = (empty($params['current_other_city'])) ? $params['current_city'] : $params['current_other_city'];
+	
+	$current_work_start = (empty($params['work_month_start']) && empty($params['work_year_start'])) ? '' : $params['work_year_start'].'/'.$params['work_month_start'];
+	if (empty($params['current_work_present']))
+		$current_work_end = (empty($params['work_month_end']) && empty($params['work_year_end'])) ? '' : $params['work_year_end'].'/'.$params['work_month_end'];
+	else
+		$current_work_end = 'present';
+
+	$industry_start = (empty($params['industry_work_month_start']) && empty($params['industry_work_year_start'])) ? '' : $params['industry_work_year_start'].'/'.$params['industry_work_month_start'];
+	if ($params['industry_present'] == 0)
+		$industry_end = (empty($params['industry_work_month_end']) && empty($params['industry_work_year_end'])) ? '' : $params['industry_work_year_end'].'/'.$params['industry_work_month_end'];
+	else
+		$industry_end = 'present';
+	
+	$industry_experience = $params['industry_experience_year'].' years '.$params['industry_experience_month'].' months';
+
+	$query = "UPDATE {conext_job_seeker} SET
+		first_name=:first_name, last_name=:last_name, phone=:phone, address_street=:address_street, address_country=:address_country, 
+		address_province=:address_province, address_zip=:address_zip, address_city=:address_city,
+		current_title=:current_title, current_company=:current_company, current_work_start=:current_work_start, current_work_end=:current_work_end,
+		industry_start=:industry_start, industry_end=:industry_end, current_city=:current_city, current_industry=:current_industry, education=:education, 
+		graduation=:graduation, major=:major, education_city=:education_city, nationality=:nationality, expected_salary=:expected_salary, about_yourself=:about_yourself, 
+		email=:email, public_profile_url=:public_profile_url, status=:status, target_position=:target_position, assessment=:assessment, assessment_note=:assessment_note,  
+		client_name=:client_name, client_assessment=:client_assessment, client_assessment_note=:client_assessment_note, other_notes=:other_notes, 
+		get_profile_from=:get_profile_from, get_profile_from_other=:get_profile_from_other, cv=:cv, industry_experience=:industry_experience, updated_by=:updated_by, updated_at=NOW()
+		WHERE user_id=:user_id";
+	db_query($query, array( 
+		'first_name' => $params['first_name'],
+		'last_name' => $params['last_name'],
+		'phone' => $params['phone'],
+		'address_street' => $params['address_street'],
+		'address_country' => $params['address_country'],
+		'address_province' => $params['address_province'],
+		'address_zip' => $params['address_zip'],
+		'address_city' => $params['address_city'],
+		'current_title' => $params['current_title'],
+		'current_company' => $params['current_company'],
+		'current_work_start' => $current_work_start, 
+		'current_work_end' => $current_work_end,
+		'industry_start' => $industry_start, 
+		'industry_end' => $industry_end,
+		'current_city' => $last_work_city,
+		'current_industry' => $params['current_industry'],
+		'education' => $params['education'],
+		'graduation' => $params['graduation'],
+		'major' => $params['major'],
+		'education_city' => $education_city,
+		'nationality' => $params['nationality'],
+		'expected_salary' => $params['expected_salary'],
+		'about_yourself' => $params['about_yourself'],
+		'email' => $params['email_address'],
+		'public_profile_url' => $params['public_profile_url'],
+		'status' => $params['status'],
+		'target_position' => $params['target_position'],
+		'assessment' => $params['assessment'],
+		'assessment_note' => $params['assessment_note'],
+		'client_name' => $params['client_name'],
+		'client_assessment' => $params['client_assessment'],
+		'client_assessment_note' => $params['client_assessment_note'],
+		'other_notes' => $params['other_notes'],
+		'get_profile_from' => (empty($params['get_profile_from_other'])) ? $params['get_profile_from'] : 'Others',
+		'get_profile_from_other' => $params['get_profile_from_other'],
+		'cv' => $params['cv'],
+		'industry_experience' => $industry_experience,
+		'updated_by' => (!empty($params['updated_by'])) ? $params['updated_by'] : $user->name,
+		'user_id' => $params['uid']
+	));
+	drupal_set_message("Job Seeker Update Successfully", "notice");
 }
 
 function admin_job(){
@@ -685,9 +1150,8 @@ function admin_job(){
 	$page = empty($_GET['page']) ? 1 : $_GET['page'];
 	$offset = ($page - 1)  * $limit;
 	
-	$query_jobs = "SELECT *, e.name as industry FROM node a 
+	$query_jobs = "SELECT *, e.name as industry, (SELECT COUNT(id) as total_applied FROM conext_job_applied WHERE job_id = b.drupal_job_id) as total_applied FROM node a 
 		INNER JOIN conext_job b ON a.nid = b.drupal_job_id
-		LEFT JOIN (SELECT COUNT(id) as total_applied, job_seeker_id, job_id FROM conext_job_applied) c ON b.drupal_job_id = c.job_id
 		LEFT JOIN conext_employer d ON b.employer_id = d.user_id
 		LEFT JOIN taxonomy_term_data e ON b.industry = e.tid"
 		. $keyword . $order . " LIMIT ".$limit." OFFSET ".$offset;
@@ -803,7 +1267,7 @@ function admin_applied_job_opening(){
 	$page = empty($_GET['page']) ? 1 : $_GET['page'];
 	$offset = ($page - 1)  * $limit;
 	
-	$query_job_applieds = "SELECT nid, title, field_job_applied_value FROM node a LEFT JOIN field_data_field_job_applied b ON a.nid=b.entity_id WHERE type = 'conext_job_applied' ".$keyword." LIMIT ".$limit." OFFSET ".$offset;
+	$query_job_applieds = "SELECT nid, title, field_job_applied_value FROM node a LEFT JOIN field_data_field_job_applied b ON a.nid=b.entity_id WHERE type = 'conext_job_applied' ".$keyword." ORDER BY nid DESC LIMIT ".$limit." OFFSET ".$offset;
  	$job_applieds = db_query($query_job_applieds);
 	
 	$content = array(
@@ -860,26 +1324,45 @@ function admin_job_seeker_export() {
   $objPHPExcel->getActiveSheet()->getStyle('K1:O1')->getAlignment()->applyFromArray($horizontal_style);
 	$objPHPExcel->getActiveSheet()->SetCellValue('K2','Title');
 	$objPHPExcel->getActiveSheet()->SetCellValue('L2','Company Name');
-	$objPHPExcel->getActiveSheet()->SetCellValue('M2','Duration (MM/YYYY to MM/YYYY)');
-	$objPHPExcel->getActiveSheet()->SetCellValue('N2','Location - city');
-	$objPHPExcel->getActiveSheet()->SetCellValue('O2','Industry');
+	$objPHPExcel->getActiveSheet()->SetCellValue('M2','Start Work (MM/YYYY)');
+	$objPHPExcel->getActiveSheet()->SetCellValue('N2','End Work (MM/YYYY)');
+	$objPHPExcel->getActiveSheet()->SetCellValue('O2','Location - city');
+	$objPHPExcel->getActiveSheet()->SetCellValue('P2','Industry');
 	// Years of Experience
-	$objPHPExcel->getActiveSheet()->SetCellValue('P1','Years of Experience');
-	$objPHPExcel->getActiveSheet()->mergeCells('P1:P2');
-	// Salary Expectation
-	$objPHPExcel->getActiveSheet()->SetCellValue('Q1','Salary Expectation (Per month)');
+	$objPHPExcel->getActiveSheet()->SetCellValue('Q1','Years of Experience');
 	$objPHPExcel->getActiveSheet()->mergeCells('Q1:Q2');
+	// Salary Expectation
+	$objPHPExcel->getActiveSheet()->SetCellValue('R1','Salary Expectation (Per month)');
+	$objPHPExcel->getActiveSheet()->mergeCells('R1:R2');
 	// Highest Education
-	$objPHPExcel->getActiveSheet()->SetCellValue('R1','Highest Education');
-	$objPHPExcel->getActiveSheet()->mergeCells('R1:U1');
-  $objPHPExcel->getActiveSheet()->getStyle('R1:U1')->getAlignment()->applyFromArray($horizontal_style);
-	$objPHPExcel->getActiveSheet()->SetCellValue('R2','School Name');
-	$objPHPExcel->getActiveSheet()->SetCellValue('S2','Graduation Time');
-	$objPHPExcel->getActiveSheet()->SetCellValue('T2','Major');
-	$objPHPExcel->getActiveSheet()->SetCellValue('U2','Location - city');
+	$objPHPExcel->getActiveSheet()->SetCellValue('S1','Highest Education');
+	$objPHPExcel->getActiveSheet()->mergeCells('S1:V1');
+  $objPHPExcel->getActiveSheet()->getStyle('S1:V1')->getAlignment()->applyFromArray($horizontal_style);
+	$objPHPExcel->getActiveSheet()->SetCellValue('S2','School Name');
+	$objPHPExcel->getActiveSheet()->SetCellValue('T2','Graduation Time');
+	$objPHPExcel->getActiveSheet()->SetCellValue('U2','Major');
+	$objPHPExcel->getActiveSheet()->SetCellValue('V2','Location - city');
 	// Nationality
-	$objPHPExcel->getActiveSheet()->SetCellValue('V1','Nationality');
-	$objPHPExcel->getActiveSheet()->mergeCells('V1:V2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('W1','Nationality');
+	$objPHPExcel->getActiveSheet()->mergeCells('W1:W2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('X1','Status');
+	$objPHPExcel->getActiveSheet()->mergeCells('X1:X2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('Y1','Target Position');
+	$objPHPExcel->getActiveSheet()->mergeCells('Y1:Y2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('Z1','Conext Assessment');
+	$objPHPExcel->getActiveSheet()->mergeCells('Z1:Z2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('AA1','Conext Assessment Note');
+	$objPHPExcel->getActiveSheet()->mergeCells('AA1:AA2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('AB1','Client Name');
+	$objPHPExcel->getActiveSheet()->mergeCells('AB1:AB2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('AC1','Client Assessment');
+	$objPHPExcel->getActiveSheet()->mergeCells('AC1:AC2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('AD1','Client Assessment Note');
+	$objPHPExcel->getActiveSheet()->mergeCells('AD1:AD2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('AE1','Other Notes');
+	$objPHPExcel->getActiveSheet()->mergeCells('AE1:AE2');
+	$objPHPExcel->getActiveSheet()->SetCellValue('AF1','Get Profile From');
+	$objPHPExcel->getActiveSheet()->mergeCells('AF1:AF2');
 	// SET HEADER - END
 	
 	// SET CONTENT - START
@@ -888,19 +1371,23 @@ function admin_job_seeker_export() {
 	$query_job_seekers = "SELECT * FROM users a 
 		INNER JOIN conext_job_seeker b ON a.uid = b.user_id WHERE user_id IN ('".$job_seeker_ids."')";
  	$job_seekers = db_query($query_job_seekers);
+	$current_time = date('Y/m');
 	
 	foreach($job_seekers as $job_seeker) {
-		// get experince years
+		// get experience years
 		$experience_year = '-';
 		$experience_month = ' ';
 		if (!empty($job_seeker->current_work_start) && !empty($job_seeker->current_work_end)) {
 			$current_work_start = explode('/', $job_seeker->current_work_start);
-			$current_work_end = explode('/', $job_seeker->current_work_end);
+			$current_work_end = explode('/', ($job_seeker->current_work_end == 'present') ? $current_time : $job_seeker->current_work_end);
 			$work_start = new DateTime($current_work_start[0].'-'.$current_work_start[1].'-28');
 			$work_end = new DateTime($current_work_end[0].'-'.$current_work_end[1].'-28');
 			$day_diff = $work_start->diff($work_end);
 			$experience_year = floor($day_diff->days / 365).' years';
 			$experience_month .= floor(($day_diff->days - ($experience_year * 365)) / 30).' months';
+			
+			$work_start_view = date('M-y', strtotime($current_work_start[0].'-'.$current_work_start[1].'-28'));
+			$work_end_view = ($job_seeker->current_work_end == 'present') ? $job_seeker->current_work_end : date('M-y', strtotime($current_work_end[0].'-'.$current_work_end[1].'-28'));
 		}
 		// salary expectation
 		//$expected_salary = (empty($job_seeker->expected_salary)) ? '-' : format_salary($job_seeker->expected_salary);
@@ -918,16 +1405,26 @@ function admin_job_seeker_export() {
 		$objPHPExcel->getActiveSheet()->SetCellValue('J'.$rowCount, $job_seeker->address_zip);
 		$objPHPExcel->getActiveSheet()->SetCellValue('K'.$rowCount, $job_seeker->current_title);
 		$objPHPExcel->getActiveSheet()->SetCellValue('L'.$rowCount, $job_seeker->current_company);
-		$objPHPExcel->getActiveSheet()->SetCellValue('M'.$rowCount, $job_seeker->current_work_start.' - '.$job_seeker->current_work_end);
-		$objPHPExcel->getActiveSheet()->SetCellValue('N'.$rowCount, $job_seeker->current_city);
-		$objPHPExcel->getActiveSheet()->SetCellValue('O'.$rowCount, $job_seeker->current_industry);
-		$objPHPExcel->getActiveSheet()->SetCellValue('P'.$rowCount, $experience_year.$experience_month);
-		$objPHPExcel->getActiveSheet()->SetCellValue('Q'.$rowCount, $expected_salary);
-		$objPHPExcel->getActiveSheet()->SetCellValue('R'.$rowCount, $job_seeker->education);
-		$objPHPExcel->getActiveSheet()->SetCellValue('S'.$rowCount, $job_seeker->graduation);
-		$objPHPExcel->getActiveSheet()->SetCellValue('T'.$rowCount, $job_seeker->major);
-		$objPHPExcel->getActiveSheet()->SetCellValue('U'.$rowCount, $job_seeker->education_city);
-		$objPHPExcel->getActiveSheet()->SetCellValue('V'.$rowCount, $job_seeker->nationality);
+		$objPHPExcel->getActiveSheet()->SetCellValue('M'.$rowCount, $work_start_view);
+		$objPHPExcel->getActiveSheet()->SetCellValue('N'.$rowCount, $work_end_view);
+		$objPHPExcel->getActiveSheet()->SetCellValue('O'.$rowCount, $job_seeker->current_city);
+		$objPHPExcel->getActiveSheet()->SetCellValue('P'.$rowCount, $job_seeker->current_industry);
+		$objPHPExcel->getActiveSheet()->SetCellValue('Q'.$rowCount, $job_seeker->industry_experience);
+		$objPHPExcel->getActiveSheet()->SetCellValue('R'.$rowCount, $expected_salary);
+		$objPHPExcel->getActiveSheet()->SetCellValue('S'.$rowCount, $job_seeker->education);
+		$objPHPExcel->getActiveSheet()->SetCellValue('T'.$rowCount, $job_seeker->graduation);
+		$objPHPExcel->getActiveSheet()->SetCellValue('U'.$rowCount, $job_seeker->major);
+		$objPHPExcel->getActiveSheet()->SetCellValue('V'.$rowCount, $job_seeker->education_city);
+		$objPHPExcel->getActiveSheet()->SetCellValue('W'.$rowCount, $job_seeker->nationality);
+		$objPHPExcel->getActiveSheet()->SetCellValue('X'.$rowCount, $job_seeker->status);
+		$objPHPExcel->getActiveSheet()->SetCellValue('Y'.$rowCount, $job_seeker->target_position);
+		$objPHPExcel->getActiveSheet()->SetCellValue('Z'.$rowCount, $job_seeker->assessment);
+		$objPHPExcel->getActiveSheet()->SetCellValue('AA'.$rowCount, $job_seeker->assessment_note);
+		$objPHPExcel->getActiveSheet()->SetCellValue('AB'.$rowCount, $job_seeker->client_name);
+		$objPHPExcel->getActiveSheet()->SetCellValue('AC'.$rowCount, $job_seeker->client_assessment);
+		$objPHPExcel->getActiveSheet()->SetCellValue('AD'.$rowCount, $job_seeker->client_assessment_note);
+		$objPHPExcel->getActiveSheet()->SetCellValue('AE'.$rowCount, $job_seeker->other_notes);
+		$objPHPExcel->getActiveSheet()->SetCellValue('AF'.$rowCount, $job_seeker->get_profile_from);
 		$rowCount++;
 	}
 	// SET CONTENT - END
@@ -940,28 +1437,109 @@ function admin_job_seeker_export() {
 	$objWriter->save('php://output');
 }
 
+function admin_job_seeker_import() {
+	module_load_include('inc', 'phpexcel');
+  // The path to the excel file
+  $path = 'sites/default/files/Conext Candidate_Master Template_DB.xls';	
+  $result = phpexcel_import($path);
+	//$cur = date('m/d/Y', PHPExcel_Shared_Date::ExcelToPHP('40878'));
+	//drupal_set_message($cur);
+	//drupal_set_message("<pre>".print_r($result, true)."</pre>");
+	//$js = $result[0][0];
+	
+	foreach($result[0] as $js) {
+		$graduation = explode('-', $js['Time']);
+		$current_start_work = date('m/Y', PHPExcel_Shared_Date::ExcelToPHP($js['Start Work (MMYYYY)']));
+		$current_start_work = explode('/', $current_start_work);
+
+		if ($js['End Work (MMYYYY)'] == 'Present') {
+			$current_end = 'Present';
+			$current_end_work = date('m/Y');
+			$current_end_work = explode('/', $current_end_work);
+		} else {
+			$current_end = '';
+			$current_end_work = date('m/Y', PHPExcel_Shared_Date::ExcelToPHP($js['End Work (MMYYYY)']));
+			$current_end_work = explode('/', $current_end_work);
+		}
+
+		$params = array(
+			'uid' => '',
+			'email_address' => $js['Email address'],
+			'first_name' => $js['Candidate Name (First Name)'],
+			'last_name' => $js['Candidate Name (Last Name)'],
+			'phone' => $js['Phone'],
+			'nationality' => $js['Nationality'],
+			'expected_salary' => $js['Salary Expectation (Per month)'],
+			'about_yourself' => '',
+			'address_street' => $js['Street Name'],
+			'address_country' => $js['Country'],
+			'address_province' => $js['Province'],
+			'address_zip' => $js['Zip Code'],
+			'address_city' => $js['City'],
+			'current_title' => $js['Current Title'],
+			'current_company' => $js['Company Name'],
+			'work_month_start' => $current_start_work[0],
+			'work_year_start' => $current_start_work[1],
+			'work_month_end' => $current_end_work[0], 
+			'work_year_end' => $current_end_work[1],
+			'current_work_present' => $current_end,
+			//'industry_work_month_start' => $js['Email address'], 
+			//'industry_work_year_start' => $js['Email address'],
+			//'industry_work_month_end' => $js['Email address'], 
+			//'industry_work_year_end' => $js['Email address'],
+			//'industry_present' => $js['Email address'],
+			'current_city' => $js['Current Location – City'],
+			'current_other_city' => '',
+			'current_industry' => $js['Current Industry'],
+			'education' => $js['School Name'],
+			'graduation' => $graduation[1],
+			'major' => $js['Major'],
+			'education_city' => $js['Education Location – City'],
+			'education_other_city' => '',
+			'email' => $js['Email address'],
+			'public_profile_url' => '',
+			'status' => $js['Status'],
+			'target_position' => $js['Target Position'],
+			'assessment' => $js['Conext Assessment'],
+			'assessment_note' => $js['Conext Assessment Note'],
+			'client_name' => $js['Client Name'],
+			'client_assessment' => $js['Client Assessment'],
+			'client_assessment_note' => $js['Client Assessment Note'],
+			'other_notes' => $js['Other Notes'],
+			'get_profile_from' => $js['Get Profile from'],
+			'get_profile_from_other' => '',
+			'cv' => '',
+			'industry_experience' => $js['Year Experienced'],
+			'updated_by' => '-'
+		);
+		drupal_set_message("<pre>".print_r($params, true)."</pre>");
+		admin_insert_job_seeker($params);
+	}
+	return 'test';
+}
+
 function other_setting_form($form, &$form_state) {
 	$form['conext_email_from'] = array(
 			'#type' => 'textfield', 
-			'#title' => 'Conext Email From',
+			'#title' => 'Email broadcast from',
 			'#required' => true,
 			'#default_value' => variable_get('conext_email_from'),
 	);
 	$form['conext_contact_email_to'] = array(
 			'#type' => 'textfield', 
-			'#title' => 'Conext Contact Email To',
+			'#title' => '"Contact Us on Website", E-mail to',
 			'#required' => true,
 			'#default_value' => variable_get('conext_contact_email_to'),
 	);
 	$form['conext_applied_job_email_to'] = array(
 			'#type' => 'textfield', 
-			'#title' => 'Conext Applied Job Email To',
+			'#title' => '"Candidate Job Applied", e-mail to',
 			'#required' => true,
 			'#default_value' => variable_get('conext_applied_job_email_to'),
 	);
 	$form['conext_employer_posted_job_to'] = array(
 			'#type' => 'textfield', 
-			'#title' => 'Conext Employer Posted Job Email To',
+			'#title' => '"Employer Posted Job", E-mail to',
 			'#required' => true,
 			'#default_value' => variable_get('conext_employer_posted_job_to'),
 	);

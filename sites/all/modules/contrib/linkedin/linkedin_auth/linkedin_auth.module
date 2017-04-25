@@ -43,10 +43,11 @@ function linkedin_auth_menu() {
  * @see http://drupal.org/node/1354
  */
 function linkedin_auth_token_access($account) {
-  if (user_is_anonymous()) {
+  /*if (user_is_anonymous()) {
     return TRUE;
   }
-  return FALSE;
+  return FALSE;*/
+	return TRUE;
 }
 
 /**

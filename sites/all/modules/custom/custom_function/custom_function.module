@@ -7,6 +7,8 @@ define("JOB_PER_PAGE", 5);
 define("AUTHENTICATED_ROLE_ID", 2);
 define("EMPLOYER_ROLE_ID", 5);
 define("JOB_SEEKER_ROLE_ID", 6);
+define("CONEXT_SUPER_ADMIN_ROLE_ID", 7);
+define("CONEXT_ADMIN_ROLE_ID", 4);
 define("WAITING_FOR_APPROVAL", "Waiting for Approval");
 define("PUBLISHED", "Published");
 define("SUBMITTED", "Submitted");
@@ -228,9 +230,21 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 				$last_work_city = (empty($params['current_city_other'])) ? $params['current_city'] : $params['current_city_other'];
 				$current_work_start = (empty($params['work_month_start']) && empty($params['work_year_start'])) ? '' : $params['work_year_start'].'/'.$params['work_month_start'];
 				$current_work_end = (empty($params['work_month_end']) && empty($params['work_year_end'])) ? '' : $params['work_year_end'].'/'.$params['work_month_end'];
+				$industry_start = (empty($params['industry_month_start']) && empty($params['industry_year_start'])) ? '' : $params['industry_year_start'].'/'.$params['industry_month_start'];
+				$industry_end = (empty($params['industry_month_end']) && empty($params['industry_year_end'])) ? '' : $params['industry_year_end'].'/'.$params['industry_month_end'];
+			
+				// industry experience
+				$industry_ex_start = new DateTime($params['industry_year_start'].'-'.$params['industry_month_start'].'-28');
+				if ($params['industry_present'] == 'present') $industry_ex_end = new DateTime(date('Y').'-'.date('m').'-28');
+				else $industry_ex_end = new DateTime($params['industry_year_end'].'-'.$params['industry_month_end'].'-28');
 
-				$query = "INSERT INTO {conext_job_seeker} (user_id, first_name, last_name, phone, address_street, address_country, address_province, address_zip, address_city, current_title, current_company, current_work_start, current_work_end, current_city, current_industry, education, graduation, major, education_city, nationality, cv, public_profile_url, expected_salary, about_yourself, email, created_at, updated_at)
-					VALUES (:user_id, :first_name, :last_name, :phone, :address_street, :address_country, :address_province, :address_zip, :address_city, :current_title, :current_company, :current_work_start, :current_work_end, :current_city, :current_industry, :education, :graduation, :major, :education_city, :nationality, :cv, :public_profile_url, :expected_salary, :about_yourself, :email, NOW(), NOW())";
+				$day_diff = $industry_ex_start->diff($industry_ex_end);
+				$experience_year = floor($day_diff->days / 365).' years';
+				$experience_month = floor(($day_diff->days - ($experience_year * 365)) / 30).' months';
+				$industry_experience = $experience_year.' '.$experience_month;
+				
+				$query = "INSERT INTO {conext_job_seeker} (user_id, first_name, last_name, phone, address_street, address_country, address_province, address_zip, address_city, current_title, current_company, current_work_start, current_work_end, industry_start, industry_end, current_city, current_industry, education, graduation, major, education_city, nationality, cv, public_profile_url, expected_salary, about_yourself, email, get_profile_from, industry_experience, created_at, updated_at)
+					VALUES (:user_id, :first_name, :last_name, :phone, :address_street, :address_country, :address_province, :address_zip, :address_city, :current_title, :current_company, :current_work_start, :current_work_end, :industry_start, :industry_end, :current_city, :current_industry, :education, :graduation, :major, :education_city, :nationality, :cv, :public_profile_url, :expected_salary, :about_yourself, :email, :get_profile_from, :industry_experience, NOW(), NOW())";
 				db_query($query, array( 
 					'user_id' => $account->uid, 
 					'first_name' => $params['first_name'],
@@ -245,7 +259,9 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 					'current_title' => $params['current_title'],
 					'current_company' => $params['current_company'],
 					'current_work_start' => $current_work_start, 
-					'current_work_end' => $current_work_end,
+					'current_work_end' => (isset($params['current_work_present']) && $params['current_work_present'] == 'present') ? $params['current_work_present'] : $current_work_end,
+					'industry_start' => $industry_start, 
+					'industry_end' => (isset($params['industry_present']) && $params['industry_present'] == 'present') ? $params['industry_present'] : $industry_end,
 					'current_city' => $last_work_city,
 					'current_industry' => $params['current_industry'],
 					'education' => $params['education'],
@@ -257,7 +273,9 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 					'public_profile_url' => $params['public_profile_url'],
 					'expected_salary' => $params['expected_salary'],
 					'about_yourself' => $params['about_yourself'],
-					'email' => $params['email_address']
+					'email' => $params['email_address'],
+					'get_profile_from' => 'Conext Site',
+					'industry_experience' => $industry_experience
 				));
 				
 				if (!empty($_SESSION['linkedin']['response'])) {
@@ -271,8 +289,13 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 					unset($_SESSION['linkedin']);
 				}
 				
-				$email_content = 'Hi'.$params['first_name'].' '.$params['last_name'];
-				$email_content .= '<br />Thank you for registering at Conext as a Job Seeker';
+				$email_subject = 'Conext.id Registration Confirmation';
+				$email_content = 'Dear '.$params['first_name'].' '.$params['last_name'].',<br /><br />
+											Thank you for registering at our site.<br />
+											Click <a href="'.$base_url.'/jobs">here</a> to find the right job.<br /><br />
+
+											Regards,<br />
+											Conext Recruitment Team';
 			} else { // employer
 				$query = "INSERT INTO {conext_employer} (user_id, salutation, first_name, last_name, phone, company, address, city, industry, created_at, updated_at)
 					VALUES (:user_id, :salutation, :first_name, :last_name, :phone, :company, :address, :city, :industry, NOW(), NOW())";
@@ -288,12 +311,18 @@ function conext_register_user ($params, $type = 'employer', $file_uri='') {
 					'city' => $params['city'],
 					'industry' => $params['industry']
 				));
-				$email_content = 'Hi'.$params['first_name'].' '.$params['last_name'];
-				$email_content .= '<br />Thank you for registering at Conext as a Employer';
+				
+				$email_subject = 'Conext.id Employer Registration Confirmation';
+				$email_content = 'Dear '.$params['first_name'].' '.$params['last_name'].',<br /><br />
+											Thank you for registering at our site.<br />
+											Click <a href="'.$base_url.'/employer">here</a> to post your job.<br /><br />
+
+											Regards,<br />
+											Conext Recruitment Team';
 			}
 			
 			// send post job notification email
-			$email_params = array('body' => $email_content, 'subject' => 'Thank You for Registering at Conext');
+			$email_params = array('body' => $email_content, 'subject' => $email_subject);
 			$key = 'register_complete';
 			$from = variable_get('conext_email_from');
 			$mail = drupal_mail('custom_function', $key, $params['email_address'], language_default(), $email_params, $from);
@@ -319,14 +348,27 @@ function conext_update_user ($params, $type = 'employer', $file_uri = '') {
 			$last_work_city = (empty($params['current_city_other'])) ? $params['current_city'] : $params['current_city_other'];
 			$current_work_start = (empty($params['work_month_start']) && empty($params['work_year_start'])) ? '' : $params['work_year_start'].'/'.$params['work_month_start'];
 			$current_work_end = (empty($params['work_month_end']) && empty($params['work_year_end'])) ? '' : $params['work_year_end'].'/'.$params['work_month_end'];
-			$update_cv = (empty($file_uri)) ? "" : ", cv= ".$file_uri;
+			$industry_start = (empty($params['industry_month_start']) && empty($params['industry_year_start'])) ? '' : $params['industry_year_start'].'/'.$params['industry_month_start'];
+			$industry_end = (empty($params['industry_month_end']) && empty($params['industry_year_end'])) ? '' : $params['industry_year_end'].'/'.$params['industry_month_end'];
+			$update_cv = (empty($file_uri)) ? "" : ", cv= '".$file_uri."'";
+			
+			// industry experience
+			$industry_ex_start = new DateTime($params['industry_year_start'].'-'.$params['industry_month_start'].'-28');
+			if ($params['industry_present'] == 'present') $industry_ex_end = new DateTime(date('Y').'-'.date('m').'-28');
+			else $industry_ex_end = new DateTime($params['industry_year_end'].'-'.$params['industry_month_end'].'-28');
+
+			$day_diff = $industry_ex_start->diff($industry_ex_end);
+			$experience_year = floor($day_diff->days / 365).' years';
+			$experience_month = floor(($day_diff->days - ($experience_year * 365)) / 30).' months';
+			$industry_experience = $experience_year.' '.$experience_month;
 				
 			$query = "UPDATE {conext_job_seeker} SET
 				first_name=:first_name, last_name=:last_name, phone=:phone, address_street=:address_street, address_country=:address_country, 
-				address_province=:address_province, address_zip=:address_zip, address_city=:address_city,
-				current_title=:current_title, current_company=:current_company, current_work_start=:current_work_start, current_work_end=:current_work_end,
+				address_province=:address_province, address_zip=:address_zip, address_city=:address_city, current_title=:current_title, current_company=:current_company,
+				current_work_start=:current_work_start, current_work_end=:current_work_end, industry_start=:industry_start, industry_end=:industry_end, 
 				current_city=:current_city, current_industry=:current_industry, education=:education, graduation=:graduation, major=:major,
-				education_city=:education_city, nationality=:nationality, expected_salary=:expected_salary, about_yourself=:about_yourself, updated_by=:updated_by, email=:email, updated_at=NOW() ".$update_cv."
+				education_city=:education_city, nationality=:nationality, expected_salary=:expected_salary, about_yourself=:about_yourself, updated_by=:updated_by, 
+				email=:email, industry_experience=:industry_experience, updated_at=NOW() ".$update_cv."
 				WHERE user_id=:user_id";
 			db_query($query, array( 
 				'first_name' => $params['first_name'],
@@ -341,7 +383,9 @@ function conext_update_user ($params, $type = 'employer', $file_uri = '') {
 				'current_title' => $params['current_title'],
 				'current_company' => $params['current_company'],
 				'current_work_start' => $current_work_start, 
-				'current_work_end' => $current_work_end,
+				'current_work_end' => (isset($params['current_work_present']) && $params['current_work_present'] == 'present') ? $params['current_work_present'] : $current_work_end,
+				'industry_start' => $industry_start, 
+				'industry_end' => (isset($params['industry_present']) && $params['industry_present'] == 'present') ? $params['industry_present'] : $industry_end,
 				'current_city' => $last_work_city,
 				'current_industry' => $params['current_industry'],
 				'education' => $params['education'],
@@ -353,6 +397,7 @@ function conext_update_user ($params, $type = 'employer', $file_uri = '') {
 				'about_yourself' => $params['about_yourself'],
 				'updated_by' => $params['email_address'],
 				'email' => $params['email_address'],
+				'industry_experience' => $industry_experience,
 				'user_id' => $user->uid
 			));
 		} else { // employer
@@ -546,7 +591,9 @@ function get_testimonial() {
 }
 
 function get_article_home() {
-	$articles = db_query("SELECT nid FROM {node} WHERE type = 'article' ORDER BY created DESC LIMIT 3");
+	$articles = db_query("SELECT nid,COALESCE(draggableviews_structure.weight, 2147483647) AS draggableviews_structure_weight_coalesce
+		FROM {node} n LEFT JOIN {draggableviews_structure} draggableviews_structure ON n.nid = draggableviews_structure.entity_id AND draggableviews_structure.view_name = 'admin_article' AND draggableviews_structure.view_display = 'page'
+		WHERE type = 'article' ORDER BY draggableviews_structure_weight_coalesce ASC, n.created DESC LIMIT 3");
 	foreach($articles as $article) {
 		$node_article[] = node_load($article->nid);
 	}

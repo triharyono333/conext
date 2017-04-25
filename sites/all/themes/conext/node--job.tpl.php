@@ -63,6 +63,7 @@ $theme_path = $base_url . '/' . $theme_path;
 						<span><?php print $job->salary_range ?></span>
 						<!--<span><?php print format_salary($job->salary_min) ?> - <?php print format_salary($job->salary_max) ?></span>-->
 					</li>
+					<?php if (!empty($job->benefit)) { ?>
 					<li class="benefit">
 						<span class="title">Benefit:</span>
 						<ul class="listing">
@@ -72,6 +73,7 @@ $theme_path = $base_url . '/' . $theme_path;
 							<?php } ?>
 						</ul>
 					</li>
+					<?php } ?>
 				</ul>
 				<div class="button-wrapper">
 					<?php if (valid_user_role(EMPLOYER_ROLE_ID)) { ?>

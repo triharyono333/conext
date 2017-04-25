@@ -131,7 +131,7 @@ function linkedin_access_token($account) {
 			
 			$tokens = array('token_key' => $oauth['oauth_token'], 'token_secret' => $oauth['oauth_token_secret']);
 			$append = '~';
-			$append .= _linkedin_build_fields_request(array('first-name', 'last-name', 'public-profile-url', 'email-address'), 'auth');
+			$append .= _linkedin_build_fields_request(array('first-name', 'last-name', 'public-profile-url', 'email-address', 'location', 'industry', 'positions', 'summary'), 'auth');
 			$url = "https://api.linkedin.com/v1/people/" . $append;
 			$response2 = linkedin_get_fields($url, $tokens);
 			//print $uid; exit;
@@ -141,7 +141,7 @@ function linkedin_access_token($account) {
 				$form_state = array();
 				$form_state['uid'] = $account->uid;      
 				user_login_submit(array(), $form_state);
-				drupal_goto('job_seeker/account');
+				drupal_goto('jobs');
         //module_invoke_all('linkedin_external_login', $uid);
       }
       else {
@@ -156,7 +156,7 @@ function linkedin_access_token($account) {
 							$form_state = array();
 							$form_state['uid'] = $account->uid;      
 							user_login_submit(array(), $form_state);
-							drupal_goto('job_seeker/account');
+							drupal_goto('jobs');
 						}
 					} 
 				}

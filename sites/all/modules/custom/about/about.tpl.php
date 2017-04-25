@@ -92,7 +92,7 @@ $banner_image = $banner['banner_image'];
 					?>
 				<div class="icon-box box animated fadeInUp text-center" data-animation-type="fadeInUp" data-animation-delay="<?php print $delay ?>" style="animation-duration: 1s; animation-delay: <?php print $delay ?>s; visibility: visible;">
 					<div class="box-content">
-						<h4 class="box-title"><a href="#"><?php print $job->title ?></a></h4>
+						<h4 class="box-title"><?php print $job->title ?></h4>
 						<p>
 							Status: <?php print $job->field_conext_job_status[LANGUAGE_NONE][0]['value'] ?><br />
 							Qualification: <?php print $job->field_conext_job_qualification[LANGUAGE_NONE][0]['value'] ?>
